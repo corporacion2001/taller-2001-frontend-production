@@ -1,0 +1,175 @@
+/* vehicleDetails.module.css */
+/* Mismos estilos que clientDetails.module.css pero con nombres de clase específicos */
+
+.container {
+  background: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.3rem;
+  color: #121037;
+  font-weight: 600;
+  margin: 0;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.editButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(21, 50, 186, 0.2);
+  transition: all 0.3s ease;
+}
+
+.editButton:hover {
+  background-color: #121035;
+  transform: translateY(-1px);
+}
+
+.saveButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+  transition: all 0.3s ease;
+}
+
+.saveButton:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.cancelButton {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: #e2e6ea;
+  transform: translateY(-1px);
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.inputGroup input,
+.inputGroup select {
+  padding: 0.7rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  background-color: white;
+}
+
+.inputGroup select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1rem;
+}
+
+.inputGroup input:disabled,
+.inputGroup select:disabled {
+  background-color: #f8f9fa;
+  color: #495057;
+  cursor: not-allowed;
+}
+
+.inputGroup input:not(:disabled):focus,
+.inputGroup select:not(:disabled):focus {
+  outline: none;
+  border-color: #4a6cf7;
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+.errorText {
+  color: #e03131;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  min-height: 1rem;
+}
+
+/* Estilos para el input de fecha */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(0.3);
+}
+
+/* Estilos para estados de carga */
+.loading {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .buttonGroup {
+    width: 100%;
+  }
+
+  .buttonGroup button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

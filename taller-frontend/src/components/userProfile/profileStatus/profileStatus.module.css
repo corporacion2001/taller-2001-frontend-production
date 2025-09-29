@@ -1,0 +1,60 @@
+/* components/UserProfile/ProfileStatus/profileStatus.module.css */
+.profileStatus {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap; /* evita que se encimen */
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  background-color: #e9ecef;
+  color: #6c757d;
+  white-space: nowrap; /* evita que corte el texto raro */
+}
+
+.statusBadge.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.memberSince {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profileStatus {
+    flex-direction: column;
+    align-items: flex-start; /* o center si preferís */
+    gap: 0.8rem;
+    text-align: center;
+  }
+
+  .statusBadge,
+  .memberSince {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .statusBadge,
+  .memberSince {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}

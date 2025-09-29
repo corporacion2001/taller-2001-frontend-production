@@ -1,0 +1,627 @@
+/* Estructura base */
+.frame {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  color: #121037;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.primaryButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  box-shadow: 0 2px 10px rgba(21, 50, 186, 0.2);
+}
+
+.primaryButton:hover {
+  background-color: #121035;
+}
+
+/* Sistema de Filtros Mejorado */
+.filtersContainer {
+  margin-bottom: 2rem;
+}
+
+.searchBar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.searchInput {
+  flex: 1;
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 1;
+}
+
+.searchInput input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+}
+
+.searchInput input:focus {
+  outline: none;
+  border-color: #1532ba;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(21, 50, 186, 0.1);
+}
+
+.clearSearchButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearSearchButton:hover {
+  color: #c23030;
+  background-color: #faeaea;
+}
+
+.filterToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterToggle:hover {
+  background-color: #f8f9fa;
+  border-color: #1532ba;
+}
+
+.filterToggle.activeFilters {
+  border-color: #1532ba;
+  color: #1532ba;
+  background-color: #f0f4ff;
+}
+
+.filterBadge {
+  color: #0d8050;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 0;
+}
+
+/* Panel de Filtros Avanzados */
+.advancedFilters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.filterGroup select {
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.filterGroup select:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 3px rgba(21, 50, 186, 0.1);
+}
+
+.filterButtons {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.applyButton,
+.resetButton {
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.applyButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+}
+
+.applyButton:hover {
+  background-color: #121035;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(21, 50, 186, 0.2);
+}
+
+.resetButton {
+  background: none;
+  border: 1px solid #ced4da;
+  color: #495057;
+}
+
+.resetButton:hover {
+  background-color: #f1f3f5;
+  border-color: #1532ba;
+  color: #1532ba;
+}
+
+/* Tabla */
+.tableContainer {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  min-width: 650px; /* Aumentado para acomodar la nueva columna */
+}
+
+.usersTable th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.usersTable td {
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.usersTable tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Estilos específicos para la columna del avatar */
+.usersTable th:first-child,
+.usersTable td:first-child {
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.avatarCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+
+/* Estilos para el SmartAvatar en la tabla */
+.usersTable .smart-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border: 2px solid #f0f2f5;
+}
+
+.usersTable tr:hover .smart-avatar {
+  border-color: #1532ba;
+}
+
+.editButton {
+  margin: 0 auto;
+  justify-content: center;
+  width: fit-content;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+  color: #1532ba;
+}
+
+.editButton:hover {
+  background-color: #e6ecff;
+}
+
+/* Paginación mejorada */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+.paginationButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #1532ba;
+  color: #1532ba;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 1rem;
+  color: #495057;
+  font-weight: 500;
+  padding: 0 1rem;
+}
+
+/* Estilos para el texto con puntos suspensivos */
+.ellipsis {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsis span {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Estilos para los roles */
+.rolesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 200px;
+}
+
+.rolePill {
+  background-color: #e0e0ff;
+  color: #1532ba;
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.workshopPill {
+  background-color: #d8d8d2;
+  color: #3e3e3e;
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Estado */
+.status {
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status.active {
+  background-color: #e6f7ee;
+  color: #0d8050;
+}
+
+.status.inactive {
+  background-color: #faeaea;
+  color: #c23030;
+}
+
+/* Asegurar que las celdas mantengan un ancho consistente */
+.usersTable td:not(:first-child):not(:last-child),
+.usersTable th:not(:first-child):not(:last-child) {
+  min-width: 100px;
+  max-width: 220px;
+}
+
+/* Para la columna de acciones */
+.usersTable td:last-child {
+  min-width: 60px;
+  max-width: 60px;
+  text-align: center;
+}
+
+/* Loading y errores */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.errorMessage {
+  color: #c23030;
+  background-color: #faeaea;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .frame {
+    padding: 1.5rem;
+  }
+
+  .advancedFilters {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .frame {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .primaryButton {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .searchBar {
+    flex-direction: column;
+  }
+
+  .advancedFilters {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .usersTable {
+    font-size: 0.9rem;
+    min-width: 700px; /* Asegurar espacio para todas las columnas */
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: 0.75rem;
+  }
+
+  /* Mejora responsive para paginación */
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .paginationButton {
+    width: 100%;
+    max-width: 200px;
+    min-width: unset;
+  }
+
+  .pageInfo {
+    padding: 0;
+  }
+
+  .filterButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .applyButton,
+  .resetButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .frame {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .primaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .usersTable {
+    font-size: 0.8rem;
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: 0.5rem;
+  }
+
+  .paginationButton {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .pageInfo {
+    font-size: 0.9rem;
+  }
+
+  .filterGroup select {
+    padding: 0.65rem;
+    font-size: 0.9rem;
+  }
+
+  .applyButton,
+  .resetButton {
+    padding: 0.65rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Inputs y botones adicionales */
+.selectInput {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.selectInput:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.secondaryButton {
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #ced4da;
+  background-color: white;
+  color: #495057;
+  margin-right: 1rem;
+}
+
+.secondaryButton:hover {
+  background-color: #f8f9fa;
+}
+
+/* Mensaje cuando no hay usuarios */
+.usersTable td[colspan] {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}

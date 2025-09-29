@@ -1,0 +1,124 @@
+/* Estilos base del navbar */
+.navbar {
+  background-color: rgba(18, 16, 53, 0.95);
+  height: 80px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+  transform: translateY(0);
+}
+
+/* Estado al hacer scroll */
+.navbar.scrolled {
+  height: 70px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Estado oculto */
+.navbar.hidden {
+  transform: translateY(-100%);
+}
+
+/* Resto de tus estilos existentes... */
+.navbarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.navbarLogo img {
+  width: 135px; /* Ajusta el tamaño de la imagen */
+  height: auto; /* Mantiene la proporción original */
+  transition: all 0.3s ease;
+}
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  position: relative;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.navLink:hover {
+  color: #314ca7;
+}
+
+.navButton {
+  background-color: #1532ba;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.navButton:hover {
+  background-color: #314ca7;
+}
+
+/* Estilos del menú hamburguesa (responsive) */
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  
+  .navMenu {
+    position: fixed;
+    left: -100%;
+    top: 80px;
+    flex-direction: column;
+    background-color: #121035;
+    width: 100%;
+    text-align: center;
+    transition: 0.4s;
+    padding: 1rem 0;
+    gap: 0;
+  }
+  
+  .navMenu.active {
+    left: 0;
+  }
+  
+  .navLink {
+    margin: 1rem 0;
+    padding: 0.5rem 0;
+  }
+  
+  .navButton {
+    margin: 1rem auto 0;
+    width: 150px;
+  }
+}

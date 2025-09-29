@@ -1,0 +1,80 @@
+/* components/UserProfile/ProfileHeader/ProfileHeader.module.css */
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: white;
+  color: #495057;
+  border: 1px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.backButton:hover {
+  background-color: #e2e6ea;
+}
+
+.profileHeader h1 {
+  color: #121035;
+  font-size: 1.8rem;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.editActions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profileHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .backButton {
+    margin: 0 auto;   /* centrado sin estirarse */
+  }
+
+  .profileHeader h1 {
+    order: -1;
+    width: 100%;
+    font-size: 1.5rem;
+  }
+
+  .editActions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileHeader h1 {
+    font-size: 1.3rem;
+  }
+
+  .backButton {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .editActions button {
+    flex: 1;
+    min-width: 120px;
+  }
+}

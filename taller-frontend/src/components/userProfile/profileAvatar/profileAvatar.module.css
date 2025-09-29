@@ -1,0 +1,46 @@
+.avatarContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+  width: 120px;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profileAvatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.profileAvatar:hover {
+  transform: scale(1.05);
+  border-color: #1532ba;
+}
+
+.editButton {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.editButton:hover {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,594 @@
+/* step3Service.module.css */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: "Arial", sans-serif;
+}
+
+.title {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.serviceForm {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.formRow {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.textArea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.characterCount {
+  color: #6b7280;
+  font-size: 0.8rem;
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.workshopInfo {
+  padding: 0.75rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  color: #4a5568;
+  font-style: italic;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 48px;
+}
+
+.proformaSection {
+  margin: 1.5rem 0;
+}
+
+.proformaSection h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.proformaTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  background: white;
+  overflow-x: auto;
+  display: block;
+}
+
+.proformaTable th,
+.proformaTable td {
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+  min-width: 100px;
+}
+
+.proformaTable th {
+  background-color: #f8fafc;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.proformaTable input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.proformaTable input:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 1px rgba(21, 50, 186, 0.1);
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #e53e3e;
+  font-size: 1.2rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.removeButton:hover {
+  background-color: #fed7d7;
+}
+
+.addButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.addButton:hover {
+  background-color: #121035;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.button {
+  background-color: #34af5a;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  background-color: #218838;
+}
+
+.button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.secondaryButton:hover {
+  background-color: #e2e6ea;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #fff5f5;
+  color: #cc1f1a;
+  font-size: 0.875rem;
+  border-left: 4px solid #cc1f1a;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.sectionTitle {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.photoCounter {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.photoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.photo {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.deleteButton {
+  padding: 0.3rem 0;
+  background: none;
+  border: none;
+  color: #e53e3e;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
+}
+
+.deleteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.photoActionsContainer {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.photoActions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.fileInputLabel {
+  display: inline-flex;
+}
+
+.photoButton {
+  padding: 0.6rem 1rem;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #1532ba;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoButton:hover {
+  background-color: #f8f9fa;
+  border-color: #1532ba;
+}
+
+.photoButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+/* Media Queries para Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.75rem;
+  }
+  
+  .title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .serviceForm {
+    padding: 0.75rem;
+  }
+  
+  .formRow {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .formGroup {
+    flex: none;
+  }
+  
+  .buttonGroup {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .button,
+  .secondaryButton {
+    width: 100%;
+  }
+  
+  .proformaTable {
+    font-size: 0.8rem;
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .proformaTable th,
+  .proformaTable td {
+    padding: 0.5rem;
+    min-width: 80px;
+  }
+  
+  .photoActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .photoButton {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .photo {
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .serviceForm {
+    padding: 0.5rem;
+  }
+  
+  .formGroup input,
+  .formGroup select,
+  .formGroup textarea {
+    padding: 0.6rem;
+  }
+  
+  .proformaTable {
+    font-size: 0.7rem;
+  }
+  
+  .proformaTable th,
+  .proformaTable td {
+    padding: 0.4rem;
+    min-width: 70px;
+  }
+  
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .photo {
+    height: 70px;
+  }
+}
+/* step3Service.module.css - Añadir estos estilos al CSS existente */
+
+/* Estilos para la vista móvil de repuestos y mano de obra */
+.mobileList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mobileCard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.cardTitle {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.cardField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardField label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.mobileInput {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+}
+
+.mobileInput:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+/* Mejoras para las tablas en desktop */
+.proformaTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.proformaTable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.proformaTable tr:last-child td {
+  border-bottom: none;
+}
+
+.proformaTable input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.proformaTable input:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+/* Media queries para responsive */
+@media (max-width: 767px) {
+  .proformaTable {
+    display: none; /* Ocultar tabla en móviles */
+  }
+  
+  .mobileList {
+    display: flex; /* Mostrar tarjetas en móviles */
+  }
+}
+
+@media (min-width: 768px) {
+  .mobileList {
+    display: none; /* Ocultar tarjetas en desktop */
+  }
+  
+  .proformaTable {
+    display: table; /* Mostrar tabla en desktop */
+  }
+}
+
+/* Mejoras adicionales para móviles */
+@media (max-width: 480px) {
+  .mobileCard {
+    padding: 0.75rem;
+  }
+  
+  .cardField {
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobileInput {
+    padding: 0.5rem;
+  }
+  
+  .cardTitle {
+    font-size: 0.9rem;
+  }
+}
+
+/* Estilos para botones de agregar */
+.addButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.addButton:hover {
+  background-color: #121035;
+}
+
+@media (min-width: 768px) {
+  .addButton {
+    width: auto;
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,553 @@
+.serviceForm {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 auto 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.formRow {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #1532ba;
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.proformaSection {
+  margin: 20px 0;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.proformaSection h3 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 8px;
+}
+
+.proformaTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  background: white;
+}
+
+.proformaTable th,
+.proformaTable td {
+  padding: 12px;
+  border: 1px solid #eaeaea;
+  text-align: left;
+}
+
+.proformaTable th {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.proformaTable input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  background-color: white;
+  transition: all 0.2s;
+}
+
+.proformaTable input:focus {
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #e74c3c;
+  font-size: 1rem;
+  padding: 0 5px;
+  transition: all 0.2s;
+}
+
+.removeButton:hover {
+  color: #c0392b;
+  transform: scale(1.1);
+}
+
+.addButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.addButton:hover {
+  background-color: #121035;
+  transform: translateY(-2px);
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between; /* separa izquierda y derecha */
+  margin-top: 50px;
+}
+
+.rightButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  background-color: #121035;
+  transform: translateY(-2px);
+}
+
+.button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  transform: none;
+}
+/* Estilo para el botón secundario */
+.secondaryButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.secondaryButton:hover {
+  background-color: #2980b9; /* Azul más oscuro */
+  transform: translateY(-2px);
+}
+
+.secondaryButton:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.deleteButton {
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;      
+}
+
+.deleteButton:hover {
+  background-color: #e6786c;
+  transform: translateY(-2px);
+}
+
+.deleteButton:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Para móviles */
+@media (max-width: 768px) {
+  .buttonGroup {
+    flex-direction: column;
+  }
+
+  .secondaryButton {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+.error {
+  color: #e74c3c;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  padding: 12px;
+  background-color: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fee2e2;
+}
+
+.noData {
+  color: #7f8c8d;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.grandTotal {
+  background-color: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #eaeaea;
+}
+
+.grandTotalContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grandTotalLabel {
+  font-weight: 400;
+  font-size: 1rem;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.grandTotalValue {
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: #000000;
+}
+
+@media (max-width: 768px) {
+  .serviceForm {
+    padding: 15px;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .proformaTable th,
+  .proformaTable td {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .grandTotalContent {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .grandTotalValue {
+    align-self: flex-end;
+    font-size: 1.2rem;
+  }
+}
+
+/* Estilos para la vista móvil de repuestos y mano de obra */
+.mobileList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mobileCard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.cardTitle {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.cardField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardField label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.mobileInput {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+}
+
+.mobileInput:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+/* Estilos para observaciones */
+.textArea {
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  font-family: inherit;
+}
+
+.textArea:focus {
+  outline: none;
+  border-color: #1532ba;
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.characterCount {
+  color: #6b7280;
+  font-size: 0.8rem;
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.observationsText {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #eaeaea;
+  min-height: 60px;
+}
+
+/* Media queries para responsive */
+@media (max-width: 767px) {
+  .proformaTable {
+    display: none; /* Ocultar tabla en móviles */
+  }
+
+  .mobileList {
+    display: flex; /* Mostrar tarjetas en móviles */
+  }
+}
+
+@media (min-width: 768px) {
+  .mobileList {
+    display: none; /* Ocultar tarjetas en desktop */
+  }
+
+  .proformaTable {
+    display: table; /* Mostrar tabla en desktop */
+  }
+}
+
+/* Mejoras adicionales para móviles */
+@media (max-width: 480px) {
+  .mobileCard {
+    padding: 0.75rem;
+  }
+
+  .cardField {
+    margin-bottom: 0.5rem;
+  }
+
+  .mobileInput {
+    padding: 0.5rem;
+  }
+
+  .cardTitle {
+    font-size: 0.9rem;
+  }
+}
+
+.mechanicsInputContainer {
+  margin-bottom: 1rem;
+}
+
+.mechanicsTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mechanicTag {
+  display: inline-flex;
+  align-items: center;
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 0.3rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.removeTagButton {
+  background: none;
+  border: none;
+  color: #1976d2;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeTagButton:hover {
+  color: #d32f2f;
+}
+
+.mechanicInputWrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.mechanicInput {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.addMechanicButton {
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addMechanicButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.addMechanicButton:hover:not(:disabled) {
+  background: #388e3c;
+}
+
+.helpText {
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.errorText {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.removeButton:disabled {
+  color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.removeButton:disabled:hover {
+  color: #bdc3c7;
+  background: none;
+  transform: none;
+}

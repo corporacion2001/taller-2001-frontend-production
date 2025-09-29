@@ -1,0 +1,139 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem; /* Añadido para espacio en móviles */
+}
+
+.modal {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 100%; /* Cambiado a 100% */
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.2s ease-out;
+  margin: 0 1rem; /* Añadido para márgenes laterales */
+}
+
+/* Tamaños responsivos */
+@media (min-width: 768px) {
+  .modal {
+    padding: 2rem;
+  }
+}
+
+.iconContainer {
+  background: #f0f4ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: #1532ba;
+}
+
+/* Texto responsivo */
+.modal h2 {
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.modal p {
+  margin-bottom: 1.5rem;
+  color: #666;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .modal h2 {
+    font-size: 1.5rem;
+  }
+  
+  .modal p {
+    font-size: 1.1rem;
+  }
+}
+
+/* Botones responsivos */
+.buttonGroup {
+  display: flex;
+  flex-direction: column; /* Columna en móviles */
+  gap: 0.75rem;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .buttonGroup {
+    flex-direction: row; /* Fila en pantallas más grandes */
+    justify-content: center;
+  }
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 100px;
+  width: 100%; /* Ocupa todo el ancho en móviles */
+}
+
+@media (min-width: 480px) {
+  .button {
+    width: auto; /* Ancho automático en pantallas grandes */
+  }
+}
+
+/* Resto de tus estilos... */
+.primaryButton {
+  background-color: #1532ba;
+  color: white;
+}
+
+.primaryButton:hover {
+  background-color: #10299e;
+}
+
+.secondaryButton {
+  background-color: #f1f1f1;
+  color: #444;
+}
+
+.secondaryButton:hover {
+  background-color: #e0e0e0;
+}
+
+.dangerButton {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.dangerButton:hover {
+  background-color: #b71c1c;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,277 @@
+/* Estilos para la tabla */
+.tableContainer {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  background: white;
+}
+
+.servicesTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.servicesTable th {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.servicesTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: top;
+}
+
+.servicesTable tr:last-child td {
+  border-bottom: none;
+}
+
+.servicesTable tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Definición de anchos de columnas */
+.columnVehicle {
+  width: 200px;
+}
+
+.columnClient {
+  width: 150px;
+}
+
+.columnPlate {
+  width: 100px;
+}
+
+.columnWorkshop {
+  width: 120px;
+}
+
+.columnDate {
+  width: 110px;
+}
+
+.columnStatus {
+  width: 110px;
+}
+
+.columnTotal {
+  width: 120px;
+}
+
+.columnActions {
+  width: 110px;
+}
+
+/* Estilos para celdas específicas */
+.cellVehicle,
+.cellClient,
+.cellWorkshop {
+  overflow: hidden;
+}
+
+/* Celda de información del vehículo */
+.vehicleInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.tableImage {
+  width: 50px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.tableNoImage {
+  width: 50px;
+  height: 40px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.7rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.vehicleText {
+  min-width: 0;
+  flex: 1;
+}
+
+.vehicleName {
+  font-weight: 500;
+  color: #121037;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.vehicleYear {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+/* Texto con elipsis para celdas con contenido largo */
+.textEllipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge de estado en tabla */
+.statusBadge {
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Celda de precio */
+.cellTotal {
+  font-weight: 600;
+  color: #121037;
+  white-space: nowrap;
+}
+
+/* Enlace de detalles en tabla */
+.tableDetailLink {
+  color: #4a6cf7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.tableDetailLink:hover {
+  background-color: rgba(74, 108, 247, 0.1);
+  text-decoration: none;
+}
+
+/* Responsive para tabla */
+@media (max-width: 1200px) {
+  .servicesTable {
+    min-width: 1000px;
+  }
+
+  .columnVehicle {
+    width: 180px;
+  }
+
+  .columnClient {
+    width: 130px;
+  }
+
+  .columnWorkshop {
+    width: 100px;
+  }
+}
+
+@media (max-width: 992px) {
+  .tableContainer {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    width: calc(100% + 4rem);
+  }
+
+  .servicesTable {
+    min-width: 900px;
+  }
+
+  .servicesTable th,
+  .servicesTable td {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .columnVehicle {
+    width: 160px;
+  }
+
+  .columnClient {
+    width: 120px;
+  }
+
+  .columnDate {
+    width: 100px;
+  }
+
+  .columnStatus {
+    width: 100px;
+  }
+
+  .columnTotal {
+    width: 110px;
+  }
+
+  .columnActions {
+    width: 100px;
+  }
+
+  .tableImage,
+  .tableNoImage {
+    width: 40px;
+    height: 32px;
+  }
+
+  .vehicleName {
+    font-size: 0.9rem;
+  }
+
+  .vehicleYear {
+    font-size: 0.75rem;
+  }
+
+  .statusBadge {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .tableDetailLink {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Estados de carga para tabla */
+.servicesTable tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.servicesTable tbody tr:hover {
+  background-color: #f1f3ff;
+}
+
+/* Mensaje cuando no hay servicios */
+.noServices {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}
+.endDateToday {
+  color: #e03131 !important; /* Rojo más fuerte */
+}

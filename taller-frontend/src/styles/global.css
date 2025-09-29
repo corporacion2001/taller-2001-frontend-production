@@ -1,0 +1,95 @@
+/* ===== VARIABLES GLOBALES ===== */
+:root {
+    /* Colores */
+    --primary-color: #1532ba;
+    --dark-color: #121035;
+    --accent-color: #FF6B00;
+    --white: #ffffff;
+    --black: #000000;
+    --gray-light: #f5f5f5;
+    
+    /* Espaciados */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Transiciones */
+    --transition-fast: all 0.15s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+  }
+  
+  /* ===== RESET Y ESTILOS BASE ===== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--black);
+    background-color: var(--white);
+  }
+  
+  /* ===== COMPONENTES GLOBALES ===== */
+  /* Botones */
+  .btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 5px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    border: none;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+  
+  /* Enlaces */
+  .nav-link {
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition-normal);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .nav-link:hover {
+    color: var(--accent-color);
+  }
+  
+  /* Utilidades */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  /* Responsive Utilities */
+  @media (max-width: 768px) {
+    .mobile-hidden {
+      display: none !important;
+    }
+  }

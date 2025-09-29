@@ -1,0 +1,33 @@
+/* Contenedor del avatar en lista */
+.listAvatarImage {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+  border: 2px solid transparent;
+  /* Quitamos ancho y alto fijo para que lo controle React */
+  /* width: 40px; */
+  /* height: 40px; */
+}
+
+/* Efecto hover */
+.listAvatarImage:hover {
+  transform: scale(1.05);
+  border-color: #1532ba;
+}
+
+/* Estado de carga */
+.listLoadingPlaceholder {
+  border-radius: 50%;
+  background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);
+  background-size: 200% 100%;
+  animation: listLoading 1.5s infinite;
+  /* Quitamos ancho y alto fijo */
+  /* width: 40px; */
+  /* height: 40px; */
+}
+
+@keyframes listLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

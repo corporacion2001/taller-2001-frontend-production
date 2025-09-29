@@ -1,0 +1,181 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #121037;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.mobileOpen {
+  transform: translateX(0) !important;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoContainer {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.closeButton {
+  display: none;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  color: white;
+}
+
+.closeIcon {
+  font-size: 1.5rem;
+}
+
+.navMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.navItem.active {
+  background: #1532ba;
+  color: white !important;
+}
+
+.navIcon {
+  margin-right: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.navText {
+  font-size: 0.95rem;
+}
+
+.bottomSection {
+  margin-top: auto;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.logoutButton:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ff4d4f;
+}
+
+/* Estilos para el menú colapsable */
+.collapsibleContainer {
+  margin-bottom: 0.5rem;
+}
+
+.collapsibleHeader {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.chevronIcon {
+  margin-left: auto;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.collapsibleHeader:hover .chevronIcon {
+  opacity: 1;
+}
+
+.subMenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.subMenu.open {
+  max-height: 500px;
+}
+
+.subItem {
+  padding: 0.7rem 1rem 0.7rem 2.5rem !important;
+  font-size: 0.9rem !important;
+  margin-top: 0.2rem;
+}
+
+.subItem .navIcon {
+  font-size: 1rem !important;
+  margin-right: 0.7rem;
+}
+
+.subItem.active {
+  background: rgba(21, 50, 186, 0.7) !important;
+}
+
+/* Estilos para el logo */
+.navbarLogo img {
+  margin: 0 auto;
+  margin-bottom: -25px;
+  padding: 0%;
+  width: 150px;
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .closeButton {
+    display: block;
+  }
+}

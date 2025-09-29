@@ -1,0 +1,289 @@
+.container {
+  margin-bottom: 25px;
+}
+
+.headerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 15px;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: white;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-height: 44px;
+}
+
+.backButton:hover {
+  background-color: #e2e6ea;
+}
+
+.pdfButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-height: 44px;
+}
+
+.pdfButton:hover {
+  background-color: #c53030;
+}
+
+.header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.title {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.vehiclePlate {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  background-color: #f8f9fa;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #ffffff;
+  align-self: flex-start;
+}
+
+/* Selectores CSS para los estados - coinciden con la BD */
+.statusBadge[data-status="Pendiente"] {
+  background-color: #ffecf1;
+}
+
+.statusBadge[data-status="En proceso"] {
+  background-color: #fff3bf;
+}
+
+.statusBadge[data-status="Finalizado"] {
+  background-color: #ebfbee;
+}
+
+.statusBadge[data-status="Entregado"] {
+  background-color: #C6D9F4;
+}
+
+/* Clases para usar con className (alternativa) */
+.statusPending {
+  color: #e03131; /* Rojo */
+}
+
+.statusInProcess {
+  color: #f08c00; /* Naranja */
+}
+
+.statusFinished {
+  color: #2f9e44; /* Verde fuerte */
+}
+
+.statusDelivered {
+  color: #1945a2; /* Azul fuerte */
+}
+
+.statusDefault {
+  background-color: #f1f3f5; /* Gris claro */
+  color: #495057; /* Gris oscuro */
+}
+
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 8px;
+}
+
+.cardContent {
+  display: grid;
+  gap: 10px;
+}
+
+.section {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.section h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 8px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .infoGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: 500;
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-bottom: 3px;
+}
+
+.highlight {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .vehiclePlate {
+    font-size: 1rem;
+  }
+
+  .card h3,
+  .section h2 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .summaryCards {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 15px;
+  }
+}
+
+/* Estilos para los botones de acciones en proceso */
+.processActions {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 0 1rem;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.actionButton:hover {
+  background-color: #2c5282;
+}
+
+.actionButton svg {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 480px) {
+  .headerActions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .backButton,
+  .pdfButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .processActions {
+    flex-direction: column;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+}

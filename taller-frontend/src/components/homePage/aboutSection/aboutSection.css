@@ -1,0 +1,182 @@
+.about-section {
+  padding: 100px 0;
+  background-color: #f9f9f9;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  flex-wrap: wrap; /* Para mejorar la disposición en pantallas pequeñas */
+}
+
+.about-image {
+  flex: 1;
+  position: relative;
+  min-width: 400px;
+}
+
+.image-border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 15px solid rgba(21, 50, 186, 0.1);
+  border-radius: 10px;
+  top: -30px;
+  left: -30px;
+  z-index: 0;
+  transition: all 0.4s ease;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.about-image:hover .main-image {
+  transform: translate(-10px, -10px);
+}
+
+.about-image:hover .image-border {
+  transform: translate(10px, 10px);
+}
+
+.about-content {
+  flex: 1;
+  text-align: left; /* Asegura que todo el contenido textual esté alineado a la izquierda */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-header {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #121035;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.section-divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, #1532ba, #ff6b00);
+  border-radius: 2px;
+  margin: 0;
+}
+
+.about-text {
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+.about-features {
+  list-style: none;
+  margin-bottom: 40px;
+}
+
+.about-features li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 500;
+}
+
+.feature-icon {
+  color: #ff6b00;
+  font-size: 1.2rem;
+}
+
+.stats-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center; /* Centra las estadísticas en pantallas grandes */
+  flex-wrap: wrap; /* Mejora la disposición en pantallas pequeñas */
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1 1 200px; /* Asigna un tamaño flexible a cada elemento */
+}
+
+.stat-number {
+  font-size: 3rem; /* Tamaño de fuente más grande */
+  font-weight: 700;
+  color: #121035;
+  margin-bottom: 5px;
+  transition: all 1s ease;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 1rem; /* Tamaño de fuente más pequeño para las etiquetas */
+  font-weight: 500;
+}
+
+@media screen and (max-width: 992px) {
+  .about-container {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  .about-image {
+    min-width: auto;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+  }
+
+  .section-divider {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-section {
+    padding: 70px 0;
+  }
+
+  .stats-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-item {
+    flex: 1 1 120px;
+  }
+
+  .image-border {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+}

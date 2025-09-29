@@ -1,0 +1,72 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  position: relative;
+}
+
+.mainContent {
+  flex: 1;
+  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+}
+
+.contentArea {
+  padding: 2rem;
+}
+
+/* Estilos para el sidebar y menú hamburguesa */
+.sidebarWrapper {
+  transition: transform 0.3s ease;
+  width: 250px;
+  flex-shrink: 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contentArea {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    margin-left: 250px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebarWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    background: white;
+  }
+  
+  .sidebarWrapper.sidebarOpen {
+    transform: translateX(0);
+  }
+  
+  .mainContent {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .overlay {
+    display: block;
+  }
+}

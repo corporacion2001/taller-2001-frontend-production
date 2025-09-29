@@ -1,0 +1,173 @@
+/* welcomeSection.module.css */
+.frame {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  margin-right: 0px;
+}
+
+.welcomeAvatar {
+  width: 60px;
+  height: 60px;
+  border: 3px solid #f0f2f5;
+  flex-shrink: 0; /* Evita que se reduzca en pantallas pequeñas */
+}
+
+.welcomeHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.welcomeTitle {
+  color: #121035;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.userName {
+  color: #1532ba;
+}
+
+.welcomeMessage {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin: 0;
+  padding-left: 0.5rem;
+}
+
+/* Responsive para WelcomeSection */
+@media (max-width: 768px) {
+  .welcomeHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .welcomeTitle {
+    font-size: 1.5rem;
+  }
+  
+  .welcomeMessage {
+    text-align: center;
+    padding-left: 0;
+  }
+}
+
+/* Agregar al final de welcomeSection.module.css */
+
+/* Analytics Styles */
+.analyticsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.metricCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.metricLabel {
+  margin: 0 0 0.5rem 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #121035;
+}
+
+.metricRevenue {
+  color: #4ecdc4;
+}
+
+.metricCompleted {
+  color: #96ceb4;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.chartCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.chartTitle {
+  margin: 0;
+  color: #121035;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.periodSelector {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  background: white;
+  color: #121035;
+  cursor: pointer;
+}
+
+.periodSelector:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.chartContainer {
+  position: relative;
+}
+
+/* Responsive para analytics */
+@media (max-width: 768px) {
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chartHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .periodSelector {
+    width: 100%;
+  }
+}

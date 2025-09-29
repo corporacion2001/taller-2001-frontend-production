@@ -1,0 +1,122 @@
+.location-section {
+  padding: 100px 0;
+  background-color: white;
+  position: relative;
+}
+
+.location-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #121035;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.section-divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, #1532ba, #ff6b00);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.location-content {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.location-info {
+  flex: 1;
+}
+
+.info-title {
+  color: #121035;
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.info-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: #ff6b00;
+}
+
+.location-map {
+  flex: 2;
+  height: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.map-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+
+.map-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.map-link-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+@media screen and (max-width: 992px) {
+  .location-content {
+    flex-direction: column;
+  }
+
+  .location-info {
+    margin-bottom: 30px; /* Espacio entre la dirección y el mapa en pantallas pequeñas */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .location-section {
+    padding: 70px 0;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .location-map {
+    height: 400px; /* Ajusto la altura en pantallas más pequeñas */
+  }
+}

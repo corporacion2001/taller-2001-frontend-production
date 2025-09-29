@@ -1,0 +1,25 @@
+/* Contenedor principal */
+.profileContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Grid de contenido */
+.profileGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.profileColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+}

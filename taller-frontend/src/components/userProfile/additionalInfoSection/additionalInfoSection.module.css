@@ -1,0 +1,25 @@
+/* components/UserProfile/AdditionalInfoSection/AdditionalInfoSection.module.css */
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.rolesContainer {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.roleBadge {
+  background-color: #e9ecef;
+  color: #121035;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+.formGroup label {
+  display: block;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}

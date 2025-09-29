@@ -1,0 +1,333 @@
+/* step2Vehicle.module.css */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  background: white;
+}
+
+.title {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.searchContainer {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+}
+
+.vehicleCard {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+}
+
+.vehicleCard h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.vehicleDetails {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.vehicleDetails p {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin: 0;
+}
+
+.vehicleDetails strong {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.mileageUpdate {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.mileageUpdate label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.mileageUpdate input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.vehicleForm {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #1532ba;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+.formGroup input:disabled,
+.formGroup select:disabled {
+  background-color: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.primaryButton {
+  background-color: #1532ba;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 100px;
+  text-align: center;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+
+.primaryButton:hover {
+  background-color: #121035;
+}
+
+.primaryButton:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 100px;
+  text-align: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+  margin-right: auto;
+}
+
+.secondaryButton:hover {
+  background-color: #e2e6ea;
+}
+
+.error {
+  color: #ef4444;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background-color: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fee2e2;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.successText {
+  color: #38a169;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Estilos para la sección de scraping */
+.scrapingSection {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #e2e8f0;
+}
+
+.scrapingSection h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.scrapingForm {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.scrapingForm .formGroup {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.scrapingSelect {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: white;
+}
+
+.scrapingButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  height: fit-content;
+  margin-bottom: 0.3rem;
+}
+
+.scrapingButton:hover {
+  background-color: #218838;
+}
+
+.scrapingButton:disabled {
+  background-color: #99b894;
+  cursor: not-allowed;
+}
+
+/* Media Queries para Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.75rem;
+  }
+  
+  .title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .searchContainer,
+  .vehicleCard {
+    padding: 0.75rem;
+  }
+  
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .buttonGroup {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    min-width: auto;
+    padding: 0.75rem;
+  }
+  
+  .scrapingForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .scrapingButton {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+  
+  .vehicleDetails p {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .searchContainer,
+  .vehicleCard,
+  .scrapingSection {
+    padding: 0.5rem;
+  }
+  
+  .formGroup input,
+  .formGroup select {
+    padding: 0.6rem;
+  }
+}

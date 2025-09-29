@@ -1,0 +1,46 @@
+/* components/shared/Button.module.css */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+/* Variantes */
+.default {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.default:hover {
+  background-color: #e2e6ea;
+}
+
+.primary {
+  background-color: #1532ba;
+  color: white;
+}
+
+.primary:hover {
+  background-color: #121035;
+}
+
+.success {
+  background-color: #28a745;
+  color: white;
+}
+
+.success:hover {
+  background-color: #218838;
+}

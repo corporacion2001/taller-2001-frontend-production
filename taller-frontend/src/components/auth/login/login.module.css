@@ -1,0 +1,20 @@
+/* login.module.css */
+.splitContainer {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.splitContainer.ready {
+  opacity: 1;
+}
+
+/* En móviles, que sea columna */
+@media (max-width: 992px) {
+  .splitContainer {
+    flex-direction: column;
+  }
+}
