@@ -43,7 +43,7 @@ const AboutSection = () => {
         <div className="about-image">
           <div className="image-border"></div>
           <img
-            src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1744088863/pexels-daniel-andraski-197681005-13065699_i29e9c.jpg"
+            src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1759382203/pexels-daniel-andraski-197681005-13065699_slmfv3.webp"
             alt="Taller mecánico"
             className="main-image"
           />
