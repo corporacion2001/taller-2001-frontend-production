@@ -81,7 +81,7 @@ const ResetPassword = () => {
       <div className={styles.formContent}>
         <div className={styles.logoContainer}>
           <img
-            src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1749926589/corporacionlogowhitebk_ezpvra.png"
+            src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1759382203/lightbackground_1_hel9zn.webp"
             alt="Logo Corporación 2001"
             className={styles.centeredLogo}
           />
