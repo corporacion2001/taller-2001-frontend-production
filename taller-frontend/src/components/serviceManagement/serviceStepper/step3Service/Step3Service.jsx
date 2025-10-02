@@ -15,16 +15,17 @@ const Step3Service = ({
   clientId,
   vehicleId,
   onComplete,
+  loading = false, // <-- Recibe el loading del Stepper
 }) => {
   const { user } = useAuth();
   const { showNotification } = useNotification();
   const isAdmin = user?.roles?.includes("Administrador");
 
   // Estados para carga y errores
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadingWorkshops, setLoadingWorkshops] = useState(false);
   const [loadingEncargados, setLoadingEncargados] = useState(false);
+  const [photoProcessing, setPhotoProcessing] = useState(false); // <-- Solo para procesamiento de fotos
 
   // Datos del formulario
   const [formData, setFormData] = useState({
@@ -200,7 +201,7 @@ const Step3Service = ({
 
     if (files.length === 0) return;
 
-    setLoading(true);
+    setPhotoProcessing(true);
 
     try {
       const processedPhotos = [];
@@ -225,7 +226,7 @@ const Step3Service = ({
       console.error("Error procesando imágenes:", error);
       showNotification("Error al procesar algunas imágenes", "error");
     } finally {
-      setLoading(false);
+      setPhotoProcessing(false);
     }
   };
 
@@ -239,14 +240,34 @@ const Step3Service = ({
   };
 
   const handlePhotosCaptured = (newPhotos) => {
-    setPhotos((prev) => [
-      ...prev,
-      ...newPhotos.map((photo) => ({
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        url: photo,
-        file: null,
-      })),
-    ]);
+    setPhotos((prev) => {
+      const processedPhotos = newPhotos.map((photo, index) => {
+        // Si la foto ya viene como objeto con url (desde Camera)
+        if (typeof photo === "object" && photo.url) {
+          return {
+            id: `${Date.now()}-${index}-${Math.random()
+              .toString(36)
+              .substr(2, 9)}`,
+            url: photo.url,
+            file: photo.file || null,
+            name: photo.name || `camera_${Date.now()}_${index}.jpg`,
+          };
+        }
+        // Si viene como string (data URL)
+        return {
+          id: `${Date.now()}-${index}-${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
+          url: photo,
+          file: null,
+          name: `camera_${Date.now()}_${index}.jpg`,
+        };
+      });
+
+      const updatedPhotos = [...prev, ...processedPhotos];
+      console.log("Fotos actualizadas después de cámara:", updatedPhotos);
+      return updatedPhotos;
+    });
   };
 
   // Handlers para partes y mano de obra
@@ -431,7 +452,6 @@ const Step3Service = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     try {
@@ -468,7 +488,8 @@ const Step3Service = ({
           })),
       };
 
-      onComplete({
+      // onComplete es manejado por el padre (Stepper) y debe activar globalLoading allí
+      await onComplete({
         service: serviceToSend,
         photos: photos.map((photo) => ({
           url: photo.url,
@@ -479,8 +500,6 @@ const Step3Service = ({
       console.error("Error en el formulario:", error);
       setError(error.message);
       showNotification(error.message, "error");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -506,7 +525,7 @@ const Step3Service = ({
         onSubmit={handleSubmit}
         onBack={onBack}
         onOpenCamera={() => setShowCamera(true)}
-        loading={loading}
+        loading={Boolean(loading || photoProcessing)} // <-- Combina loading del Stepper + procesamiento de fotos
         error={error}
         availableWorkshops={availableWorkshops}
         loadingWorkshops={loadingWorkshops}

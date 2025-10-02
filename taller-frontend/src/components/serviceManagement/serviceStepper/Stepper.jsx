@@ -26,6 +26,8 @@ const ServiceStepper = () => {
     service: false,
   });
 
+  const [globalLoading, setGlobalLoading] = useState(false);
+
   const handleNext = (stepData, stepName) => {
     const newFormData = {
       ...formData,
@@ -58,173 +60,204 @@ const ServiceStepper = () => {
     setActiveStep((prev) => prev - 1);
   };
 
-const handleCompleteService = async ({ service, photos }) => {
-  try {
-    setFormData((prev) => ({
-      ...prev,
-      service: { ...service, completed: true },
-      photos: photos,
-    }));
-
-    if (!formData.client || !formData.vehicle) {
-      throw new Error("Faltan datos del cliente o vehículo");
-    }
-    let clientId = formData.client.id;
-    let vehicleId = formData.vehicle?.id || null;
-    let serviceId = null;
-    let newClientId = null;
-
-    const createdEntities = {
-      client: !formData.client.id,
-      vehicle: !formData.vehicle.id,
-      service: false,
-      photos: false,
-    };
-
-    // 1. Registrar cliente (si es nuevo)
-    if (!clientId) {
-      try {
-        const clientResponse = await clientsAPI.clientRegister({
-          ...formData.client,
-          isExisting: undefined,
-          completed: undefined,
-        });
-
-        if (clientResponse.data?.success === false) {
-          throw handleClientError(clientResponse.data.errorCode, formData.client);
-        }
-        newClientId = clientResponse.data.client_id;
-        clientId = newClientId;
-      } catch (clientError) {
-        if (clientError.response?.data?.errorCode) {
-          throw handleClientError(clientError.response.data.errorCode, formData.client);
-        }
-        throw new Error(clientError.response?.data?.message || clientError.message || "Error al registrar cliente");
-      }
-    }
-
-    // 2. Registrar vehículo (si es nuevo)
-    if (!vehicleId) {
-      try {
-        const vehicleResponse = await vehiclesApi.vehicleRegister({
-          ...formData.vehicle,
-          isExisting: undefined,
-          completed: undefined,
-        });
-
-        if (vehicleResponse.data?.success === false) {
-          throw handleVehicleError(vehicleResponse.data.errorCode, formData.vehicle);
-        }
-
-        vehicleId = vehicleResponse.data.vehicle_id;
-      } catch (vehicleError) {
-        // Rollback cliente si falla vehículo
-        if (newClientId) {
-          try {
-            await clientsAPI.deleteClient(newClientId);
-          } catch (deleteError) {}
-        }
-
-        if (vehicleError.response?.data?.errorCode) {
-          throw handleVehicleError(vehicleError.response.data.errorCode, formData.vehicle);
-        }
-        throw new Error(vehicleError.response?.data?.message || vehicleError.message || "Error al registrar vehículo");
-      }
-    }
-
-    // 3. Registrar servicio
+  const handleCompleteService = async ({ service, photos }) => {
     try {
-      const serviceResponse = await serviceAPI.serviceRegister({
-        ...service,
-        client_id: clientId,
-        vehicle_id: vehicleId,
-        status: "pending",
-      });
+      setFormData((prev) => ({
+        ...prev,
+        service: { ...service, completed: true },
+        photos: photos,
+      }));
 
-      if (serviceResponse.data?.success === false) {
-        throw handleServiceError(serviceResponse.data.message);
+      if (!formData.client || !formData.vehicle) {
+        throw new Error("Faltan datos del cliente o vehículo");
       }
+      let clientId = formData.client.id;
+      let vehicleId = formData.vehicle?.id || null;
+      let serviceId = null;
+      let newClientId = null;
 
-      serviceId = serviceResponse.data.service_id;
-      createdEntities.service = true;
-    } catch (serviceError) {
-      // Rollback si falla el servicio
-      if (newClientId) {
+      const createdEntities = {
+        client: !formData.client.id,
+        vehicle: !formData.vehicle.id,
+        service: false,
+        photos: false,
+      };
+
+      // 1. Registrar cliente (si es nuevo)
+      if (!clientId) {
         try {
-          await clientsAPI.deleteClient(newClientId);
-        } catch (deleteError) {}
-      }
-      if (createdEntities.vehicle) {
-        try {
-          await vehiclesApi.deleteVehicle(vehicleId);
-        } catch (deleteError) {}
-      }
-
-      if (serviceError.response?.data?.message) {
-        throw handleServiceError(serviceError.response.data.message);
-      }
-      throw new Error(serviceError.response?.data?.message || serviceError.message || "Error al registrar servicio");
-    }
-
-    // 4. Subir fotos si hay
-    if (photos && photos.length > 0) {
-      for (const photo of photos) {
-        try {
-          const uploadUrlResponse = await serviceAPI.getPhotoUploadUrl(serviceId);
-          const { uploadUrl, key } = uploadUrlResponse.data.data;
-          if (!uploadUrl || !key) {
-            continue;
-          }
-
-          let fileToUpload;
-          if (photo.file) fileToUpload = photo.file;
-          else if (photo instanceof Blob) fileToUpload = photo;
-          else fileToUpload = await fetch(photo.url).then((r) => r.blob());
-
-          const uploadResponse = await fetch(uploadUrl, {
-            method: "PUT",
-            body: fileToUpload,
-            headers: { "Content-Type": fileToUpload.type || "image/jpeg" },
+          const clientResponse = await clientsAPI.clientRegister({
+            ...formData.client,
+            isExisting: undefined,
+            completed: undefined,
           });
 
-          if (!uploadResponse.ok) {
-            throw new Error(`Error subiendo foto a S3: ${uploadResponse.statusText}`);
+          if (clientResponse.data?.success === false) {
+            throw handleClientError(
+              clientResponse.data.errorCode,
+              formData.client
+            );
+          }
+          newClientId = clientResponse.data.client_id;
+          clientId = newClientId;
+        } catch (clientError) {
+          if (clientError.response?.data?.errorCode) {
+            throw handleClientError(
+              clientError.response.data.errorCode,
+              formData.client
+            );
+          }
+          throw new Error(
+            clientError.response?.data?.message ||
+              clientError.message ||
+              "Error al registrar cliente"
+          );
+        }
+      }
+
+      // 2. Registrar vehículo (si es nuevo)
+      if (!vehicleId) {
+        try {
+          const vehicleResponse = await vehiclesApi.vehicleRegister({
+            ...formData.vehicle,
+            isExisting: undefined,
+            completed: undefined,
+          });
+
+          if (vehicleResponse.data?.success === false) {
+            throw handleVehicleError(
+              vehicleResponse.data.errorCode,
+              formData.vehicle
+            );
           }
 
-          await serviceAPI.registerPhotoInDatabase({
-            reference: key,
-            service_id: serviceId,
-          });
-        } catch (photoError) {
-          // Rollback completo si falla alguna foto
-          if (createdEntities.service) {
-            try {
-              await serviceAPI.deleteService(serviceId);
-            } catch (deleteError) {}
-          }
-          if (createdEntities.vehicle) {
-            try {
-              await vehiclesApi.deleteVehicle(vehicleId);
-            } catch (deleteError) {}
-          }
+          vehicleId = vehicleResponse.data.vehicle_id;
+        } catch (vehicleError) {
+          // Rollback cliente si falla vehículo
           if (newClientId) {
             try {
               await clientsAPI.deleteClient(newClientId);
             } catch (deleteError) {}
           }
 
-          throw new Error("Error subiendo fotos, el registro fue revertido");
+          if (vehicleError.response?.data?.errorCode) {
+            throw handleVehicleError(
+              vehicleError.response.data.errorCode,
+              formData.vehicle
+            );
+          }
+          throw new Error(
+            vehicleError.response?.data?.message ||
+              vehicleError.message ||
+              "Error al registrar vehículo"
+          );
         }
       }
-      createdEntities.photos = true;
-    }
 
-    toast.success("Servicio registrado con éxito");
-    navigate("/dashboard/gestion/servicios");
-  } catch (error) {
-    toast.error(error.message || "Error al registrar servicio");
-  }
-};
+      // 3. Registrar servicio
+      try {
+        setGlobalLoading(true);
+        const serviceResponse = await serviceAPI.serviceRegister({
+          ...service,
+          client_id: clientId,
+          vehicle_id: vehicleId,
+          status: "pending",
+        });
+
+        if (serviceResponse.data?.success === false) {
+          throw handleServiceError(serviceResponse.data.message);
+        }
+
+        serviceId = serviceResponse.data.service_id;
+        createdEntities.service = true;
+      } catch (serviceError) {
+        // Rollback si falla el servicio
+        if (newClientId) {
+          try {
+            await clientsAPI.deleteClient(newClientId);
+          } catch (deleteError) {}
+        }
+        if (createdEntities.vehicle) {
+          try {
+            await vehiclesApi.deleteVehicle(vehicleId);
+          } catch (deleteError) {}
+        }
+
+        if (serviceError.response?.data?.message) {
+          throw handleServiceError(serviceError.response.data.message);
+        }
+        throw new Error(
+          serviceError.response?.data?.message ||
+            serviceError.message ||
+            "Error al registrar servicio"
+        );
+      }
+
+      // 4. Subir fotos si hay
+      if (photos && photos.length > 0) {
+        for (const photo of photos) {
+          try {
+            const uploadUrlResponse = await serviceAPI.getPhotoUploadUrl(
+              serviceId
+            );
+            const { uploadUrl, key } = uploadUrlResponse.data.data;
+            if (!uploadUrl || !key) {
+              continue;
+            }
+
+            let fileToUpload;
+            if (photo.file) fileToUpload = photo.file;
+            else if (photo instanceof Blob) fileToUpload = photo;
+            else fileToUpload = await fetch(photo.url).then((r) => r.blob());
+
+            const uploadResponse = await fetch(uploadUrl, {
+              method: "PUT",
+              body: fileToUpload,
+              headers: { "Content-Type": fileToUpload.type || "image/jpeg" },
+            });
+
+            if (!uploadResponse.ok) {
+              throw new Error(
+                `Error subiendo foto a S3: ${uploadResponse.statusText}`
+              );
+            }
+
+            await serviceAPI.registerPhotoInDatabase({
+              reference: key,
+              service_id: serviceId,
+            });
+          } catch (photoError) {
+            // Rollback completo si falla alguna foto
+            if (createdEntities.service) {
+              try {
+                await serviceAPI.deleteService(serviceId);
+              } catch (deleteError) {}
+            }
+            if (createdEntities.vehicle) {
+              try {
+                await vehiclesApi.deleteVehicle(vehicleId);
+              } catch (deleteError) {}
+            }
+            if (newClientId) {
+              try {
+                await clientsAPI.deleteClient(newClientId);
+              } catch (deleteError) {}
+            }
+
+            throw new Error("Error subiendo fotos, el registro fue revertido");
+          }
+        }
+        createdEntities.photos = true;
+      }
+
+      toast.success("Servicio registrado con éxito");
+      navigate("/dashboard/gestion/servicios");
+    } catch (error) {
+      toast.error(error.message || "Error al registrar servicio");
+    } finally {
+      setGlobalLoading(false);
+    }
+  };
 
   // Manejador de errores específicos del servicio
   const handleServiceError = (message) => {
@@ -312,6 +345,7 @@ const handleCompleteService = async ({ service, photos }) => {
           clientId={formData.client?.id}
           vehicleId={formData.vehicle?.id}
           onComplete={handleCompleteService}
+          loading={globalLoading}
         />
       ),
     },

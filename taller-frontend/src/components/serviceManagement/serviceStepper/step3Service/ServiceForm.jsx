@@ -539,13 +539,7 @@ const ServiceForm = ({
           Atrás
         </button>
         <button type="submit" disabled={loading} className={styles.button}>
-          {loading ? (
-            <>
-              <LoadingSpinner></LoadingSpinner> Guardando...
-            </>
-          ) : (
-            "Registrar Servicio"
-          )}
+          {loading ? "Registrando..." : "Registrar Servicio"}
         </button>
       </div>
     </form>

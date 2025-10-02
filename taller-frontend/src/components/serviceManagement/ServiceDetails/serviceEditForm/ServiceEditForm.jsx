@@ -70,6 +70,10 @@ const ServiceEditForm = ({
     return "";
   };
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const localDate = today.toLocaleDateString("en-CA");
+
   const formatDeliveryDateTime = (dateTimeString) => {
     if (!dateTimeString) return "";
 
@@ -142,7 +146,9 @@ const ServiceEditForm = ({
             }
           >
             <FiArrowRight />{" "}
-            {buttonStates.markStatus ? "Procesando..." : "Marcar como En Proceso"}
+            {buttonStates.markStatus
+              ? "Procesando..."
+              : "Marcar como En Proceso"}
           </button>
         );
       case "En proceso":
@@ -159,7 +165,9 @@ const ServiceEditForm = ({
             }
           >
             <FiCheckCircle />{" "}
-            {buttonStates.markStatus ? "Procesando..." : "Marcar como Finalizado"}
+            {buttonStates.markStatus
+              ? "Procesando..."
+              : "Marcar como Finalizado"}
           </button>
         );
       case "Finalizado":
@@ -176,7 +184,10 @@ const ServiceEditForm = ({
                 : "Guardará los cambios y marcará el servicio como Entregado"
             }
           >
-            <FiTruck /> {buttonStates.markStatus ? "Procesando..." : "Marcar como Entregado"}
+            <FiTruck />{" "}
+            {buttonStates.markStatus
+              ? "Procesando..."
+              : "Marcar como Entregado"}
           </button>
         ) : null;
       default:
@@ -525,7 +536,10 @@ const ServiceEditForm = ({
   );
 
   return (
-    <form onSubmit={!isDelivered ? handleSaveChanges : (e) => e.preventDefault()} className={styles.serviceForm}>
+    <form
+      onSubmit={!isDelivered ? handleSaveChanges : (e) => e.preventDefault()}
+      className={styles.serviceForm}
+    >
       {/* Campos básicos */}
       <div className={styles.formRow}>
         <div className={styles.formGroup}>
@@ -538,6 +552,7 @@ const ServiceEditForm = ({
               name="end_date"
               value={formatDateForInput(formData.end_date) || ""}
               onChange={handleDateChange}
+              min={localDate}
             />
           )}
         </div>
@@ -712,47 +727,48 @@ const ServiceEditForm = ({
       </div>
 
       {/* Datos de Entrega - SOLO visible para Administrador o Encargado Flotilla */}
-      {canSeeDeliveryData && (service.status_service.name === "Finalizado" || isDelivered) && (
-        <div className={styles.deliverySection}>
-          <h3>Datos de Entrega</h3>
-          <div className={styles.formRow}>
-            <div className={styles.formGroup}>
-              <label>Número de Factura</label>
-              {isDelivered ? (
-                <span>{deliveryData?.invoice_number}</span>
-              ) : (
-                <input
-                  type="text"
-                  name="invoice_number"
-                  value={deliveryData?.invoice_number || ""}
-                  onChange={handleDeliveryDataChange}
-                />
-              )}
-            </div>
+      {canSeeDeliveryData &&
+        (service.status_service.name === "Finalizado" || isDelivered) && (
+          <div className={styles.deliverySection}>
+            <h3>Datos de Entrega</h3>
+            <div className={styles.formRow}>
+              <div className={styles.formGroup}>
+                <label>Número de Factura</label>
+                {isDelivered ? (
+                  <span>{deliveryData?.invoice_number}</span>
+                ) : (
+                  <input
+                    type="text"
+                    name="invoice_number"
+                    value={deliveryData?.invoice_number || ""}
+                    onChange={handleDeliveryDataChange}
+                  />
+                )}
+              </div>
 
-            <div className={styles.formGroup}>
-              <label>Método de Pago</label>
-              {isDelivered ? (
-                <span>{deliveryData?.payment_method}</span>
-              ) : (
-                <select
-                  name="payment_method"
-                  value={deliveryData?.payment_method || ""}
-                  onChange={handleDeliveryDataChange}
-                >
-                  <option value="" disabled>
-                    Seleccione
-                  </option>
-                  <option value="Efectivo">Efectivo</option>
-                  <option value="Tarjeta">Tarjeta</option>
-                  <option value="Sinpe">Sinpe</option>
-                  <option value="Transferencia">Transferencia</option>
-                </select>
-              )}
+              <div className={styles.formGroup}>
+                <label>Método de Pago</label>
+                {isDelivered ? (
+                  <span>{deliveryData?.payment_method}</span>
+                ) : (
+                  <select
+                    name="payment_method"
+                    value={deliveryData?.payment_method || ""}
+                    onChange={handleDeliveryDataChange}
+                  >
+                    <option value="" disabled>
+                      Seleccione
+                    </option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Tarjeta">Tarjeta</option>
+                    <option value="Sinpe">Sinpe</option>
+                    <option value="Transferencia">Transferencia</option>
+                  </select>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* BOTONES - OCULTOS CUANDO EL SERVICIO ESTÁ ENTREGADO */}
       {!isDelivered && (
@@ -763,17 +779,19 @@ const ServiceEditForm = ({
             disabled={buttonStates.deleteService}
             className={styles.deleteButton}
           >
-            <FiTrash2 /> {buttonStates.deleteService ? "Eliminando..." : "Eliminar Servicio"}
+            <FiTrash2 />{" "}
+            {buttonStates.deleteService ? "Eliminando..." : "Eliminar Servicio"}
           </button>
 
           <div className={styles.rightButtons}>
-            <button 
-              type="submit" 
-              disabled={buttonStates.saveChanges} 
+            <button
+              type="submit"
+              disabled={buttonStates.saveChanges}
               className={styles.button}
               title="Guardar cambios sin validar campos requeridos"
             >
-              <FiSave /> {buttonStates.saveChanges ? "Guardando..." : "Guardar Cambios"}
+              <FiSave />{" "}
+              {buttonStates.saveChanges ? "Guardando..." : "Guardar Cambios"}
             </button>
             {renderActionButtons()}
           </div>

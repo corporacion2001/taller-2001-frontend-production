@@ -144,7 +144,7 @@
 }
 
 .button {
-  background-color: #2ecc71;
+  background-color: #34af5a;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -161,7 +161,7 @@
 }
 
 .button:hover {
-  background-color: #121035;
+  background-color: #218838;
   transform: translateY(-2px);
 }
 

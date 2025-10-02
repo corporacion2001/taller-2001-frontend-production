@@ -344,7 +344,9 @@ const ServicesList = () => {
       </div>
 
       {/* Contenedor de servicios según el modo de vista */}
-      {viewMode === "cards" ? (
+      {loading ? (
+        <div className={styles.loading}>Cargando servicios...</div>
+      ) : viewMode === "cards" ? (
         <div className={styles.cardsContainer}>
           {filteredServices.length > 0 ? (
             filteredServices.map((service) => (
