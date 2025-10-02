@@ -13,7 +13,7 @@ const LeftPanel = () => {
     <div className={styles.leftPanel}>
       <div className={styles.content}>
         <img
-          src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1749708920/corporacionlogo_aoppj5.png"
+          src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1759382203/darkbackground_1_evdepb.webp"
           alt="Logo"
           className={styles.logo}
         />
