@@ -19,7 +19,7 @@ const HeroSection = () => {
         <div className={styles.heroImage}>
           <div className={styles.imageFrame}>
             <img
-              src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1747374154/istockphoto-1347150429-612x612_f0nex0.jpg"
+              src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1759382203/istockphoto-1347150429-612x612_glz7vg.webp"
               alt="Taller mecánico moderno"
               className={styles.carImage}
             />
