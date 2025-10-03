@@ -16,6 +16,7 @@ import ServicesFilters from "./servicesFilters/ServicesFilters";
 import ServicesCard from "./servicesCard/ServicesCard";
 import styles from "./servicesList.module.css";
 import ServicesTable from "./servicesTable/ServicesTable";
+import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
 
 const ServicesList = () => {
   const navigate = useNavigate();
@@ -345,7 +346,9 @@ const ServicesList = () => {
 
       {/* Contenedor de servicios según el modo de vista */}
       {loading ? (
-        <div className={styles.loading}>Cargando servicios...</div>
+               <div>
+          <LoadingSpinner />
+        </div>
       ) : viewMode === "cards" ? (
         <div className={styles.cardsContainer}>
           {filteredServices.length > 0 ? (
