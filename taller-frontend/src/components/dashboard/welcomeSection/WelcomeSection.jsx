@@ -4,6 +4,7 @@ import styles from "./welcomeSection.module.css";
 import SmartAvatar from "../../ui/smartAvatar/SmartAvatar";
 import { useAuth } from "../../../contexts/AuthContext";
 import { AnalyticsAPI } from "../../../services/analyticsAPI";
+import LoadingSpinner from '../../ui/spinner/LoadingSpinner';
 
 const WelcomeSection = () => {
   const { user } = useAuth();
@@ -125,9 +126,8 @@ const WelcomeSection = () => {
             <span className={styles.userName}>{user?.name || "Usuario"}</span>
           </h1>
         </div>
-        <p className={styles.welcomeMessage}>
-          Cargando...
-        </p>
+               <LoadingSpinner />
+
       </div>
     );
   }
