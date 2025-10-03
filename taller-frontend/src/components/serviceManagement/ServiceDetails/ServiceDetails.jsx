@@ -9,6 +9,7 @@ import styles from "./serviceDetails.module.css";
 import { useNotification } from "../../../contexts/NotificationContext";
 import { quoteAPI } from "../../../services/quoteAPI";
 import { proformaAPI } from "../../../services/proformaAPI";
+import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
 
 // Helper functions fuera del componente
 const formatPrice = (price) => {
@@ -1092,7 +1093,7 @@ const ServiceDetails = () => {
   if (loading) {
     return (
       <div className={styles.loading}>
-        <p>Cargando detalles del servicio...</p>
+        <LoadingSpinner />
       </div>
     );
   }
