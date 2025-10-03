@@ -270,12 +270,6 @@
   font-size: 0.9rem;
 }
 
-.loading {
-  padding: 2rem;
-  text-align: center;
-  color: #666;
-}
-
 .error {
   padding: 2rem;
   text-align: center;
