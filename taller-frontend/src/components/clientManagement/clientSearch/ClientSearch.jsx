@@ -4,6 +4,7 @@ import styles from "./clientSearch.module.css";
 import { clientsAPI } from "../../../services/client.api";
 import { FiSearch } from "react-icons/fi";
 import { useNotification } from "../../../contexts/NotificationContext";
+import LoandingSpinner from "../../ui/spinner/LoadingSpinner";
 
 const ClientSearch = () => {
   const [cedula, setCedula] = useState("");
@@ -95,7 +96,7 @@ const ClientSearch = () => {
       </div>
 
       <div className={styles.resultContainer}>
-        {loading && <p className={styles.loading}>Cargando...</p>}
+        {loading && <LoandingSpinner />}
         {!loading && error && <p className={styles.error}>{error}</p>}
         {!loading && !error && !clientData && (
           <p className={styles.noResults}>
