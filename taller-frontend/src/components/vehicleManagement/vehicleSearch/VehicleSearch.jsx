@@ -4,7 +4,7 @@ import styles from "./vehicleSearch.module.css";
 import { vehiclesApi } from "../../../services/vehicles.api";
 import { FiSearch } from "react-icons/fi";
 import { useNotification } from "../../../contexts/NotificationContext";
-
+import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
 const VehicleSearch = () => {
   const [plate, setPlate] = useState("");
   const [vehicleData, setVehicleData] = useState(null);
@@ -96,7 +96,7 @@ const VehicleSearch = () => {
       </div>
 
       <div className={styles.resultContainer}>
-        {loading && <p className={styles.loading}>Cargando...</p>}
+        {loading && <LoadingSpinner />}
         {!loading && error && <p className={styles.error}>{error}</p>}
         {!loading && !error && !vehicleData && (
           <p className={styles.noResults}>
