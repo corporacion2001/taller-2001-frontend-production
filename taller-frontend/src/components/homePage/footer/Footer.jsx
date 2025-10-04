@@ -103,7 +103,7 @@ const Footer = () => {
               </li>
               <li className="contact-item">
                 <FaPhoneAlt className="contact-icon" />
-                <a href="+50622450292">+506 2245 0292</a>
+                <a href="tel:+50622450292">+506 2245 0292</a>
               </li>
               <li className="contact-item">
                 <FaEnvelope className="contact-icon" />
