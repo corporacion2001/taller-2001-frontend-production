@@ -507,6 +507,7 @@ const ServiceEditForm = ({
                 <span>{formatPrice(labor.price)}</span>
               ) : (
                 <input
+                  maxLength={150}
                   type="number"
                   min="0"
                   step="0.01"
@@ -738,6 +739,7 @@ const ServiceEditForm = ({
                   <span>{deliveryData?.invoice_number}</span>
                 ) : (
                   <input
+                    maxLength={255}
                     type="text"
                     name="invoice_number"
                     value={deliveryData?.invoice_number || ""}
