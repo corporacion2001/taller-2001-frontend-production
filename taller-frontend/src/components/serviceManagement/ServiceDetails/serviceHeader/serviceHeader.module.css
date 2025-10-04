@@ -144,6 +144,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   padding: 15px;
   transition: all 0.3s ease;
+  overflow: hidden; 
+  word-wrap: break-word; 
 }
 
 .card:hover {
@@ -158,6 +160,9 @@
   font-size: 1.1rem;
   border-bottom: 1px solid #eaeaea;
   padding-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cardContent {
@@ -197,6 +202,7 @@
 .infoItem {
   display: flex;
   flex-direction: column;
+  min-width: 0; 
 }
 
 .label {
@@ -204,6 +210,9 @@
   color: #7f8c8d;
   font-size: 0.85rem;
   margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .highlight {
