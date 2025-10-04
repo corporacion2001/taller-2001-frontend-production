@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import styles from "./step3Service.module.css";
 import { useAuth } from "../../../../contexts/AuthContext";
 import LoadingSpinner from "../../../ui/spinner/LoadingSpinner";
-
+import {
+  FiTrash2
+} from "react-icons/fi";
 const ServiceForm = ({
   formData = {},
   encargados = [],
@@ -57,7 +59,7 @@ const ServiceForm = ({
               onClick={() => onRemovePart(index)}
               className={styles.removeButton}
             >
-              ×
+              <FiTrash2 />
             </button>
           </div>
 
@@ -127,7 +129,7 @@ const ServiceForm = ({
               onClick={() => onRemoveLabor(index)}
               className={styles.removeButton}
             >
-              ×
+                            <FiTrash2 />
             </button>
           </div>
 
@@ -232,7 +234,7 @@ const ServiceForm = ({
                 onClick={() => onRemovePart(index)}
                 className={styles.removeButton}
               >
-                ×
+                                <FiTrash2 />
               </button>
             </td>
           </tr>
@@ -289,7 +291,7 @@ const ServiceForm = ({
                 onClick={() => onRemoveLabor(index)}
                 className={styles.removeButton}
               >
-                ×
+                                <FiTrash2 />
               </button>
             </td>
           </tr>
