@@ -93,6 +93,8 @@ const App = () => {
                     "Monitoreo Metalmecánica",
                     "Monitoreo Todo Frenos y Clutch",
                     "Monitoreo Hidráulica",
+                     "Ingresador Servicios",
+                    "Gestor Repuestos",
                   ]}
                 />
               }
@@ -130,6 +132,30 @@ const App = () => {
                     "Encargado Metalmecánica",
                     "Encargado Todo Frenos y Cluth",
                     "Encargado Hidráulica",
+                                   "Ingresador Servicios",
+                    "Gestor Repuestos",
+                  ]}
+                />
+              }
+            >
+              <Route element={<Dashboard />}>
+                <Route path="/dashboard/nuevo-servicio" element={<Stepper />} />
+              </Route>
+            </Route>
+
+            <Route
+              element={
+                <PrivateRoute
+                  allowedRoles={[
+                    "Administrador",
+                    "Encargado Flotilla",
+                    "Encargado Livianos",
+                    "Encargado Pesados",
+                    "Encargado Enderezado y Pintura",
+                    "Encargado Metalmecánica",
+                    "Encargado Todo Frenos y Cluth",
+                    "Encargado Hidráulica",
+                    "Gestor Repuestos",
                   ]}
                 />
               }
