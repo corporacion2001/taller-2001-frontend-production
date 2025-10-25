@@ -10,6 +10,8 @@ import { vehiclesApi } from "../../../services/vehicles.api";
 import { serviceAPI } from "../../../services/service.api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../../contexts/AuthContext"; // Importar el contexto de autenticación
+
 
 const ServiceStepper = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -27,6 +29,8 @@ const ServiceStepper = () => {
   });
 
   const [globalLoading, setGlobalLoading] = useState(false);
+  
+  const isReceptor = user?.roles?.includes("Ingresador Servicios");
 
   const handleNext = (stepData, stepName) => {
     const newFormData = {
@@ -251,8 +255,15 @@ const ServiceStepper = () => {
       }
 
       toast.success("Servicio registrado con éxito");
-      navigate("/dashboard/gestion/servicios");
-    } catch (error) {
+
+      // Redirigir según el tipo de usuario
+      if (isReceptor) {
+        // El receptor vuelve al inicio para crear otro servicio
+        navigate("/dashboard");
+      } else {
+        // Los demás usuarios van a la lista de servicios
+        navigate("/dashboard/gestion/servicios");
+      }    } catch (error) {
       toast.error(error.message || "Error al registrar servicio");
     } finally {
       setGlobalLoading(false);
@@ -315,8 +326,14 @@ const ServiceStepper = () => {
           onNext={(data) => handleNext(data, "client")}
           initialData={formData.client}
           showSearch={!completedSteps.client}
-          onBack={() => navigate("/dashboard/gestion/servicios")}
-        />
+          onBack={() => {
+            // Para el receptor, no mostrar confirmación de volver
+            if (isReceptor) {
+              navigate("/dashboard");
+            } else {
+              navigate("/dashboard/gestion/servicios");
+            }
+          }}        />
       ),
     },
     {
@@ -353,12 +370,14 @@ const ServiceStepper = () => {
 
   return (
     <div className={styles.stepperContainer}>
+            {!isReceptor && (
       <button
         onClick={() => navigate("/dashboard/gestion/servicios")}
         className={styles.backButton}
       >
         <FiArrowLeft /> Volver
       </button>
+      )}
 
       <div className={styles.stepperHeader}>
         {steps.map((step, index) => (
