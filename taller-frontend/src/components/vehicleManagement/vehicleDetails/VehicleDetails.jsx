@@ -18,6 +18,13 @@ const VehicleDetails = ({ vehicle }) => {
     engine: "",
     mileage: "",
     fuel_type: "",
+    traccion: "",
+    color: "",
+    cilindros: "",
+    nombre_propietario: "",
+    carroceria: "",
+    categoria: "",
+    vin: "",
   });
 
   useEffect(() => {
@@ -28,9 +35,8 @@ const VehicleDetails = ({ vehicle }) => {
   const validateField = (name, value) => {
     switch (name) {
       case "plate":
-        // Mantener la validación pero no se usará para edición
         if (!value.trim()) return "La placa es requerida";
-        if (value.length > 15) return "Máximo 15 caracteres";
+        if (value.length > 6) return "Máximo 6 caracteres";
         return "";
       case "year":
         if (!value) return "Año requerido";
@@ -50,6 +56,27 @@ const VehicleDetails = ({ vehicle }) => {
         return "";
       case "fuel_type":
         if (!value) return "Tipo de combustible requerido";
+        return "";
+      case "traccion":
+        if (value && value.length > 50) return "Máximo 50 caracteres";
+        return "";
+      case "color":
+        if (value && value.length > 50) return "Máximo 50 caracteres";
+        return "";
+      case "cilindros":
+        if (value && value.length > 10) return "Máximo 10 caracteres";
+        return "";
+      case "nombre_propietario":
+        if (value && value.length > 255) return "Máximo 255 caracteres";
+        return "";
+      case "carroceria":
+        if (value && value.length > 100) return "Máximo 100 caracteres";
+        return "";
+      case "categoria":
+        if (value && value.length > 100) return "Máximo 100 caracteres";
+        return "";
+      case "vin":
+        if (value && value.length > 255) return "Máximo 255 caracteres";
         return "";
       default:
         return "";
@@ -86,22 +113,40 @@ const VehicleDetails = ({ vehicle }) => {
       engine: validateField("engine", formData.engine),
       mileage: validateField("mileage", formData.mileage),
       fuel_type: validateField("fuel_type", formData.fuel_type),
+      traccion: validateField("traccion", formData.traccion),
+      color: validateField("color", formData.color),
+      cilindros: validateField("cilindros", formData.cilindros),
+      nombre_propietario: validateField(
+        "nombre_propietario",
+        formData.nombre_propietario
+      ),
+      carroceria: validateField("carroceria", formData.carroceria),
+      categoria: validateField("categoria", formData.categoria),
+      vin: validateField("vin", formData.vin),
     };
 
     setErrors(newErrors);
-    
-    // Excluir la placa de la validación general del formulario
-    const errorsWithoutPlate = { ...newErrors };
-    delete errorsWithoutPlate.plate;
-    
-    return !Object.values(errorsWithoutPlate).some((error) => error);
+
+    // Excluir la placa y campos opcionales de la validación general
+    const requiredFields = [
+      "year",
+      "model",
+      "chassis",
+      "brand",
+      "engine",
+      "mileage",
+      "fuel_type",
+    ];
+    const hasRequiredErrors = requiredFields.some((field) => newErrors[field]);
+
+    return !hasRequiredErrors;
   };
 
   const hasChanges = () => {
     return Object.keys(formData).some((key) => {
       // Excluir la placa de la verificación de cambios
       if (key === "plate") return false;
-      
+
       // Convertir valores vacíos a string vacía para ambos
       const current = formData[key] == null ? "" : formData[key];
       const original = originalData[key] == null ? "" : originalData[key];
@@ -124,6 +169,13 @@ const VehicleDetails = ({ vehicle }) => {
       engine: "",
       mileage: "",
       fuel_type: "",
+      traccion: "",
+      color: "",
+      cilindros: "",
+      nombre_propietario: "",
+      carroceria: "",
+      categoria: "",
+      vin: "",
     });
   };
 
@@ -172,10 +224,7 @@ const VehicleDetails = ({ vehicle }) => {
               <button className={styles.cancelButton} onClick={handleCancel}>
                 Cancelar
               </button>
-              <button
-                className={styles.saveButton}
-                onClick={handleSave}
-              >
+              <button className={styles.saveButton} onClick={handleSave}>
                 {loading.save ? "Guardando..." : "Guardar"}
               </button>
             </>
@@ -186,52 +235,22 @@ const VehicleDetails = ({ vehicle }) => {
       <div className={styles.grid}>
         {/* Placa - Siempre deshabilitada */}
         <div className={styles.inputGroup}>
-          <label>Placa</label>
+          <label>Placa*</label>
           <input
-            maxLength={15}
+            maxLength={6}
             name="plate"
             value={formData.plate || ""}
             onChange={handleChange}
-            disabled={true} // Siempre deshabilitado
+            disabled={true}
           />
           {errors.plate && (
             <span className={styles.errorText}>{errors.plate}</span>
           )}
         </div>
 
-        {/* Año */}
-        <div className={styles.inputGroup}>
-          <label>Año</label>
-          <input
-            name="year"
-            value={formData.year || ""}
-            onChange={handleChange}
-            disabled={!isEditable}
-            maxLength={4}
-          />
-          {errors.year && (
-            <span className={styles.errorText}>{errors.year}</span>
-          )}
-        </div>
-
-        {/* Modelo */}
-        <div className={styles.inputGroup}>
-          <label>Modelo</label>
-          <input
-            maxLength={255}
-            name="model"
-            value={formData.model || ""}
-            onChange={handleChange}
-            disabled={!isEditable}
-          />
-          {errors.model && (
-            <span className={styles.errorText}>{errors.model}</span>
-          )}
-        </div>
-
         {/* Marca */}
         <div className={styles.inputGroup}>
-          <label>Marca</label>
+          <label>Marca*</label>
           <input
             maxLength={255}
             name="brand"
@@ -244,9 +263,39 @@ const VehicleDetails = ({ vehicle }) => {
           )}
         </div>
 
+        {/* Modelo */}
+        <div className={styles.inputGroup}>
+          <label>Modelo*</label>
+          <input
+            maxLength={255}
+            name="model"
+            value={formData.model || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+          />
+          {errors.model && (
+            <span className={styles.errorText}>{errors.model}</span>
+          )}
+        </div>
+
+        {/* Año */}
+        <div className={styles.inputGroup}>
+          <label>Año*</label>
+          <input
+            name="year"
+            value={formData.year || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            maxLength={4}
+          />
+          {errors.year && (
+            <span className={styles.errorText}>{errors.year}</span>
+          )}
+        </div>
+
         {/* Chasis */}
         <div className={styles.inputGroup}>
-          <label>Número de Chasis</label>
+          <label>Número de Chasis*</label>
           <input
             maxLength={255}
             name="chassis"
@@ -261,7 +310,7 @@ const VehicleDetails = ({ vehicle }) => {
 
         {/* Motor */}
         <div className={styles.inputGroup}>
-          <label>Número de Motor</label>
+          <label>Motor*</label>
           <input
             maxLength={255}
             name="engine"
@@ -276,7 +325,7 @@ const VehicleDetails = ({ vehicle }) => {
 
         {/* Kilometraje */}
         <div className={styles.inputGroup}>
-          <label>Kilometraje</label>
+          <label>Kilometraje*</label>
           <input
             name="mileage"
             value={formData.mileage || ""}
@@ -290,7 +339,7 @@ const VehicleDetails = ({ vehicle }) => {
 
         {/* Tipo de Combustible */}
         <div className={styles.inputGroup}>
-          <label>Tipo de Combustible</label>
+          <label>Tipo de Combustible*</label>
           <select
             name="fuel_type"
             value={formData.fuel_type || ""}
@@ -299,13 +348,129 @@ const VehicleDetails = ({ vehicle }) => {
           >
             <option value="">Seleccione...</option>
             <option value="Gasolina">Gasolina</option>
-            <option value="Diésel">Diésel</option>
-            <option value="Eléctrico">Eléctrico</option>
+            <option value="Diesel">Diésel</option>
+            <option value="Electrico">Eléctrico</option>
+            <option value="Hibrido">Híbrido</option>
+            <option value="Gas">Gas</option>
             <option value="Otro">Otro</option>
           </select>
           {errors.fuel_type && (
             <span className={styles.errorText}>{errors.fuel_type}</span>
           )}
+        </div>
+      </div>
+
+      <div className={styles.grid}>
+        {/* Tracción */}
+        <div className={styles.inputGroup}>
+          <label>Tracción</label>
+          <input
+            maxLength={50}
+            name="traccion"
+            value={formData.traccion || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Ej: 4x4"
+          />
+          {errors.traccion && (
+            <span className={styles.errorText}>{errors.traccion}</span>
+          )}
+        </div>
+
+        {/* Color */}
+        <div className={styles.inputGroup}>
+          <label>Color</label>
+          <input
+            maxLength={50}
+            name="color"
+            value={formData.color || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Ej: Blanco"
+          />
+          {errors.color && (
+            <span className={styles.errorText}>{errors.color}</span>
+          )}
+        </div>
+
+        {/* Cilindros */}
+        <div className={styles.inputGroup}>
+          <label>Cilindros</label>
+          <input
+            maxLength={10}
+            name="cilindros"
+            value={formData.cilindros || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Ej: 4"
+          />
+          {errors.cilindros && (
+            <span className={styles.errorText}>{errors.cilindros}</span>
+          )}
+        </div>
+
+        {/* Nombre Propietario */}
+        <div className={styles.inputGroup}>
+          <label>Nombre Propietario</label>
+          <input
+            maxLength={255}
+            name="nombre_propietario"
+            value={formData.nombre_propietario || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Nombre completo"
+          />
+          {errors.nombre_propietario && (
+            <span className={styles.errorText}>
+              {errors.nombre_propietario}
+            </span>
+          )}
+        </div>
+
+        {/* Carrocería */}
+        <div className={styles.inputGroup}>
+          <label>Carrocería</label>
+          <input
+            maxLength={100}
+            name="carroceria"
+            value={formData.carroceria || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Ej: Sedán"
+          />
+          {errors.carroceria && (
+            <span className={styles.errorText}>{errors.carroceria}</span>
+          )}
+        </div>
+
+        {/* Categoría */}
+        <div className={styles.inputGroup}>
+          <label>Categoría</label>
+          <input
+            maxLength={100}
+            name="categoria"
+            value={formData.categoria || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Ej: Particular"
+          />
+          {errors.categoria && (
+            <span className={styles.errorText}>{errors.categoria}</span>
+          )}
+        </div>
+
+        {/* VIN */}
+        <div className={styles.inputGroup}>
+          <label>VIN</label>
+          <input
+            maxLength={255}
+            name="vin"
+            value={formData.vin || ""}
+            onChange={handleChange}
+            disabled={!isEditable}
+            placeholder="Número VIN"
+          />
+          {errors.vin && <span className={styles.errorText}>{errors.vin}</span>}
         </div>
       </div>
     </div>
