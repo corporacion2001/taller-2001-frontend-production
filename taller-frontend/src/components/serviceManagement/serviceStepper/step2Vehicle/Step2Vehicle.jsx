@@ -27,6 +27,13 @@ const Step2Vehicle = ({
     engine: "",
     mileage: "",
     fuel_type: "Gasolina",
+    traccion: "",
+    color: "",
+    cilindros: "",
+    nombre_propietario: "",
+    carroceria: "",
+    categoria: "",
+    vin: "",
   });
 
   const validatePlate = (plate) => {
@@ -49,6 +56,13 @@ const Step2Vehicle = ({
         engine: "",
         mileage: "",
         fuel_type: "",
+        traccion: "",
+        color: "",
+        cilindros: "",
+        nombre_propietario: "",
+        carroceria: "",
+        categoria: "",
+        vin: "",
       });
       setCurrentMileage("");
     } else {
@@ -64,6 +78,13 @@ const Step2Vehicle = ({
         engine: initialData.engine || "",
         mileage: initialData.mileage || "",
         fuel_type: initialData.fuel_type || "",
+        traccion: initialData.traccion || "",
+        color: initialData.color || "",
+        cilindros: initialData.cilindros || "",
+        nombre_propietario: initialData.nombre_propietario || "",
+        carroceria: initialData.carroceria || "",
+        categoria: initialData.categoria || "",
+        vin: initialData.vin || "",
       });
       setCurrentMileage(
         initialData.currentMileage || initialData.mileage || ""
@@ -228,6 +249,31 @@ const Step2Vehicle = ({
               <p>
                 <strong>Motor:</strong> {vehicleData.engine}
               </p>
+                       {vehicleData.traccion && (
+                <p>
+                  <strong>Tracción:</strong> {vehicleData.traccion}
+                </p>
+              )}
+              {vehicleData.color && (
+                <p>
+                  <strong>Color:</strong> {vehicleData.color}
+                </p>
+              )}
+              {vehicleData.cilindros && (
+                <p>
+                  <strong>Cilindros:</strong> {vehicleData.cilindros}
+                </p>
+              )}
+              {vehicleData.carroceria && (
+                <p>
+                  <strong>Carrocería:</strong> {vehicleData.carroceria}
+                </p>
+              )}
+              {vehicleData.categoria && (
+                <p>
+                  <strong>Categoría:</strong> {vehicleData.categoria}
+                </p>
+              )}
             </div>
           </div>
           <div className={styles.mileageUpdate}>
