@@ -93,7 +93,7 @@ const App = () => {
                     "Monitoreo Metalmecánica",
                     "Monitoreo Todo Frenos y Clutch",
                     "Monitoreo Hidráulica",
-                     "Ingresador Servicios",
+                    "Ingresador Servicios",
                     "Gestor Repuestos",
                   ]}
                 />
@@ -132,7 +132,7 @@ const App = () => {
                     "Encargado Metalmecánica",
                     "Encargado Todo Frenos y Cluth",
                     "Encargado Hidráulica",
-                                   "Ingresador Servicios",
+                    "Ingresador Servicios",
                     "Gestor Repuestos",
                   ]}
                 />
@@ -165,7 +165,6 @@ const App = () => {
                   path="/dashboard/gestion/servicios"
                   element={<ServicesList />}
                 />
-                <Route path="/dashboard/nuevo-servicio" element={<Stepper />} />
                 <Route
                   path="/dashboard/servicios/:serviceId"
                   element={<ServiceDetails />}
@@ -174,7 +173,7 @@ const App = () => {
                 <Route
                   path="/dashboard/gestion/clientes"
                   element={<ClientSearch />}
-                ></Route>
+                />
                 <Route
                   path="/dashboard/gestion/vehicles"
                   element={<VehicleSearch />}
