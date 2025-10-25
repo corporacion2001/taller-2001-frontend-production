@@ -16,6 +16,7 @@ import { useAuth } from "../../../contexts/AuthContext"; // Importar el contexto
 const ServiceStepper = () => {
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     client: null,
     vehicle: null,
