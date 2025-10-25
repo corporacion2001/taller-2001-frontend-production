@@ -224,8 +224,8 @@ const tiposPlaca = [
     if (!formData.plate.trim()) {
       newErrors.plate = "La placa es requerida";
       isValid = false;
-    } else if (formData.plate.length > 15) {
-      newErrors.plate = "Máximo 15 caracteres permitidos";
+   } else if (formData.plate.length > 6) {
+      newErrors.plate = "Máximo 6 caracteres permitidos";
       isValid = false;
     }
 
@@ -289,9 +289,6 @@ const tiposPlaca = [
     if (!formData.fuel_type) {
       newErrors.fuel_type = "El tipo de combustible es requerido";
       isValid = false;
-    } else if (formData.fuel_type.length > 20) {
-      newErrors.fuel_type = "Máximo 20 caracteres permitidos";
-      isValid = false;
     }
 
     setErrors(newErrors);
@@ -314,14 +311,50 @@ const tiposPlaca = [
       );
 
       if (response?.success) {
-        const { brand, model, year, chassis, engine } = response.data;
+    const {
+          brand,
+          model,
+          year,
+          chassis,
+          engine,
+          traccion,
+          combustible,
+          color,
+          cilindros,
+          nombre,
+          carroceria,
+          categoria,
+          vin,
+        } = response.data;
 
+        // Mapear combustible del scraping al formato de fuel_type
+        const fuelTypeMap = {
+          GASOLINA: "Gasolina",
+          DIESEL: "Diesel",
+          ELECTRICO: "Electrico",
+          HIBRIDO: "Hibrido",
+          GAS: "Gas",
+        };
         onInputChange({ target: { name: "brand", value: brand || "" } });
         onInputChange({ target: { name: "model", value: model || "" } });
         onInputChange({ target: { name: "year", value: year || "" } });
         onInputChange({ target: { name: "chassis", value: chassis || "" } });
         onInputChange({ target: { name: "engine", value: engine || "" } });
-
+        onInputChange({ target: { name: "traccion", value: traccion || "" } });
+        onInputChange({
+          target: {
+            name: "fuel_type",
+            value: fuelTypeMap[combustible?.toUpperCase()] || "Gasolina",
+          },
+        });
+        onInputChange({ target: { name: "color", value: color || "" } });
+        onInputChange({ target: { name: "cilindros", value: cilindros || "" } });
+        onInputChange({
+          target: { name: "nombre_propietario", value: nombre || "" },
+        });
+        onInputChange({ target: { name: "carroceria", value: carroceria || "" } });
+        onInputChange({ target: { name: "categoria", value: categoria || "" } });
+        onInputChange({ target: { name: "vin", value: vin || "" } });
         setErrors((prev) => ({
           ...prev,
           scraping: "✓ Datos obtenidos correctamente",
@@ -557,6 +590,98 @@ const tiposPlaca = [
           {errors.fuel_type && (
             <span className={styles.errorText}>{errors.fuel_type}</span>
           )}
+        </div>
+      </div>
+           <div className={styles.formGrid}>
+        <div className={styles.formGroup}>
+          <label>Tracción</label>
+          <input
+            type="text"
+            name="traccion"
+            placeholder="Ej: 4x4"
+            value={formData.traccion || ""}
+            onChange={onInputChange}
+            maxLength={50}
+            disabled={loading}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Color</label>
+          <input
+            type="text"
+            name="color"
+            placeholder="Ej: Blanco"
+            value={formData.color || ""}
+            onChange={onInputChange}
+            maxLength={50}
+            disabled={loading}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Cilindros</label>
+          <input
+            type="text"
+            name="cilindros"
+            placeholder="Ej: 4"
+            value={formData.cilindros || ""}
+            onChange={onInputChange}
+            maxLength={10}
+            disabled={loading}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Nombre Propietario</label>
+          <input
+            type="text"
+            name="nombre_propietario"
+            placeholder="Nombre completo"
+            value={formData.nombre_propietario || ""}
+            onChange={onInputChange}
+            maxLength={255}
+            disabled={loading}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Carrocería</label>
+          <input
+            type="text"
+            name="carroceria"
+            placeholder="Ej: Sedán"
+            value={formData.carroceria || ""}
+            onChange={onInputChange}
+            maxLength={100}
+            disabled={loading}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Categoría</label>
+          <input
+            type="text"
+            name="categoria"
+            placeholder="Ej: Particular"
+            value={formData.categoria || ""}
+            onChange={onInputChange}
+            maxLength={100}
+            disabled={loading}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>VIN</label>
+          <input
+            type="text"
+            name="vin"
+            placeholder="Número VIN"
+            value={formData.vin || ""}
+            onChange={onInputChange}
+            maxLength={255}
+            disabled={loading}
+          />
         </div>
       </div>
       <div className={styles.buttonGroup}>
