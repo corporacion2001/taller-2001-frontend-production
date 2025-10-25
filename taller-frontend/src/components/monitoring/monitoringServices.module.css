@@ -167,18 +167,30 @@
   display: flex;
   gap: 0.5rem;
   font-size: 0.9rem;
+  align-items: flex-start;
 }
 
 .infoLabel {
   color: #8a8a9d;
   min-width: 70px;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .infoValue {
   color: #e0e0e0;
   font-weight: 500;
+  flex: 1;
 }
+
+/* 🎯 ESTILOS PARA MECÁNICOS */
+.mechanicsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
 
 /* Fechas */
 .datesContainer {
@@ -348,6 +360,22 @@
   font-weight: 500;
 }
 
+/* Fecha en alerta */
+.alertDate {
+  color: #ff4d4d; /* rojo fuerte */
+  font-weight: 700;
+  animation: blink 1.2s infinite alternate;
+}
+
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
 /* Responsive */
 @media (max-width: 1400px) {
   .serviceRow {
@@ -388,19 +416,5 @@
   
   .partItem {
     font-size: 0.8rem;
-  }
-}
-.alertDate {
-  color: #ff4d4d; /* rojo fuerte */
-  font-weight: 700;
-  animation: blink 1.2s infinite alternate;
-}
-
-@keyframes blink {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0.6;
   }
 }
