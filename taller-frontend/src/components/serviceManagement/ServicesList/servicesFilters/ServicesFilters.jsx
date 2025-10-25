@@ -10,7 +10,7 @@ const ServicesFilters = ({
   isFleetMgr,
   activeTab,
   usersList,
-  nonAdminsList
+  nonAdminsList,
 }) => {
   const paymentMethods = [
     { value: "", label: "Todos los métodos" },
@@ -41,17 +41,17 @@ const ServicesFilters = ({
   return (
     <div className={styles.filtersPanel}>
       <div className={styles.filtersHeader}>
-        <button 
+        <button
           onClick={() => {
             resetFilters();
             setShowFilters(false);
-          }} 
+          }}
           className={styles.clearFilters}
         >
-          Limpiar 
+          Limpiar
         </button>
       </div>
-      
+
       <div className={styles.filtersGrid}>
         <div className={styles.filterGroup}>
           <label>Fecha de entrada</label>
@@ -109,39 +109,38 @@ const ServicesFilters = ({
           </select>
         </div>
 
-        {(isAdmin || isFleetMgr) && (activeTab === "Finalizado" || activeTab === "Todos") && (
-          <div className={styles.filterGroup}>
-            <label>Método de pago</label>
-            <select
-              value={filters.paymentMethod}
-              onChange={(e) => updateFilter("paymentMethod", e.target.value)}
-              className={styles.selectInput}
-            >
-              {paymentMethods.map((method) => (
-                <option key={method.value} value={method.value}>
-                  {method.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        {(isAdmin || isFleetMgr) &&
+          (activeTab === "Finalizado" || activeTab === "Todos") && (
+            <div className={styles.filterGroup}>
+              <label>Método de pago</label>
+              <select
+                value={filters.paymentMethod}
+                onChange={(e) => updateFilter("paymentMethod", e.target.value)}
+                className={styles.selectInput}
+              >
+                {paymentMethods.map((method) => (
+                  <option key={method.value} value={method.value}>
+                    {method.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
-        {(isAdmin || isFleetMgr) && (
-          <div className={styles.filterGroup}>
-            <label>Área</label>
-            <select
-              value={filters.area}
-              onChange={(e) => updateFilter("area", e.target.value)}
-              className={styles.selectInput}
-            >
-              {areas.map((areaOption) => (
-                <option key={areaOption.value} value={areaOption.value}>
-                  {areaOption.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className={styles.filterGroup}>
+          <label>Área</label>
+          <select
+            value={filters.area}
+            onChange={(e) => updateFilter("area", e.target.value)}
+            className={styles.selectInput}
+          >
+            {areas.map((areaOption) => (
+              <option key={areaOption.value} value={areaOption.value}>
+                {areaOption.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {(isAdmin || isFleetMgr) && (
           <div className={styles.filterGroup}>

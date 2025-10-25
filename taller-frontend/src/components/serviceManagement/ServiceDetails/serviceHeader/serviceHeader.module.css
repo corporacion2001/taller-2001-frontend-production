@@ -31,23 +31,6 @@
   background-color: #e2e6ea;
 }
 
-.pdfButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.8rem 1.5rem;
-  background-color: #e53e3e;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  min-height: 44px;
-}
-
 .pdfButton:hover {
   background-color: #c53030;
 }
@@ -106,7 +89,7 @@
 }
 
 .statusBadge[data-status="Entregado"] {
-  background-color: #C6D9F4;
+  background-color: #c6d9f4;
 }
 
 /* Clases para usar con className (alternativa) */
@@ -144,8 +127,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   padding: 15px;
   transition: all 0.3s ease;
-  overflow: hidden; 
-  word-wrap: break-word; 
+  overflow: hidden; /* Esto evita que el contenido se salga */
+  word-wrap: break-word; /* Rompe palabras muy largas */
 }
 
 .card:hover {
@@ -202,7 +185,7 @@
 .infoItem {
   display: flex;
   flex-direction: column;
-  min-width: 0; 
+  min-width: 0; /* Esto ayuda con el flexbox y el desbordamiento */
 }
 
 .label {
@@ -295,4 +278,47 @@
   .actionButton {
     width: 100%;
   }
+}
+
+.exportButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.pdfButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-height: 44px;
+}
+
+.wordButton {
+  background-color: #2b579a;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-height: 44px;
+}
+
+.wordButton:hover {
+  background-color: #1d3e73;
 }

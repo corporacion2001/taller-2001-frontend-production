@@ -49,5 +49,7 @@ export const serviceAPI = {
   deletePart: (partId) =>
     api.delete(`/parts/${partId}`),
   deleteLabor: (laborId) =>
-    api.delete(`/labors/${laborId}`)
+    api.delete(`/labors/${laborId}`),
+  deletePaidLabor: (paidLaborId) =>
+    api.delete(`/paid-labors/${paidLaborId}`)
 };

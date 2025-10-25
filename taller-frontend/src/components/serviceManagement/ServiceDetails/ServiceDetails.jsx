@@ -10,7 +10,6 @@ import { useNotification } from "../../../contexts/NotificationContext";
 import { quoteAPI } from "../../../services/quoteAPI";
 import { proformaAPI } from "../../../services/proformaAPI";
 import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
-
 // Helper functions fuera del componente
 const formatPrice = (price) => {
   return new Intl.NumberFormat("es-CR", {
@@ -78,6 +77,9 @@ const ServiceDetails = () => {
   const [showQuotePartsModal, setShowQuotePartsModal] = useState(false);
   const [showSendProformaModal, setShowSendProformaModal] = useState(false);
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
+  const [showDeletePaidLaborModal, setShowDeletePaidLaborModal] = useState(false);
+  const [pendingPaidLaborIndex, setPendingPaidLaborIndex] = useState(null);
+  const [pendingPaidLaborId, setPendingPaidLaborId] = useState(null);
 
   // Estados para almacenar datos temporales de confirmación
   const [pendingPartIndex, setPendingPartIndex] = useState(null);
@@ -94,6 +96,7 @@ const ServiceDetails = () => {
   const [formData, setFormData] = useState({
     parts: [],
     labors: [],
+    paidLabors: [],
     end_date: "",
     vehicle_location: "",
     mechanics: [],
@@ -123,6 +126,13 @@ const ServiceDetails = () => {
   const calculateLaborsTotal = (labors = formData.labors) => {
     return labors.reduce(
       (total, labor) => total + labor.amount * parseFloat(labor.price),
+      0
+    );
+  };
+
+  const calculatePaidLaborsTotal = (paidLabors = formData.paidLabors) => {
+    return paidLabors.reduce(
+      (total, paidLabor) => total + parseFloat(paidLabor.price || 0),
       0
     );
   };
@@ -203,13 +213,18 @@ const ServiceDetails = () => {
       initialFormData.labors
     );
 
+    const paidLaborsChanged = !areArraysEqual(
+      formData.paidLabors,
+      initialFormData.paidLabors
+    );
+
     // Verificar cambios en datos de entrega (para servicios Finalizados)
     const deliveryDataChanged =
       deliveryData.invoice_number !== initialDeliveryData.invoice_number ||
       deliveryData.payment_method !== initialDeliveryData.payment_method;
 
     return (
-      basicFormChanges || partsChanged || laborsChanged || deliveryDataChanged
+      basicFormChanges || partsChanged || laborsChanged || paidLaborsChanged || deliveryDataChanged
     );
   };
 
@@ -503,6 +518,7 @@ const ServiceDetails = () => {
         const initialData = {
           parts: serviceData.parts || [],
           labors: serviceData.labors || [],
+          paidLabors: serviceData.paid_labors || [],
           end_date: serviceData.end_date || "",
           vehicle_location: serviceData.vehicle_location || "",
           mechanics: serviceData.mechanics || [],
@@ -596,27 +612,61 @@ const ServiceDetails = () => {
   };
 
   const handleConfirmDeletePart = async () => {
-    setShowDeletePartModal(false);
-    setActionLoading(true);
+  setShowDeletePartModal(false);
+  setActionLoading(true);
 
-    try {
-      await serviceAPI.deletePart(pendingPartId);
+  try {
+    // 1. Eliminar el part del backend
+    await serviceAPI.deletePart(pendingPartId);
 
-      setFormData((prev) => ({
-        ...prev,
-        parts: prev.parts.filter((_, i) => i !== pendingPartIndex),
-      }));
+    // 2. Actualizar el estado local eliminando el repuesto
+    const updatedParts = formData.parts.filter((_, i) => i !== pendingPartIndex);
+    
+    setFormData((prev) => ({
+      ...prev,
+      parts: updatedParts,
+    }));
 
-      showNotification("Repuesto eliminado correctamente", "success");
-    } catch (err) {
-      setActionError("Error al eliminar el repuesto");
-      showNotification("Error al eliminar el repuesto", "error");
-    } finally {
-      setActionLoading(false);
-      setPendingPartIndex(null);
-      setPendingPartId(null);
+    const payload = {
+      parts: updatedParts.map((part) => ({
+        id: part.id || undefined,
+        amount: part.amount,
+        name: part.name,
+        price: parseFloat(part.price),
+        invoice_number: part.invoice_number || "",
+      })),
+    };
+    //Para que sea actualice el total_price
+    const response = await serviceAPI.updateService(serviceId, payload);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || "Error al actualizar el servicio");
     }
-  };
+
+    // 6. Actualizar los datos iniciales
+    setInitialFormData(JSON.parse(JSON.stringify({
+      ...formData,
+      parts: updatedParts
+    })));
+    setHasUnsavedChanges(false);
+
+    showNotification("Repuesto eliminado correctamente", "success");
+
+    // 7. Recargar el servicio para obtener los datos actualizados
+    const serviceResponse = await serviceAPI.getServiceById(serviceId);
+    if (serviceResponse.data.success) {
+      setService(serviceResponse.data.data);
+    }
+
+  } catch (err) {
+    setActionError(err.message || "Error al eliminar el repuesto");
+    showNotification("Error al eliminar el repuesto", "error");
+  } finally {
+    setActionLoading(false);
+    setPendingPartIndex(null);
+    setPendingPartId(null);
+  }
+};
 
   const removeLabor = async (index, laborId) => {
     if (laborId) {
@@ -632,25 +682,129 @@ const ServiceDetails = () => {
   };
 
   const handleConfirmDeleteLabor = async () => {
-    setShowDeleteLaborModal(false);
+  setShowDeleteLaborModal(false);
+  setActionLoading(true);
+
+  try {
+    // 1. Eliminar el labor del backend
+    await serviceAPI.deleteLabor(pendingLaborId);
+
+    // 2. Actualizar el estado local eliminando la mano de obra
+    const updatedLabors = formData.labors.filter((_, i) => i !== pendingLaborIndex);
+    
+    setFormData((prev) => ({
+      ...prev,
+      labors: updatedLabors,
+    }));
+
+    const payload = {
+      labors: updatedLabors.map((labor) => ({
+        id: labor.id || undefined,
+        amount: labor.amount,
+        description: labor.description,
+        price: parseFloat(labor.price),
+      })),
+    };
+    
+    const response = await serviceAPI.updateService(serviceId, payload);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || "Error al actualizar el servicio");
+    }
+
+    // 6. Actualizar los datos iniciales
+    setInitialFormData(JSON.parse(JSON.stringify({
+      ...formData,
+      labors: updatedLabors
+    })));
+    setHasUnsavedChanges(false);
+
+    showNotification("Mano de obra eliminada correctamente", "success");
+
+    // 7. Recargar el servicio para obtener los datos actualizados
+    const serviceResponse = await serviceAPI.getServiceById(serviceId);
+    if (serviceResponse.data.success) {
+      setService(serviceResponse.data.data);
+    }
+
+  } catch (err) {
+    setActionError(err.message || "Error al eliminar la mano de obra");
+    showNotification("Error al eliminar la mano de obra", "error");
+  } finally {
+    setActionLoading(false);
+    setPendingLaborIndex(null);
+    setPendingLaborId(null);
+  }
+};
+
+// AGREGAR: Handlers para PaidLabors
+  const handlePaidLaborChange = (index, field, value) => {
+    const updatedPaidLabors = [...formData.paidLabors];
+    updatedPaidLabors[index] = {
+      ...updatedPaidLabors[index],
+      [field]: field === "price" ? parseFloat(value) || 0 : value,
+    };
+    setFormData((prev) => ({ ...prev, paidLabors: updatedPaidLabors }));
+  };
+
+  const addNewPaidLabor = () => {
+    setFormData((prev) => ({
+      ...prev,
+      paidLabors: [...prev.paidLabors, { description: "", price: 0 }],
+    }));
+  };
+
+  const removePaidLabor = async (index, paidLaborId) => {
+    if (paidLaborId) {
+      setPendingPaidLaborIndex(index);
+      setPendingPaidLaborId(paidLaborId);
+      setShowDeletePaidLaborModal(true);
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        paidLabors: prev.paidLabors.filter((_, i) => i !== index),
+      }));
+    }
+  };
+
+  const handleConfirmDeletePaidLabor = async () => {
+    setShowDeletePaidLaborModal(false);
     setActionLoading(true);
 
     try {
-      await serviceAPI.deleteLabor(pendingLaborId);
+      // 1. Eliminar el paidLabor del backend
+      await serviceAPI.deletePaidLabor(pendingPaidLaborId);
 
+      // 2. Actualizar el estado local eliminando la labor pagada
+      const updatedPaidLabors = formData.paidLabors.filter((_, i) => i !== pendingPaidLaborIndex);
+      
       setFormData((prev) => ({
         ...prev,
-        labors: prev.labors.filter((_, i) => i !== pendingLaborIndex),
+        paidLabors: updatedPaidLabors,
       }));
 
-      showNotification("Mano de obra eliminada correctamente", "success");
+      // Actualizar los datos iniciales
+      setInitialFormData(JSON.parse(JSON.stringify({
+        ...formData,
+        paidLabors: updatedPaidLabors
+      })));
+      setHasUnsavedChanges(false);
+
+      showNotification("Mano de obra pagada eliminada correctamente", "success");
+
+      // Recargar el servicio para obtener los datos actualizados
+      const serviceResponse = await serviceAPI.getServiceById(serviceId);
+      if (serviceResponse.data.success) {
+        setService(serviceResponse.data.data);
+      }
+
     } catch (err) {
-      setActionError("Error al eliminar la mano de obra");
-      showNotification("Error al eliminar la mano de obra", "error");
+      setActionError(err.message || "Error al eliminar la mano de obra pagada");
+      showNotification("Error al eliminar la mano de obra pagada", "error");
     } finally {
       setActionLoading(false);
-      setPendingLaborIndex(null);
-      setPendingLaborId(null);
+      setPendingPaidLaborIndex(null);
+      setPendingPaidLaborId(null);
     }
   };
 
@@ -705,6 +859,11 @@ const ServiceDetails = () => {
           amount: labor.amount,
           description: labor.description,
           price: parseFloat(labor.price),
+        })),
+        paidLabors: formData.paidLabors.map((paidLabor) => ({
+          id: paidLabor.id || undefined,
+          description: paidLabor.description,
+          price: parseFloat(paidLabor.price),
         })),
       };
 
@@ -816,6 +975,11 @@ const ServiceDetails = () => {
           description: labor.description,
           price: parseFloat(labor.price),
         })),
+        paidLabors: formData.paidLabors.map((paidLabor) => ({
+          id: paidLabor.id || undefined,
+          description: paidLabor.description,
+          price: parseFloat(paidLabor.price),
+        })),
       };
 
       updatePayload.total_price =
@@ -920,6 +1084,11 @@ const ServiceDetails = () => {
           amount: labor.amount,
           description: labor.description,
           price: parseFloat(labor.price),
+        })),
+        paidLabors: formData.paidLabors.map((paidLabor) => ({
+          id: paidLabor.id || undefined,
+          description: paidLabor.description,
+          price: parseFloat(paidLabor.price),
         })),
       };
 
@@ -1036,6 +1205,11 @@ const ServiceDetails = () => {
           amount: labor.amount,
           description: labor.description,
           price: parseFloat(labor.price),
+        })),
+        paidLabors: formData.paidLabors.map((paidLabor) => ({
+          id: paidLabor.id || undefined,
+          description: paidLabor.description,
+          price: parseFloat(paidLabor.price),
         })),
         invoice_number: deliveryData.invoice_number,
         payment_method: deliveryData.payment_method,
@@ -1156,6 +1330,16 @@ const ServiceDetails = () => {
       />
 
       <ConfirmationModal
+        isOpen={showDeletePaidLaborModal}
+        onClose={() => setShowDeletePaidLaborModal(false)}
+        onConfirm={handleConfirmDeletePaidLabor}
+        title="¿Eliminar mano de obra pagada?"
+        message="¿Está seguro de que desea eliminar esta mano de obra pagada?"
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+      />
+
+      <ConfirmationModal
         isOpen={showMarkInProcessModal}
         onClose={() => setShowMarkInProcessModal(false)}
         onConfirm={handleConfirmMarkInProcess}
@@ -1243,7 +1427,7 @@ const ServiceDetails = () => {
         deliveryData={deliveryData}
         loading={actionLoading}
         error={actionError}
-        handleSaveChanges={handleSaveChanges} // MODIFICADO: cambiamos handleSubmit por handleSaveChanges
+        handleSaveChanges={handleSaveChanges}
         handleMarkInProcess={handleMarkInProcess}
         handleMarkFinished={handleMarkFinished}
         handleMarkDelivered={handleMarkDelivered}
@@ -1251,21 +1435,25 @@ const ServiceDetails = () => {
         handleInputChange={handleInputChange}
         handlePartChange={handlePartChange}
         handleLaborChange={handleLaborChange}
+        handlePaidLaborChange={handlePaidLaborChange}
         handleMechanicsChange={handleMechanicsChange}
         handleDeleteService={handleDeleteService}
         handleQuoteParts={handleQuoteParts}
         handleSendProforma={handleSendProforma}
         addNewPart={addNewPart}
         addNewLabor={addNewLabor}
+        addNewPaidLabor={addNewPaidLabor}
         removePart={removePart}
         removeLabor={removeLabor}
+        removePaidLabor={removePaidLabor}
         calculatePartsTotal={calculatePartsTotal}
         calculateLaborsTotal={calculateLaborsTotal}
+        calculatePaidLaborsTotal={calculatePaidLaborsTotal}
         formatPrice={formatPrice}
-        hasValidPartsOrLabors={hasValidPartsOrLabors} // MODIFICADO: nueva prop
+        hasValidPartsOrLabors={hasValidPartsOrLabors}
         hasValidParts={hasValidParts}
         isFormCompleteForProcess={isFormCompleteForProcess}
-        isFormCompleteForDelivered={isFormCompleteForDelivered} // MODIFICADO: nueva prop
+        isFormCompleteForDelivered={isFormCompleteForDelivered}
         buttonStates={buttonStates}
       />
     </div>

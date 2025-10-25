@@ -39,10 +39,7 @@ const Step3Service = ({
     client_id: clientId,
     vehicle_id: vehicleId,
     area_id: "",
-    order_number: "",
     observations: "",
-    parts: [],
-    labors: [],
     ...initialData,
   });
 
@@ -65,10 +62,7 @@ const Step3Service = ({
       client_id: clientId,
       vehicle_id: vehicleId,
       area_id: "",
-      order_number: "",
       observations: "",
-      parts: [],
-      labors: [],
       ...initialData,
     };
 
@@ -270,62 +264,6 @@ const Step3Service = ({
     });
   };
 
-  // Handlers para partes y mano de obra
-  const handleAddPart = () => {
-    setFormData((prev) => ({
-      ...prev,
-      parts: [
-        ...prev.parts,
-        { amount: 1, name: "", price: 0, invoice_number: "" },
-      ],
-    }));
-  };
-
-  const handleAddLabor = () => {
-    setFormData((prev) => ({
-      ...prev,
-      labors: [...prev.labors, { amount: 1, description: "", price: 0 }],
-    }));
-  };
-
-  const handlePartChange = (index, field, value) => {
-    setFormData((prev) => {
-      const newParts = [...prev.parts];
-      newParts[index] = {
-        ...newParts[index],
-        [field]:
-          field === "amount" || field === "price" ? Number(value) : value,
-      };
-      return { ...prev, parts: newParts };
-    });
-  };
-
-  const handleLaborChange = (index, field, value) => {
-    setFormData((prev) => {
-      const newLabors = [...prev.labors];
-      newLabors[index] = {
-        ...newLabors[index],
-        [field]:
-          field === "amount" || field === "price" ? Number(value) : value,
-      };
-      return { ...prev, labors: newLabors };
-    });
-  };
-
-  const handleRemovePart = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      parts: prev.parts.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleRemoveLabor = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      labors: prev.labors.filter((_, i) => i !== index),
-    }));
-  };
-
   const validateServiceData = (serviceData) => {
     const errors = {};
     let isValid = true;
@@ -349,16 +287,6 @@ const Step3Service = ({
       !/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(serviceData.entry_time)
     ) {
       errors.entry_time = "Formato de hora inválido (HH:MM)";
-      isValid = false;
-    }
-
-    // Validación del número de orden
-    if (!serviceData.order_number?.trim()) {
-      errors.order_number = "El número de orden es requerido";
-      isValid = false;
-    } else if (serviceData.order_number.trim().length > 255) {
-      errors.order_number =
-        "El número de orden no puede exceder 255 caracteres";
       isValid = false;
     }
 
@@ -387,66 +315,6 @@ const Step3Service = ({
       isValid = false;
     }
 
-    // Validación de repuestos
-    if (serviceData.parts?.length > 0) {
-      serviceData.parts.forEach((part, index) => {
-        if (!part.name?.trim()) {
-          errors[`parts.${index}.name`] = "Nombre de repuesto requerido";
-          isValid = false;
-        } else if (part.name.length > 255) {
-          errors[`parts.${index}.name`] = "Máximo 255 caracteres permitidos";
-          isValid = false;
-        }
-
-        if (!part.amount || part.amount <= 0) {
-          errors[`parts.${index}.amount`] = "Cantidad inválida (debe ser > 0)";
-          isValid = false;
-        }
-
-        if (part.price === undefined || part.price < 0) {
-          errors[`parts.${index}.price`] = "Precio inválido (debe ser ≥ 0)";
-          isValid = false;
-        } else if (part.price.toString().split(".")[1]?.length > 2) {
-          errors[`parts.${index}.price`] = "Máximo 2 decimales permitidos";
-          isValid = false;
-        }
-
-        // Validación del número de factura para repuestos
-        if (part.invoice_number && part.invoice_number.length > 255) {
-          errors[`parts.${index}.invoice_number`] =
-            "Número de factura no puede exceder 255 caracteres";
-          isValid = false;
-        }
-      });
-    }
-
-    // Validación de mano de obra
-    if (serviceData.labors?.length > 0) {
-      serviceData.labors.forEach((labor, index) => {
-        if (!labor.description?.trim()) {
-          errors[`labors.${index}.description`] = "Descripción requerida";
-          isValid = false;
-        } else if (labor.description.length > 255) {
-          errors[`labors.${index}.description`] =
-            "Máximo 255 caracteres permitidos";
-          isValid = false;
-        }
-
-        if (!labor.amount || labor.amount <= 0) {
-          errors[`labors.${index}.amount`] = "Cantidad inválida (debe ser > 0)";
-          isValid = false;
-        }
-
-        if (labor.price === undefined || labor.price < 0) {
-          errors[`labors.${index}.price`] = "Precio inválido (debe ser ≥ 0)";
-          isValid = false;
-        } else if (labor.price.toString().split(".")[1]?.length > 2) {
-          errors[`labors.${index}.price`] = "Máximo 2 decimales permitidos";
-          isValid = false;
-        }
-      });
-    }
-
     return { isValid, errors };
   };
 
@@ -464,28 +332,17 @@ const Step3Service = ({
         throw new Error("Por favor corrija los errores en el formulario");
       }
 
+      // Validación de fotos
+      if (photos.length < 10) {
+        throw new Error("Debe subir al menos 10 fotos del vehículo");
+      }
+
       // Preparar datos para enviar
       const serviceToSend = {
         ...formData,
         workshop_id: isAdmin ? formData.workshop_id : user.workshop.id,
         user_received_id: user.id,
-        order_number: formData.order_number.trim(),
         observations: formData.observations?.trim() || "",
-        parts: formData.parts
-          .filter((part) => part.name?.trim())
-          .map((part) => ({
-            name: part.name.trim(),
-            amount: Number(part.amount) || 1,
-            price: parseFloat(part.price).toFixed(2),
-            invoice_number: part.invoice_number?.trim() || "",
-          })),
-        labors: formData.labors
-          .filter((labor) => labor.description?.trim())
-          .map((labor) => ({
-            description: labor.description.trim(),
-            amount: Number(labor.amount) || 1,
-            price: parseFloat(labor.price).toFixed(2),
-          })),
       };
 
       // onComplete es manejado por el padre (Stepper) y debe activar globalLoading allí
@@ -516,12 +373,6 @@ const Step3Service = ({
         onUserChange={handleUserChange}
         onPhotoUpload={handlePhotoUpload}
         onRemovePhoto={handleRemovePhoto}
-        onAddPart={handleAddPart}
-        onAddLabor={handleAddLabor}
-        onPartChange={handlePartChange}
-        onLaborChange={handleLaborChange}
-        onRemovePart={handleRemovePart}
-        onRemoveLabor={handleRemoveLabor}
         onSubmit={handleSubmit}
         onBack={onBack}
         onOpenCamera={() => setShowCamera(true)}

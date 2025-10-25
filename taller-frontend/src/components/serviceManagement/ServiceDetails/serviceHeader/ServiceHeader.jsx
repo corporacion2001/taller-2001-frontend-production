@@ -1,6 +1,7 @@
 import React from "react";
 import { FiArrowLeft, FiDownload } from "react-icons/fi";
 import { generateServicePDF } from "../../../../utils/pdfGenerator";
+import { generateServiceWord } from "../../../../utils/wordGenerator";
 import ProcessActions from "./processActions/ProcessActions";
 import InfoCard from "./infoCard/InfoCard";
 import styles from "./serviceHeader.module.css";
@@ -27,8 +28,19 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   };
 
   const handleExportToPDF = () => {
-    const doc = generateServicePDF(service, formatPrice);    
+    const doc = generateServicePDF(service, formatPrice);
     doc.save(`servicio_${service.order_number}.pdf`);
+  };
+
+  // ✅ Exportar a Word
+  const handleExportToWord = async () => {
+    try {
+      await generateServiceWord(service);
+      showNotification("Documento Word generado exitosamente.", "success");
+    } catch (error) {
+      console.error("Error exportando a Word:", error);
+      showNotification("Error al generar el documento Word.", "error");
+    }
   };
 
   const getStatusBadgeClass = (status) => {
@@ -51,19 +63,26 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           <FiArrowLeft /> Volver
         </button>
 
-        <button onClick={handleExportToPDF} className={styles.pdfButton}>
-          <FiDownload /> Exportar a PDF
-        </button>
+        <div className={styles.exportButtons}>
+          <button onClick={handleExportToPDF} className={styles.pdfButton}>
+            <FiDownload /> Exportar PDF
+          </button>
+          <button onClick={handleExportToWord} className={styles.wordButton}>
+            <FiDownload /> Exportar Word
+          </button>
+        </div>
       </div>
 
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <h1 className={styles.title}>Número de orden: {service.order_number}</h1>
+          <h1 className={styles.title}>
+            Número de orden: {service.order_number}
+          </h1>
           <div
             className={`${styles.statusBadge} ${getStatusBadgeClass(
               service.status_service.name
             )}`}
-            data-status={service.status_service.name} 
+            data-status={service.status_service.name}
           >
             {service.status_service.name}
           </div>
@@ -73,7 +92,8 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
         </div>
       </header>
 
-      {(service.status_service.name === "En proceso" || service.status_service.name === "Finalizado") && (
+      {(service.status_service.name === "En proceso" ||
+        service.status_service.name === "Finalizado") && (
         <ProcessActions
           onCotizarRepuesto={handleCotizarRepuesto}
           onEnviarProforma={handleEnviarProforma}

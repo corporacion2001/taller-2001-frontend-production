@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import styles from "./step3Service.module.css";
 import { useAuth } from "../../../../contexts/AuthContext";
 import LoadingSpinner from "../../../ui/spinner/LoadingSpinner";
-import {
-  FiTrash2
-} from "react-icons/fi";
+
 const ServiceForm = ({
   formData = {},
   encargados = [],
@@ -47,259 +45,6 @@ const ServiceForm = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Renderizado de repuestos para móviles (tarjetas)
-  const renderMobileParts = () => (
-    <div className={styles.mobileList}>
-      {parts.map((part, index) => (
-        <div key={`part-${index}`} className={styles.mobileCard}>
-          <div className={styles.cardHeader}>
-            <span className={styles.cardTitle}>Repuesto #{index + 1}</span>
-            <button
-              type="button"
-              onClick={() => onRemovePart(index)}
-              className={styles.removeButton}
-            >
-              <FiTrash2 />
-            </button>
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Cantidad:</label>
-            <input
-              type="number"
-              min="1"
-              value={part.amount || ""}
-              onChange={(e) => onPartChange(index, "amount", e.target.value)}
-              className={styles.mobileInput}
-            />
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Nombre:</label>
-            <input
-              type="text"
-              value={part.name || ""}
-              onChange={(e) => onPartChange(index, "name", e.target.value)}
-              placeholder="Nombre del repuesto"
-              maxLength={255}
-              className={styles.mobileInput}
-            />
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Precio:</label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={part.price || ""}
-              onChange={(e) => onPartChange(index, "price", e.target.value)}
-              placeholder="0.00"
-              className={styles.mobileInput}
-            />
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Nº Factura:</label>
-            <input
-              type="text"
-              value={part.invoice_number || ""}
-              onChange={(e) =>
-                onPartChange(index, "invoice_number", e.target.value)
-              }
-              placeholder="Número de factura"
-              maxLength={255}
-              className={styles.mobileInput}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
-  // Renderizado de mano de obra para móviles (tarjetas)
-  const renderMobileLabors = () => (
-    <div className={styles.mobileList}>
-      {labors.map((labor, index) => (
-        <div key={`labor-${index}`} className={styles.mobileCard}>
-          <div className={styles.cardHeader}>
-            <span className={styles.cardTitle}>Mano de obra #{index + 1}</span>
-            <button
-              type="button"
-              onClick={() => onRemoveLabor(index)}
-              className={styles.removeButton}
-            >
-                            <FiTrash2 />
-            </button>
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Cantidad:</label>
-            <input
-              type="number"
-              min="1"
-              value={labor.amount || ""}
-              onChange={(e) => onLaborChange(index, "amount", e.target.value)}
-              className={styles.mobileInput}
-            />
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Descripción:</label>
-            <input
-              type="text"
-              value={labor.description || ""}
-              onChange={(e) =>
-                onLaborChange(index, "description", e.target.value)
-              }
-              placeholder="Descripción del trabajo"
-              maxLength={255}
-              className={styles.mobileInput}
-            />
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Precio:</label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={labor.price || ""}
-              onChange={(e) => onLaborChange(index, "price", e.target.value)}
-              placeholder="0.00"
-              className={styles.mobileInput}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
-  // Renderizado de tablas para desktop
-  const renderDesktopParts = () => (
-    <table className={styles.proformaTable}>
-      <thead>
-        <tr>
-          <th>Cantidad</th>
-          <th>Nombre</th>
-          <th>Precio</th>
-          <th>Nº Factura</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {parts.map((part, index) => (
-          <tr key={`part-${index}`}>
-            <td>
-              <input
-                type="number"
-                min="1"
-                value={part.amount || ""}
-                onChange={(e) => onPartChange(index, "amount", e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                value={part.name || ""}
-                onChange={(e) => onPartChange(index, "name", e.target.value)}
-                placeholder="Nombre del repuesto"
-                maxLength={255}
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={part.price || ""}
-                onChange={(e) => onPartChange(index, "price", e.target.value)}
-                placeholder="0.00"
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                value={part.invoice_number || ""}
-                onChange={(e) =>
-                  onPartChange(index, "invoice_number", e.target.value)
-                }
-                placeholder="Número de factura"
-                maxLength={255}
-              />
-            </td>
-            <td>
-              <button
-                type="button"
-                onClick={() => onRemovePart(index)}
-                className={styles.removeButton}
-              >
-                                <FiTrash2 />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
-  const renderDesktopLabors = () => (
-    <table className={styles.proformaTable}>
-      <thead>
-        <tr>
-          <th>Cantidad</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {labors.map((labor, index) => (
-          <tr key={`labor-${index}`}>
-            <td>
-              <input
-                type="number"
-                min="1"
-                value={labor.amount || ""}
-                onChange={(e) => onLaborChange(index, "amount", e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                value={labor.description || ""}
-                onChange={(e) =>
-                  onLaborChange(index, "description", e.target.value)
-                }
-                placeholder="Descripción del trabajo"
-                maxLength={255}
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={labor.price || ""}
-                onChange={(e) => onLaborChange(index, "price", e.target.value)}
-                placeholder="0.00"
-              />
-            </td>
-            <td>
-              <button
-                type="button"
-                onClick={() => onRemoveLabor(index)}
-                className={styles.removeButton}
-              >
-                                <FiTrash2 />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
   return (
     <form onSubmit={onSubmit} className={styles.serviceForm}>
       <div className={styles.formRow}>
@@ -321,21 +66,6 @@ const ServiceForm = ({
             name="entry_time"
             value={formData.entry_time || ""}
             onChange={onInputChange}
-            required
-          />
-        </div>
-      </div>
-
-      <div className={styles.formRow}>
-        <div className={styles.formGroup}>
-          <label>Número de Orden*</label>
-          <input
-            type="text"
-            name="order_number"
-            value={formData.order_number || ""}
-            onChange={onInputChange}
-            placeholder="Ingrese el número de orden"
-            maxLength={255}
             required
           />
         </div>
@@ -429,7 +159,7 @@ const ServiceForm = ({
           >
             <option value="">
               {!formData.user_assigned_id
-                ? "Seleccione un técnico primero"
+                ? "Seleccione un encargado primero"
                 : areas.length === 0
                 ? "No hay áreas disponibles"
                 : "Seleccione un área"}
@@ -457,24 +187,6 @@ const ServiceForm = ({
         <small className={styles.characterCount}>
           {(formData.observations || "").length}/255 caracteres
         </small>
-      </div>
-
-      {/* Sección de repuestos - Responsive */}
-      <div className={styles.proformaSection}>
-        <h3>Repuestos</h3>
-        {isMobileView ? renderMobileParts() : renderDesktopParts()}
-        <button type="button" onClick={onAddPart} className={styles.addButton}>
-          + Agregar Repuesto
-        </button>
-      </div>
-
-      {/* Sección de mano de obra - Responsive */}
-      <div className={styles.proformaSection}>
-        <h3>Mano de Obra</h3>
-        {isMobileView ? renderMobileLabors() : renderDesktopLabors()}
-        <button type="button" onClick={onAddLabor} className={styles.addButton}>
-          + Agregar Mano de Obra
-        </button>
       </div>
 
       <div className={styles.sectionHeader}>

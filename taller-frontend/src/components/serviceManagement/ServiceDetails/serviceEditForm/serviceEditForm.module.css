@@ -50,8 +50,8 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  /* AÑADE ESTO */
   overflow-x: auto;
-
 }
 
 .proformaSection h3 {
@@ -68,8 +68,8 @@
   border-collapse: collapse;
   margin-bottom: 15px;
   background: white;
+  /* AÑADE ESTO */
   min-width: 600px;
-
 }
 
 .proformaTable th,
@@ -215,7 +215,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;      
+  gap: 8px;
 }
 
 .deleteButton:hover {
@@ -233,6 +233,10 @@
 @media (max-width: 768px) {
   .buttonGroup {
     flex-direction: column;
+  }
+
+  .invisibleSpacer {
+    display: none; /* No necesitamos el espaciador en móvil */
   }
 
   .secondaryButton {
@@ -468,8 +472,8 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  /* AÑADE ESTO */
   max-width: 100%;
-
 }
 
 .mechanicTag {
@@ -481,6 +485,7 @@
   border-radius: 16px;
   font-size: 0.9rem;
   font-weight: 500;
+  /* AÑADE ESTO */
   word-break: break-word;
   max-width: 100%;
 }
@@ -558,4 +563,11 @@
   color: #bdc3c7;
   background: none;
   transform: none;
+}
+
+/* Espaciador invisible para mantener la estructura */
+.invisibleSpacer {
+  visibility: hidden;
+  height: 44px; /* Misma altura que los botones */
+  pointer-events: none;
 }

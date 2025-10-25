@@ -25,14 +25,18 @@ const ServiceEditForm = ({
   handleInputChange,
   handlePartChange,
   handleLaborChange,
+  handlePaidLaborChange,
   handleMechanicsChange,
   handleDeleteService,
   addNewPart,
   addNewLabor,
+  addNewPaidLabor,
   removePart,
   removeLabor,
+  removePaidLabor,
   calculatePartsTotal,
   calculateLaborsTotal,
+  calculatePaidLaborsTotal,
   formatPrice,
   hasValidPartsOrLabors,
   isFormCompleteForProcess,
@@ -50,6 +54,20 @@ const ServiceEditForm = ({
   const isAdmin = user?.roles?.includes("Administrador");
   const isFleetMgr = user?.roles?.includes("Encargado Flotilla");
   const canSeeDeliveryData = isAdmin || isFleetMgr;
+
+  // NUEVO: Roles que pueden ver Mano de Obra Pagada
+  const canSeePaidLabors = user?.roles?.some(role => 
+    [
+      'Administrador',
+      'Encargado Flotilla', 
+      'Encargado Livianos',
+      'Encargado Pesados',
+      'Encargado Enderezado y Pintura',
+      'Encargado Metalmecánica',
+      'Encargado Todo Frenos y Cluth',
+      'Encargado Hidráulica'
+    ].includes(role)
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -102,6 +120,10 @@ const ServiceEditForm = ({
   const subtotal = calculatePartsTotal() + calculateLaborsTotal();
   const ivaAmount = subtotal * IVA_RATE;
   const totalWithIVA = subtotal + ivaAmount;
+
+  // NUEVO: Cálculo de Ganancia
+  const paidLaborsTotal = calculatePaidLaborsTotal();
+  const profit = subtotal - paidLaborsTotal;
 
   // ----------------- MANEJO DE MECÁNICOS MEJORADO -----------------
   const addMechanic = () => {
@@ -368,6 +390,66 @@ const ServiceEditForm = ({
     </div>
   );
 
+  // ----------------- RENDERIZADO DE MANO DE OBRA PAGADA EN MÓVIL (TARJETAS) -----------------
+  const renderMobilePaidLabors = () => (
+    <div className={styles.mobileList}>
+      {formData.paidLabors.map((paidLabor, index) => (
+        <div key={`paidLabor-${index}`} className={styles.mobileCard}>
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>Mano de obra pagada #{index + 1}</span>
+            {!isDelivered && (
+              <button
+                type="button"
+                onClick={() => removePaidLabor(index, paidLabor.id)}
+                className={styles.removeButton}
+                disabled={loading}
+              >
+                <FiTrash2 />
+              </button>
+            )}
+          </div>
+
+          <div className={styles.cardField}>
+            <label>Descripción:</label>
+            {isDelivered ? (
+              <span>{paidLabor.description}</span>
+            ) : (
+              <input
+                type="text"
+                value={paidLabor.description || ""}
+                onChange={(e) =>
+                  handlePaidLaborChange(index, "description", e.target.value)
+                }
+                placeholder="Descripción del trabajo pagado"
+                required
+                className={styles.mobileInput}
+              />
+            )}
+          </div>
+
+          <div className={styles.cardField}>
+            <label>Precio:</label>
+            {isDelivered ? (
+              <span>{formatPrice(paidLabor.price)}</span>
+            ) : (
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={paidLabor.price || ""}
+                onChange={(e) =>
+                  handlePaidLaborChange(index, "price", e.target.value)
+                }
+                placeholder="0.00"
+                className={styles.mobileInput}
+              />
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   // ----------------- RENDERIZADO DE REPUESTOS EN DESKTOP (TABLA) -----------------
   const renderDesktopParts = () => (
     <table className={styles.proformaTable}>
@@ -507,7 +589,6 @@ const ServiceEditForm = ({
                 <span>{formatPrice(labor.price)}</span>
               ) : (
                 <input
-                  maxLength={150}
                   type="number"
                   min="0"
                   step="0.01"
@@ -523,6 +604,67 @@ const ServiceEditForm = ({
                 <button
                   type="button"
                   onClick={() => removeLabor(index, labor.id)}
+                  className={styles.removeButton}
+                  disabled={loading}
+                >
+                  <FiTrash2 />
+                </button>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  // ----------------- RENDERIZADO DE MANO DE OBRA PAGADA EN DESKTOP (TABLA) -----------------
+  const renderDesktopPaidLabors = () => (
+    <table className={styles.proformaTable}>
+      <thead>
+        <tr>
+          <th>Descripción</th>
+          <th>Precio</th>
+          {!isDelivered && <th>Acciones</th>}
+        </tr>
+      </thead>
+      <tbody>
+        {formData.paidLabors.map((paidLabor, index) => (
+          <tr key={`paidLabor-${index}`}>
+            <td>
+              {isDelivered ? (
+                <span>{paidLabor.description}</span>
+              ) : (
+                <input
+                  type="text"
+                  required
+                  value={paidLabor.description || ""}
+                  onChange={(e) =>
+                    handlePaidLaborChange(index, "description", e.target.value)
+                  }
+                  placeholder="Descripción del trabajo pagado"
+                />
+              )}
+            </td>
+            <td>
+              {isDelivered ? (
+                <span>{formatPrice(paidLabor.price)}</span>
+              ) : (
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={paidLabor.price || ""}
+                  onChange={(e) =>
+                    handlePaidLaborChange(index, "price", e.target.value)
+                  }
+                />
+              )}
+            </td>
+            {!isDelivered && (
+              <td>
+                <button
+                  type="button"
+                  onClick={() => removePaidLabor(index, paidLabor.id)}
                   className={styles.removeButton}
                   disabled={loading}
                 >
@@ -571,6 +713,7 @@ const ServiceEditForm = ({
             <span>{formData.vehicle_location}</span>
           ) : (
             <input
+              maxLength={150}
               type="text"
               name="vehicle_location"
               value={formData.vehicle_location || ""}
@@ -703,6 +846,31 @@ const ServiceEditForm = ({
         )}
       </div>
 
+      {/* Sección de Mano de Obra Pagada - SOLO para roles específicos */}
+      {canSeePaidLabors && (
+        <div className={styles.proformaSection}>
+          <h3>Mano de Obra Pagada para Calcular Ganancia ({formData.paidLabors.length})</h3>
+          {formData.paidLabors.length > 0 ? (
+            isMobileView ? (
+              renderMobilePaidLabors()
+            ) : (
+              renderDesktopPaidLabors()
+            )
+          ) : (
+            <p className={styles.noData}>No se registró mano de obra pagada</p>
+          )}
+          {!isDelivered && (
+            <button
+              type="button"
+              onClick={addNewPaidLabor}
+              className={styles.addButton}
+            >
+              <FiPlus /> Agregar Mano de Obra Pagada
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Total General */}
       <div className={styles.grandTotal}>
         <div className={styles.grandTotalContent}>
@@ -726,6 +894,18 @@ const ServiceEditForm = ({
           </div>
         </div>
       </div>
+
+      {/* Sección de Ganancia - SOLO para Administrador */}
+      {isAdmin && (
+        <div className={styles.grandTotal}>
+          <div className={styles.grandTotalContent}>
+            <span className={styles.grandTotalLabel}>Ganancia (Subtotal - Total de Mano de Obra Pagada): </span>
+            <span className={styles.grandTotalValue}>
+              {formatPrice(profit)}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Datos de Entrega - SOLO visible para Administrador o Encargado Flotilla */}
       {canSeeDeliveryData &&
@@ -775,15 +955,27 @@ const ServiceEditForm = ({
       {/* BOTONES - OCULTOS CUANDO EL SERVICIO ESTÁ ENTREGADO */}
       {!isDelivered && (
         <div className={styles.buttonGroup}>
-          <button
-            type="button"
-            onClick={handleDeleteService}
-            disabled={buttonStates.deleteService}
-            className={styles.deleteButton}
-          >
-            <FiTrash2 />{" "}
-            {buttonStates.deleteService ? "Eliminando..." : "Eliminar Servicio"}
-          </button>
+          {/* Contenedor izquierdo - Siempre presente pero a veces vacío */}
+          <div className={styles.leftButtons}>
+            {/* Botón Eliminar Servicio - Condiciones específicas */}
+            {(isAdmin && !isDelivered) ||
+            (isFleetMgr && service.status_service.name === "Pendiente") ? (
+              <button
+                type="button"
+                onClick={handleDeleteService}
+                disabled={buttonStates.deleteService}
+                className={styles.deleteButton}
+              >
+                <FiTrash2 />{" "}
+                {buttonStates.deleteService
+                  ? "Eliminando..."
+                  : "Eliminar Servicio"}
+              </button>
+            ) : (
+              // Espaciador invisible cuando no hay botón de eliminar
+              <div className={styles.invisibleSpacer}></div>
+            )}
+          </div>
 
           <div className={styles.rightButtons}>
             <button
