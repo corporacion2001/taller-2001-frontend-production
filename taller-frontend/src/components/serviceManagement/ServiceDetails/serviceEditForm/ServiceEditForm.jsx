@@ -54,6 +54,7 @@ const ServiceEditForm = ({
   const isAdmin = user?.roles?.includes("Administrador");
   const isFleetMgr = user?.roles?.includes("Encargado Flotilla");
   const canSeeDeliveryData = isAdmin || isFleetMgr;
+  const isGestorRepuestos = user?.roles?.includes("Gestor Repuestos");
 
   // NUEVO: Roles que pueden ver Mano de Obra Pagada
   const canSeePaidLabors = user?.roles?.some(role => 
@@ -153,6 +154,8 @@ const ServiceEditForm = ({
 
   // ----------------- RENDERIZADO CONDICIONAL DE BOTONES -----------------
   const renderActionButtons = () => {
+        if (isGestorRepuestos) return null;
+    
     switch (service.status_service.name) {
       case "Pendiente":
         return (
@@ -319,7 +322,7 @@ const ServiceEditForm = ({
         <div key={`labor-${index}`} className={styles.mobileCard}>
           <div className={styles.cardHeader}>
             <span className={styles.cardTitle}>Mano de obra #{index + 1}</span>
-            {!isDelivered && (
+            {!isDelivered && !isGestorRepuestos && (
               <button
                 type="button"
                 onClick={() => removeLabor(index, labor.id)}
@@ -333,7 +336,7 @@ const ServiceEditForm = ({
 
           <div className={styles.cardField}>
             <label>Cantidad:</label>
-            {isDelivered ? (
+            {isDelivered || isGestorRepuestos ? (
               <span>{labor.amount}</span>
             ) : (
               <input
@@ -351,7 +354,7 @@ const ServiceEditForm = ({
 
           <div className={styles.cardField}>
             <label>Descripción:</label>
-            {isDelivered ? (
+            {isDelivered || isGestorRepuestos ? (
               <span>{labor.description}</span>
             ) : (
               <input
@@ -369,7 +372,7 @@ const ServiceEditForm = ({
 
           <div className={styles.cardField}>
             <label>Precio:</label>
-            {isDelivered ? (
+            {isDelivered || isGestorRepuestos ? (
               <span>{formatPrice(labor.price)}</span>
             ) : (
               <input
@@ -397,7 +400,7 @@ const ServiceEditForm = ({
         <div key={`paidLabor-${index}`} className={styles.mobileCard}>
           <div className={styles.cardHeader}>
             <span className={styles.cardTitle}>Mano de obra pagada #{index + 1}</span>
-            {!isDelivered && (
+            {!isDelivered && !isGestorRepuestos && (
               <button
                 type="button"
                 onClick={() => removePaidLabor(index, paidLabor.id)}
@@ -411,7 +414,7 @@ const ServiceEditForm = ({
 
           <div className={styles.cardField}>
             <label>Descripción:</label>
-            {isDelivered ? (
+            {isDelivered || isGestorRepuestos ? (
               <span>{paidLabor.description}</span>
             ) : (
               <input
@@ -429,7 +432,7 @@ const ServiceEditForm = ({
 
           <div className={styles.cardField}>
             <label>Precio:</label>
-            {isDelivered ? (
+            {isDelivered || isGestorRepuestos ? (
               <span>{formatPrice(paidLabor.price)}</span>
             ) : (
               <input
@@ -549,14 +552,14 @@ const ServiceEditForm = ({
           <th>Cantidad</th>
           <th>Descripción</th>
           <th>Precio</th>
-          {!isDelivered && <th>Acciones</th>}
+          {!isDelivered && !isGestorRepuestos && <th>Acciones</th>}
         </tr>
       </thead>
       <tbody>
         {formData.labors.map((labor, index) => (
           <tr key={`labor-${index}`}>
             <td>
-              {isDelivered ? (
+              {isDelivered || isGestorRepuestos ? (
                 <span>{labor.amount}</span>
               ) : (
                 <input
@@ -571,7 +574,7 @@ const ServiceEditForm = ({
               )}
             </td>
             <td>
-              {isDelivered ? (
+              {isDelivered || isGestorRepuestos ? (
                 <span>{labor.description}</span>
               ) : (
                 <input
@@ -585,7 +588,7 @@ const ServiceEditForm = ({
               )}
             </td>
             <td>
-              {isDelivered ? (
+              {isDelivered || isGestorRepuestos ? (
                 <span>{formatPrice(labor.price)}</span>
               ) : (
                 <input
@@ -599,7 +602,7 @@ const ServiceEditForm = ({
                 />
               )}
             </td>
-            {!isDelivered && (
+            {!isDelivered && !isGestorRepuestos && (
               <td>
                 <button
                   type="button"
@@ -624,14 +627,14 @@ const ServiceEditForm = ({
         <tr>
           <th>Descripción</th>
           <th>Precio</th>
-          {!isDelivered && <th>Acciones</th>}
+          {!isDelivered && !isGestorRepuestos && <th>Acciones</th>}
         </tr>
       </thead>
       <tbody>
         {formData.paidLabors.map((paidLabor, index) => (
           <tr key={`paidLabor-${index}`}>
             <td>
-              {isDelivered ? (
+              {isDelivered || isGestorRepuestos ? (
                 <span>{paidLabor.description}</span>
               ) : (
                 <input
@@ -646,7 +649,7 @@ const ServiceEditForm = ({
               )}
             </td>
             <td>
-              {isDelivered ? (
+              {isDelivered || isGestorRepuestos ? (
                 <span>{formatPrice(paidLabor.price)}</span>
               ) : (
                 <input
@@ -660,7 +663,7 @@ const ServiceEditForm = ({
                 />
               )}
             </td>
-            {!isDelivered && (
+            {!isDelivered && !isGestorRepuestos && (
               <td>
                 <button
                   type="button"
@@ -687,7 +690,7 @@ const ServiceEditForm = ({
       <div className={styles.formRow}>
         <div className={styles.formGroup}>
           <label>Fecha estimada de finalización</label>
-          {isReadOnly ? (
+          {isReadOnly || isGestorRepuestos ? (
             <span>{formData.end_date}</span>
           ) : (
             <input
@@ -709,7 +712,7 @@ const ServiceEditForm = ({
 
         <div className={styles.formGroup}>
           <label>Ubicación del vehículo</label>
-          {isDelivered ? (
+          {isDelivered || isGestorRepuestos ? (
             <span>{formData.vehicle_location}</span>
           ) : (
             <input
@@ -726,7 +729,7 @@ const ServiceEditForm = ({
       {/* Mecánicos asignados */}
       <div className={styles.formGroup}>
         <label>Mecánicos asignados</label>
-        {isReadOnly ? (
+        {isReadOnly || isGestorRepuestos ? (
           <div className={styles.mechanicsTags}>
             {formData.mechanics.map((mechanic, index) => (
               <span key={index} className={styles.mechanicTag}>
@@ -778,7 +781,7 @@ const ServiceEditForm = ({
       {/* Sección de Observaciones */}
       <div className={styles.formGroup}>
         <label>Observaciones</label>
-        {isDelivered ? (
+        {isDelivered || isGestorRepuestos ? (
           <div className={styles.observationsText}>
             {formData.observations || "No hay observaciones registradas"}
           </div>
@@ -793,7 +796,7 @@ const ServiceEditForm = ({
             className={styles.textArea}
           />
         )}
-        {!isDelivered && (
+        {!isDelivered && !isGestorRepuestos && (
           <small className={styles.characterCount}>
             {(formData.observations || "").length}/255 caracteres
           </small>
@@ -835,7 +838,7 @@ const ServiceEditForm = ({
         ) : (
           <p className={styles.noData}>No se registró mano de obra</p>
         )}
-        {!isDelivered && (
+        {!isDelivered && !isGestorRepuestos && (
           <button
             type="button"
             onClick={addNewLabor}
@@ -847,7 +850,7 @@ const ServiceEditForm = ({
       </div>
 
       {/* Sección de Mano de Obra Pagada - SOLO para roles específicos */}
-      {canSeePaidLabors && (
+      {canSeePaidLabors && !isGestorRepuestos && (
         <div className={styles.proformaSection}>
           <h3>Mano de Obra Pagada para Calcular Ganancia ({formData.paidLabors.length})</h3>
           {formData.paidLabors.length > 0 ? (
@@ -896,10 +899,11 @@ const ServiceEditForm = ({
       </div>
 
       {/* Sección de Ganancia - SOLO para Administrador */}
-      {isAdmin && (
+      {isAdmin && !isGestorRepuestos && (
         <div className={styles.grandTotal}>
           <div className={styles.grandTotalContent}>
             <span className={styles.grandTotalLabel}>Ganancia (Subtotal - Total de Mano de Obra Pagada): </span>
+           <span className={styles.grandTotalDescription}>(Subtotal - Total de Mano de Obra Pagada): </span>
             <span className={styles.grandTotalValue}>
               {formatPrice(profit)}
             </span>
@@ -909,6 +913,8 @@ const ServiceEditForm = ({
 
       {/* Datos de Entrega - SOLO visible para Administrador o Encargado Flotilla */}
       {canSeeDeliveryData &&
+                !isGestorRepuestos &&
+
         (service.status_service.name === "Finalizado" || isDelivered) && (
           <div className={styles.deliverySection}>
             <h3>Datos de Entrega</h3>
@@ -958,8 +964,9 @@ const ServiceEditForm = ({
           {/* Contenedor izquierdo - Siempre presente pero a veces vacío */}
           <div className={styles.leftButtons}>
             {/* Botón Eliminar Servicio - Condiciones específicas */}
-            {(isAdmin && !isDelivered) ||
-            (isFleetMgr && service.status_service.name === "Pendiente") ? (
+               {!isGestorRepuestos &&
+            ((isAdmin && !isDelivered) ||
+              (isFleetMgr && service.status_service.name === "Pendiente")) ? (
               <button
                 type="button"
                 onClick={handleDeleteService}
