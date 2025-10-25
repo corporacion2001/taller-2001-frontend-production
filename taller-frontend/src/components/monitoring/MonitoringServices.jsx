@@ -11,11 +11,11 @@ const MonitoringServices = () => {
   const isScrollingToTopRef = useRef(false);
   const scrollSpeedRef = useRef(0.5);
   const servicesPaginationRef = useRef({});
-  
+
   // Función para formatear fecha de YYYY-MM-DD a DD/MM/YYYY
   const formatDateToDDMMYYYY = (dateString) => {
     if (!dateString) return "--/--/----";
-    
+
     try {
       const [year, month, day] = dateString.split("-");
       return `${day}/${month}/${year}`;
@@ -28,20 +28,28 @@ const MonitoringServices = () => {
   // Función para verificar si la fecha ya pasó (incluyendo hoy)
   const isDateTodayOrPast = (dateString, now) => {
     if (!dateString) return false;
-    
+
     try {
       // Parsear la fecha en formato YYYY-MM-DD
       const [year, month, day] = dateString.split("-").map(Number);
       const givenDate = new Date(year, month - 1, day);
-      
+
       // Fecha actual (sin tiempo)
       const today = new Date(now);
       today.setHours(0, 0, 0, 0);
-      
+
       // Ajustar ambas fechas a UTC para evitar problemas de zona horaria
-      const givenUTC = Date.UTC(givenDate.getFullYear(), givenDate.getMonth(), givenDate.getDate());
-      const todayUTC = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
-      
+      const givenUTC = Date.UTC(
+        givenDate.getFullYear(),
+        givenDate.getMonth(),
+        givenDate.getDate()
+      );
+      const todayUTC = Date.UTC(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+
       return givenUTC <= todayUTC;
     } catch (error) {
       console.error("Error parsing date:", dateString, error);
@@ -219,6 +227,22 @@ const MonitoringServices = () => {
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>UBICACIÓN:</span>
             <span className={styles.infoValue}>{data.vehicle_location}</span>
+          </div>
+
+          {/* 🎯 SECCIÓN DE MECÁNICOS */}
+          <div className={styles.infoRow}>
+            <span className={styles.infoLabel}>MECÁNICOS:</span>
+            <span className={styles.infoValue}>
+              {data.mechanics && data.mechanics.length > 0 ? (
+                <div className={styles.mechanicsList}>
+                  {data.mechanics.map((mechanic, index) => (
+                    <span key={index}>{mechanic}</span>
+                  ))}
+                </div>
+              ) : (
+                "No asignados"
+              )}
+            </span>
           </div>
         </div>
 
