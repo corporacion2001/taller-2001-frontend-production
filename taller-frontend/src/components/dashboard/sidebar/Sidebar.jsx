@@ -12,6 +12,7 @@ import {
   FiTruck,
   FiUser,
   FiMonitor,
+  FiPlus,
 } from "react-icons/fi";
 import { useAuth } from "../../../contexts/AuthContext";
 
@@ -78,6 +79,10 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
       "Encargado Hidráulica",
     ].includes(role)
   );
+
+  // NUEVOS ROLES
+  const isReceptor = user?.roles?.includes("Ingresador Servicios");
+  const isGestorRepuestos = user?.roles?.includes("Gestor Repuestos");
   
   // Verificar si el usuario puede ver la opción de Clientes
   const canSeeClients = isAdmin || user?.roles?.includes("Encargado Flotilla");
@@ -129,6 +134,24 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
           text="Inicio"
           onClick={handleNavClick}
         />
+        
+        {isReceptor && (
+          <NavItem
+            to="/dashboard/nuevo-servicio"
+            icon={<FiPlus />}
+            text="Recepción"
+            onClick={handleNavClick}
+          />
+        )}
+
+        {isGestorRepuestos && (
+          <NavItem
+            to="/dashboard/gestion/servicios"
+            icon={<FiTool />}
+            text="Servicios"
+            onClick={handleNavClick}
+          />
+        )}
 
         {(isAdmin || isEncargado) && (
           <CollapsibleMenu
