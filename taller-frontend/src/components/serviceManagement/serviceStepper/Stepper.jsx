@@ -12,11 +12,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../../contexts/AuthContext"; // Importar el contexto de autenticación
 
-
 const ServiceStepper = () => {
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
+
   const [formData, setFormData] = useState({
     client: null,
     vehicle: null,
@@ -30,7 +30,7 @@ const ServiceStepper = () => {
   });
 
   const [globalLoading, setGlobalLoading] = useState(false);
-  
+
   const isReceptor = user?.roles?.includes("Ingresador Servicios");
 
   const handleNext = (stepData, stepName) => {
@@ -264,7 +264,8 @@ const ServiceStepper = () => {
       } else {
         // Los demás usuarios van a la lista de servicios
         navigate("/dashboard/gestion/servicios");
-      }    } catch (error) {
+      }
+    } catch (error) {
       toast.error(error.message || "Error al registrar servicio");
     } finally {
       setGlobalLoading(false);
@@ -334,7 +335,8 @@ const ServiceStepper = () => {
             } else {
               navigate("/dashboard/gestion/servicios");
             }
-          }}        />
+          }}
+        />
       ),
     },
     {
@@ -371,13 +373,13 @@ const ServiceStepper = () => {
 
   return (
     <div className={styles.stepperContainer}>
-            {!isReceptor && (
-      <button
-        onClick={() => navigate("/dashboard/gestion/servicios")}
-        className={styles.backButton}
-      >
-        <FiArrowLeft /> Volver
-      </button>
+      {!isReceptor && (
+        <button
+          onClick={() => navigate("/dashboard/gestion/servicios")}
+          className={styles.backButton}
+        >
+          <FiArrowLeft /> Volver
+        </button>
       )}
 
       <div className={styles.stepperHeader}>
