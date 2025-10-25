@@ -53,8 +53,8 @@ const ServiceEditForm = ({
   // Verificar roles del usuario
   const isAdmin = user?.roles?.includes("Administrador");
   const isFleetMgr = user?.roles?.includes("Encargado Flotilla");
-  const canSeeDeliveryData = isAdmin || isFleetMgr;
   const isGestorRepuestos = user?.roles?.includes("Gestor Repuestos");
+  const canSeeDeliveryData = isAdmin || isFleetMgr;
 
   // NUEVO: Roles que pueden ver Mano de Obra Pagada
   const canSeePaidLabors = user?.roles?.some(role => 
@@ -154,8 +154,9 @@ const ServiceEditForm = ({
 
   // ----------------- RENDERIZADO CONDICIONAL DE BOTONES -----------------
   const renderActionButtons = () => {
-        if (isGestorRepuestos) return null;
-    
+    // Gestor Repuestos no puede cambiar estados
+    if (isGestorRepuestos) return null;
+
     switch (service.status_service.name) {
       case "Pendiente":
         return (
@@ -196,7 +197,7 @@ const ServiceEditForm = ({
           </button>
         );
       case "Finalizado":
-        // SOLO mostrar botón de entregado si el usuario tiene permisos
+            // SOLO mostrar botón de entregado si el usuario tiene permisos
         return !isDelivered && canSeeDeliveryData ? (
           <button
             type="button"
@@ -902,8 +903,8 @@ const ServiceEditForm = ({
       {isAdmin && !isGestorRepuestos && (
         <div className={styles.grandTotal}>
           <div className={styles.grandTotalContent}>
-            <span className={styles.grandTotalLabel}>Ganancia (Subtotal - Total de Mano de Obra Pagada): </span>
-           <span className={styles.grandTotalDescription}>(Subtotal - Total de Mano de Obra Pagada): </span>
+            <span className={styles.grandTotalLabel}>Ganancia: </span>
+            <span className={styles.grandTotalDescription}>(Subtotal - Total de Mano de Obra Pagada): </span>
             <span className={styles.grandTotalValue}>
               {formatPrice(profit)}
             </span>
@@ -913,8 +914,7 @@ const ServiceEditForm = ({
 
       {/* Datos de Entrega - SOLO visible para Administrador o Encargado Flotilla */}
       {canSeeDeliveryData &&
-                !isGestorRepuestos &&
-
+        !isGestorRepuestos &&
         (service.status_service.name === "Finalizado" || isDelivered) && (
           <div className={styles.deliverySection}>
             <h3>Datos de Entrega</h3>
@@ -964,7 +964,7 @@ const ServiceEditForm = ({
           {/* Contenedor izquierdo - Siempre presente pero a veces vacío */}
           <div className={styles.leftButtons}>
             {/* Botón Eliminar Servicio - Condiciones específicas */}
-               {!isGestorRepuestos &&
+            {!isGestorRepuestos &&
             ((isAdmin && !isDelivered) ||
               (isFleetMgr && service.status_service.name === "Pendiente")) ? (
               <button
