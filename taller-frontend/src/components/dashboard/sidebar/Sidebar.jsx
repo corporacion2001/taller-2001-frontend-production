@@ -83,7 +83,7 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
   // NUEVOS ROLES
   const isReceptor = user?.roles?.includes("Ingresador Servicios");
   const isGestorRepuestos = user?.roles?.includes("Gestor Repuestos");
-  
+
   // Verificar si el usuario puede ver la opción de Clientes
   const canSeeClients = isAdmin || user?.roles?.includes("Encargado Flotilla");
 
@@ -112,7 +112,7 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
         <div className={styles.logoContainer}>
           <a href="/dashboard" className={styles.navbarLogo}>
             <img
-              src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1759382203/darkbackground_1_evdepb.webp"
+              src="https://res.cloudinary.com/dzj9vcedu/image/upload/v1749708920/corporacionlogo_aoppj5.png"
               alt="logo"
               className={styles.logoImage}
             />
@@ -134,7 +134,7 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
           text="Inicio"
           onClick={handleNavClick}
         />
-        
+
         {isReceptor && (
           <NavItem
             to="/dashboard/nuevo-servicio"
@@ -170,7 +170,7 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
               onClick={handleNavClick}
               isSubItem
             />
-            
+
             {/* Opción de Clientes solo visible para Admin o Encargado Flotilla */}
             {canSeeClients && (
               <NavItem
@@ -181,7 +181,7 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
                 isSubItem
               />
             )}
-            
+
             <NavItem
               to="/dashboard/gestion/vehicles"
               icon={<FiTruck />}
@@ -196,7 +196,7 @@ const Sidebar = ({ user, closeSidebar, isMobileOpen }) => {
           <NavItem
             to="/dashboard/user-management"
             icon={<FiUserPlus />}
-            text="Usuarios"
+            text="Usuarios"  
             onClick={handleNavClick}
           />
         )}
