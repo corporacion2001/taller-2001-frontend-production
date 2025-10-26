@@ -124,7 +124,7 @@ const ServiceEditForm = ({
 
   // NUEVO: Cálculo de Ganancia
   const paidLaborsTotal = calculatePaidLaborsTotal();
-  const profit = subtotal - paidLaborsTotal;
+  const profit = calculateLaborsTotal() - paidLaborsTotal;
 
   // ----------------- MANEJO DE MECÁNICOS MEJORADO -----------------
   const addMechanic = () => {
@@ -687,6 +687,78 @@ const ServiceEditForm = ({
       onSubmit={!isDelivered ? handleSaveChanges : (e) => e.preventDefault()}
       className={styles.serviceForm}
     >
+
+      {/* Sección de Repuestos */}
+      <div className={styles.proformaSection}>
+        <h3>Repuestos ({formData.parts.length})</h3>
+        {formData.parts.length > 0 ? (
+          isMobileView ? (
+            renderMobileParts()
+          ) : (
+            renderDesktopParts()
+          )
+        ) : (
+          <p className={styles.noData}>No se registraron repuestos</p>
+        )}
+        {!isDelivered && (
+          <button
+            type="button"
+            onClick={addNewPart}
+            className={styles.addButton}
+          >
+            <FiPlus /> Agregar Repuesto
+          </button>
+        )}
+      </div>
+
+      {/* Sección de Mano de Obra */}
+      <div className={styles.proformaSection}>
+        <h3>Mano de Obra ({formData.labors.length})</h3>
+        {formData.labors.length > 0 ? (
+          isMobileView ? (
+            renderMobileLabors()
+          ) : (
+            renderDesktopLabors()
+          )
+        ) : (
+          <p className={styles.noData}>No se registró mano de obra</p>
+        )}
+        {!isDelivered && !isGestorRepuestos && (
+          <button
+            type="button"
+            onClick={addNewLabor}
+            className={styles.addButton}
+          >
+            <FiPlus /> Agregar Mano de Obra
+          </button>
+        )}
+      </div>
+
+      {/* Sección de Mano de Obra Pagada - SOLO para roles específicos */}
+      {canSeePaidLabors && !isGestorRepuestos && (
+        <div className={styles.proformaSection}>
+          <h3>Mano de Obra Pagada para Calcular Ganancia ({formData.paidLabors.length})</h3>
+          {formData.paidLabors.length > 0 ? (
+            isMobileView ? (
+              renderMobilePaidLabors()
+            ) : (
+              renderDesktopPaidLabors()
+            )
+          ) : (
+            <p className={styles.noData}>No se registró mano de obra pagada</p>
+          )}
+          {!isDelivered && (
+            <button
+              type="button"
+              onClick={addNewPaidLabor}
+              className={styles.addButton}
+            >
+              <FiPlus /> Agregar Mano de Obra Pagada
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Campos básicos */}
       <div className={styles.formRow}>
         <div className={styles.formGroup}>
@@ -804,77 +876,6 @@ const ServiceEditForm = ({
         )}
       </div>
 
-      {/* Sección de Repuestos */}
-      <div className={styles.proformaSection}>
-        <h3>Repuestos ({formData.parts.length})</h3>
-        {formData.parts.length > 0 ? (
-          isMobileView ? (
-            renderMobileParts()
-          ) : (
-            renderDesktopParts()
-          )
-        ) : (
-          <p className={styles.noData}>No se registraron repuestos</p>
-        )}
-        {!isDelivered && (
-          <button
-            type="button"
-            onClick={addNewPart}
-            className={styles.addButton}
-          >
-            <FiPlus /> Agregar Repuesto
-          </button>
-        )}
-      </div>
-
-      {/* Sección de Mano de Obra */}
-      <div className={styles.proformaSection}>
-        <h3>Mano de Obra ({formData.labors.length})</h3>
-        {formData.labors.length > 0 ? (
-          isMobileView ? (
-            renderMobileLabors()
-          ) : (
-            renderDesktopLabors()
-          )
-        ) : (
-          <p className={styles.noData}>No se registró mano de obra</p>
-        )}
-        {!isDelivered && !isGestorRepuestos && (
-          <button
-            type="button"
-            onClick={addNewLabor}
-            className={styles.addButton}
-          >
-            <FiPlus /> Agregar Mano de Obra
-          </button>
-        )}
-      </div>
-
-      {/* Sección de Mano de Obra Pagada - SOLO para roles específicos */}
-      {canSeePaidLabors && !isGestorRepuestos && (
-        <div className={styles.proformaSection}>
-          <h3>Mano de Obra Pagada para Calcular Ganancia ({formData.paidLabors.length})</h3>
-          {formData.paidLabors.length > 0 ? (
-            isMobileView ? (
-              renderMobilePaidLabors()
-            ) : (
-              renderDesktopPaidLabors()
-            )
-          ) : (
-            <p className={styles.noData}>No se registró mano de obra pagada</p>
-          )}
-          {!isDelivered && (
-            <button
-              type="button"
-              onClick={addNewPaidLabor}
-              className={styles.addButton}
-            >
-              <FiPlus /> Agregar Mano de Obra Pagada
-            </button>
-          )}
-        </div>
-      )}
-
       {/* Total General */}
       <div className={styles.grandTotal}>
         <div className={styles.grandTotalContent}>
@@ -903,8 +904,7 @@ const ServiceEditForm = ({
       {isAdmin && !isGestorRepuestos && (
         <div className={styles.grandTotal}>
           <div className={styles.grandTotalContent}>
-            <span className={styles.grandTotalLabel}>Ganancia: </span>
-            <span className={styles.grandTotalDescription}>(Subtotal - Total de Mano de Obra Pagada): </span>
+            <span className={styles.grandTotalLabel}>Ganancia (Total Mano de Obra - Total Mano de Obra Pagada): </span>
             <span className={styles.grandTotalValue}>
               {formatPrice(profit)}
             </span>

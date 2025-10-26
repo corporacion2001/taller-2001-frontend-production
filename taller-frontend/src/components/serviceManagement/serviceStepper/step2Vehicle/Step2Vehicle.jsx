@@ -179,9 +179,8 @@ const Step2Vehicle = ({
     setFormData((prev) => ({ ...prev, [name]: parsedValue }));
   };
 
-  const handleSubmitNewVehicle = (e) => {
-    e.preventDefault();
-    onNext({ ...formData, isExisting: false }, "vehicle");
+  const handleSubmitNewVehicle = (formDataWithFormattedPlate) => {
+    onNext({ ...formDataWithFormattedPlate, isExisting: false }, "vehicle");
   };
 
   return (
@@ -249,7 +248,7 @@ const Step2Vehicle = ({
               <p>
                 <strong>Motor:</strong> {vehicleData.engine}
               </p>
-                       {vehicleData.traccion && (
+              {vehicleData.traccion && (
                 <p>
                   <strong>Tracción:</strong> {vehicleData.traccion}
                 </p>

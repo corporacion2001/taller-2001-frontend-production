@@ -92,11 +92,19 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
         </div>
       </header>
 
+      {service.status_service.name === "Pendiente" && (
+        <ProcessActions
+          onCotizarRepuesto={handleCotizarRepuesto}
+          showEnviarProforma={false}
+        />
+      )}
+
       {(service.status_service.name === "En proceso" ||
         service.status_service.name === "Finalizado") && (
         <ProcessActions
           onCotizarRepuesto={handleCotizarRepuesto}
           onEnviarProforma={handleEnviarProforma}
+          showEnviarProforma={true}
         />
       )}
 
