@@ -35,6 +35,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .searchIcon {
@@ -142,5 +143,35 @@
   .primaryButton {
     width: 100%;
     justify-content: center;
+  }
+}
+
+.tipoPlacaSelect {
+  padding: 0.6rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background-color: white;
+  color: #121037;
+  min-width: 220px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tipoPlacaSelect:focus {
+  outline: none;
+  border-color: #4a6cf7;
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+.tipoPlacaSelect:hover {
+  border-color: #adb5bd;
+}
+
+/* Para asegurar que se vea bien en dispositivos móviles */
+@media (max-width: 992px) {
+  .tipoPlacaSelect {
+    min-width: 100%;
+    width: 100%;
   }
 }

@@ -8,6 +8,8 @@ const VehicleForm = ({
   onSubmit,
   onCancel,
   loading,
+  tipoPlaca,
+  onTipoPlacaChange,
 }) => {
   const [errors, setErrors] = useState({
     plate: "",
@@ -22,7 +24,6 @@ const VehicleForm = ({
   });
 
   const [scrapingLoading, setScrapingLoading] = useState(false);
-  const [tipoPlaca, setTipoPlaca] = useState("PARTICULAR");
 
   // Función para obtener solo la parte antes del guión del tipo de placa
   const getTipoPlacaPrefix = (tipoPlacaValue) => {
@@ -770,16 +771,26 @@ const VehicleForm = ({
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      // Formatear la placa completa antes de enviar
-      const formattedFormData = {
-        ...formData,
-        plate: formatPlate(formData.plate)
-      };
-      onSubmit(formattedFormData);
+  e.preventDefault();
+  if (validateForm()) {
+    // Determinar si necesitamos formatear la placa o no
+    const cleanedTipoPlaca = tipoPlaca.replace(/^\s*-\s*/, '').trim();
+    const noPrefixTypes = ["PARTICULAR"];
+    
+    let finalPlate = formData.plate;
+    
+    // Solo formatear si NO es PARTICULAR
+    if (!noPrefixTypes.includes(cleanedTipoPlaca)) {
+      finalPlate = formatPlate(formData.plate);
     }
-  };
+    
+    const formattedFormData = {
+      ...formData,
+      plate: finalPlate
+    };
+    onSubmit(formattedFormData);
+  }
+};
 
   const handleNumericChange = (e) => {
     const { name, value } = e.target;
@@ -801,7 +812,7 @@ const VehicleForm = ({
             <label>Tipo de placa*</label>
             <select
               value={tipoPlaca}
-              onChange={(e) => setTipoPlaca(e.target.value)}
+              onChange={(e) => onTipoPlacaChange(e.target.value)}
               disabled={scrapingLoading || loading}
               className={styles.scrapingSelect}
             >
