@@ -517,9 +517,13 @@ const Step2Vehicle = ({
   };
 
   const handleSubmitNewVehicle = (formDataWithFormattedPlate) => {
+
+    const plateForSave = getPlateForSearch(formDataWithFormattedPlate.plate, tipoPlaca);
+
     onNext(
       {
         ...formDataWithFormattedPlate,
+        plate: plateForSave,
         isExisting: false,
         tipoPlaca: tipoPlaca,
       },

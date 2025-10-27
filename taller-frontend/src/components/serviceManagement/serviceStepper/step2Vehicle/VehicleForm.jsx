@@ -524,22 +524,7 @@ const VehicleForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Determinar si necesitamos formatear la placa o no
-      const cleanedTipoPlaca = tipoPlaca.replace(/^\s*-\s*/, "").trim();
-      const noPrefixTypes = ["PARTICULAR"];
-
-      let finalPlate = formData.plate;
-
-      // Solo formatear si NO es PARTICULAR
-      if (!noPrefixTypes.includes(cleanedTipoPlaca)) {
-        finalPlate = formatPlate(formData.plate);
-      }
-
-      const formattedFormData = {
-        ...formData,
-        plate: finalPlate,
-      };
-      onSubmit(formattedFormData);
+      onSubmit(formData);
     }
   };
 
