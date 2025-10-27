@@ -107,7 +107,7 @@ const Step2Vehicle = ({
 
     try {
       const response = await vehiclesApi.getVehicleByPlate(plate);
-
+console.log(response)
       if (response?.success) {
         const vehicleInfo = response.data.data || response.data;
 
