@@ -10,6 +10,8 @@ import { useNotification } from "../../../contexts/NotificationContext";
 import { quoteAPI } from "../../../services/quoteAPI";
 import { proformaAPI } from "../../../services/proformaAPI";
 import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
+import { useAuth } from "../../../contexts/AuthContext";
+
 // Helper functions fuera del componente
 const formatPrice = (price) => {
   return new Intl.NumberFormat("es-CR", {
@@ -66,6 +68,8 @@ const ServiceDetails = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState(null);
+  const { user } = useAuth();
+
 
   // Estados para los modales de confirmación
   const [showDeleteServiceModal, setShowDeleteServiceModal] = useState(false);
@@ -366,6 +370,8 @@ const ServiceDetails = () => {
         vehicle_brand: service.vehicle.brand,
         vehicle_model: service.vehicle.model,
         vehicle_year: service.vehicle.year,
+        sender_name: `${user.name} ${user.lastname1} ${user.lastname2}`,
+        sender_email: user.email,
         message:
           "Por favor envíenos su mejor cotización para los repuestos solicitados.",
         parts: formData.parts
