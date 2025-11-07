@@ -4,7 +4,7 @@ import {
   FiPlus,
   FiTrash2,
   FiArrowRight,
-  FiCheckCircle,
+  FiCheckCircle
   FiTruck,
   FiX,
 } from "react-icons/fi";
@@ -285,7 +285,7 @@ const ServiceEditForm = ({
                 type="number"
                 min="0"
                 step="0.01"
-                value={part.price || 0}
+                value={part.price || ""}
                 onChange={(e) =>
                   handlePartChange(index, "price", e.target.value)
                 }
