@@ -244,6 +244,24 @@
   font-size: 1rem;
 }
 
+.serviceCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.serviceCardLink:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.serviceCard {
+  cursor: pointer; /* Indica que es clickeable */
+  position: relative;
+}
+
+
 .detailLink {
   color: #4a6cf7;
   text-decoration: none;
