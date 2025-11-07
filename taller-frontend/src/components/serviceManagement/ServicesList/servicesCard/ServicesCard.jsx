@@ -53,90 +53,92 @@ const ServicesCard = ({ service }) => {
   };
 
   return (
-    <div className={styles.serviceCard}>
-      <div className={styles.cardImageContainer}>
-        {service.photos.length > 0 ? (
-          <img
-            src={service.photos[0].downloadUrl}
-            alt={`${service.vehicle.brand} ${service.vehicle.model} - ${service.vehicle.plate}`}
-            className={styles.cardImage}
-            onError={(e) => {
-              e.target.onerror = null;
-            }}
-          />
-        ) : (
-          <div className={styles.noImage}>
-            <span>Sin imágenes</span>
-          </div>
-        )}
-      </div>
-
-      <div className={styles.cardContent}>
-        <div className={styles.titleRow}>
-          <h3 className={styles.cardTitle}>
-            {service.vehicle.brand} {service.vehicle.model}
-          </h3>
-          <span
-            className={`${styles.cardStatus} ${getStatusStyle(
-              service.status_service.name
-            )}`}
-          >
-            {service.status_service.name}
-          </span>
+    <Link 
+      to={`/dashboard/servicios/${service.id}`}
+      className={styles.serviceCardLink}
+      aria-label={`Acceder al servicio ${service.order_number} - ${service.vehicle.brand} ${service.vehicle.model}`}
+    >
+      <div className={styles.serviceCard}>
+        <div className={styles.cardImageContainer}>
+          {service.photos.length > 0 ? (
+            <img
+              src={service.photos[0].downloadUrl}
+              alt={`${service.vehicle.brand} ${service.vehicle.model} - ${service.vehicle.plate}`}
+              className={styles.cardImage}
+              onError={(e) => {
+                e.target.onerror = null;
+              }}
+            />
+          ) : (
+            <div className={styles.noImage}>
+              <span>Sin imágenes</span>
+            </div>
+          )}
         </div>
-        <p className={styles.cardPlate}>Placa: {service.vehicle.plate}</p>
 
-        <div className={styles.cardInfo}>
-          <div className={styles.infoItem}>
-            <span className={styles.infoLabel}>Cliente:</span>
-            <span>
-              {service.client.name} {service.client.lastname1}
-            </span>
-          </div>
-          <div className={styles.infoItem}>
-            <span className={styles.infoLabel}>Taller:</span>
-            <span>{service.workshop?.name}</span>
-          </div>
-          <div className={styles.infoItem}>
+        <div className={styles.cardContent}>
+          <div className={styles.titleRow}>
+            <h3 className={styles.cardTitle}>
+              {service.vehicle.brand} {service.vehicle.model}
+            </h3>
             <span
-              className={`${styles.infoLabel} ${
-                isEndDateTodayOrPast(service.end_date)
-                  ? styles.endDateWarning
-                  : ""
-              }`}
+              className={`${styles.cardStatus} ${getStatusStyle(
+                service.status_service.name
+              )}`}
             >
-              Fecha de finalización:
-            </span>
-            <span
-              className={
-                isEndDateTodayOrPast(service.end_date)
-                  ? styles.endDateToday
-                  : ""
-              }
-            >
-              {formatDate(service.end_date)}
+              {service.status_service.name}
             </span>
           </div>
-          <div className={styles.infoItem}>
-            <span className={styles.infoLabel}>Número de orden:</span>
-            <span>{service.order_number}</span>
-          </div>
-        </div>
+          <p className={styles.cardPlate}>Placa: {service.vehicle.plate}</p>
 
-        <div className={styles.cardFooter}>
-          <div className={styles.cardTotal}>
-            {formatPrice(service.total_price)}
+          <div className={styles.cardInfo}>
+            <div className={styles.infoItem}>
+              <span className={styles.infoLabel}>Cliente:</span>
+              <span>
+                {service.client.name} {service.client.lastname1}
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.infoLabel}>Taller:</span>
+              <span>{service.workshop?.name}</span>
+            </div>
+            <div className={styles.infoItem}>
+              <span
+                className={`${styles.infoLabel} ${
+                  isEndDateTodayOrPast(service.end_date)
+                    ? styles.endDateWarning
+                    : ""
+                }`}
+              >
+                Fecha de finalización:
+              </span>
+              <span
+                className={
+                  isEndDateTodayOrPast(service.end_date)
+                    ? styles.endDateToday
+                    : ""
+                }
+              >
+                {formatDate(service.end_date)}
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.infoLabel}>Número de orden:</span>
+              <span>{service.order_number}</span>
+            </div>
           </div>
-          <Link
-            to={`/dashboard/servicios/${service.id}`}
-            className={styles.detailLink}
-            aria-label={`Ver detalles del servicio ${service.id}`}
-          >
-            Ver Detalles
-          </Link>
+
+          <div className={styles.cardFooter}>
+            <div className={styles.cardTotal}>
+              {formatPrice(service.total_price)}
+            </div>
+            <div className={styles.detailLink}>
+              Ver Detalles
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
