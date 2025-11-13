@@ -4,7 +4,7 @@ import {
   FiPlus,
   FiTrash2,
   FiArrowRight,
-  FiCheckCircle
+  FiCheckCircle,
   FiTruck,
   FiX,
 } from "react-icons/fi";
