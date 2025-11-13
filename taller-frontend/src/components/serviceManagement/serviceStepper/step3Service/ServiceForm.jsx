@@ -5,8 +5,7 @@ import LoadingSpinner from "../../../ui/spinner/LoadingSpinner";
 
 const ServiceForm = ({
   formData = {},
-  encargados = [],
-  areas = [],
+  encargadosFlotilla = [],
   photos = [],
   onInputChange,
   onUserChange,
@@ -92,18 +91,18 @@ const ServiceForm = ({
           </div>
 
           <div className={styles.formGroup}>
-            <label>Encargado asignado*</label>
+            <label>Encargado Flotilla*</label>
             <select
-              name="user_assigned_id"
-              value={formData.user_assigned_id || ""}
+              name="user_fleet_id"
+              value={formData.user_fleet_id || ""}
               onChange={onUserChange}
               disabled={loadingEncargados || (isAdmin && !formData.workshop_id)}
               required
             >
               <option value="">
-                {loadingEncargados ? "Cargando..." : "Seleccione un técnico"}
+                {loadingEncargados ? "Cargando..." : "Seleccione un encargado flotilla"}
               </option>
-              {encargados.map((encargado) => (
+              {encargadosFlotilla.map((encargado) => (
                 <option key={encargado.id} value={encargado.id}>
                   {encargado.name} {encargado.lastname1}
                 </option>
@@ -126,18 +125,18 @@ const ServiceForm = ({
           </div>
 
           <div className={styles.formGroup}>
-            <label>Encargado asignado*</label>
+            <label>Encargado Flotilla*</label>
             <select
-              name="user_assigned_id"
-              value={formData.user_assigned_id || ""}
+              name="user_fleet_id"
+              value={formData.user_fleet_id || ""}
               onChange={onUserChange}
               disabled={loadingEncargados}
               required
             >
               <option value="">
-                {loadingEncargados ? "Cargando..." : "Seleccione un técnico"}
+                {loadingEncargados ? "Cargando..." : "Seleccione un encargado flotilla"}
               </option>
-              {encargados.map((encargado) => (
+              {encargadosFlotilla.map((encargado) => (
                 <option key={encargado.id} value={encargado.id}>
                   {encargado.name} {encargado.lastname1}
                 </option>
@@ -147,31 +146,7 @@ const ServiceForm = ({
         </div>
       )}
 
-      <div className={styles.formRow}>
-        <div className={styles.formGroup}>
-          <label>Área*</label>
-          <select
-            name="area_id"
-            value={formData.area_id || ""}
-            onChange={onInputChange}
-            disabled={!formData.user_assigned_id || areas.length === 0}
-            required
-          >
-            <option value="">
-              {!formData.user_assigned_id
-                ? "Seleccione un encargado primero"
-                : areas.length === 0
-                ? "No hay áreas disponibles"
-                : "Seleccione un área"}
-            </option>
-            {areas.map((area) => (
-              <option key={area.id} value={area.id}>
-                {area.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      {/* ELIMINADO: Sección de área - ya no se necesita */}
 
       <div className={styles.formGroup}>
         <label>Observaciones</label>

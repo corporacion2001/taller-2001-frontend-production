@@ -326,6 +326,9 @@
     align-self: flex-end;
     font-size: 1.2rem;
   }
+  .assignmentSection {
+    padding: 15px;
+  }
 }
 
 /* Estilos para la vista móvil de repuestos y mano de obra */
@@ -570,4 +573,12 @@
   visibility: hidden;
   height: 44px; /* Misma altura que los botones */
   pointer-events: none;
+}
+
+
+.warningText {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin: 10px 0 0 0;
+  font-style: italic;
 }

@@ -38,4 +38,10 @@ export const usersAPI = {
         `/profile/list/basic${workshopId ? `?workshop_id=${workshopId}` : ""}`
       )
       .then((res) => res.data),
+  getEncargadosFlotilla: (workshopId) =>
+    api
+      .get(
+        `/profile/fleet${workshopId ? `?workshop_id=${workshopId}` : ""}`
+      )
+      .then((res) => res.data),
 };

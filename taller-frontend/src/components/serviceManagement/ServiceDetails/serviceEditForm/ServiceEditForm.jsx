@@ -42,6 +42,12 @@ const ServiceEditForm = ({
   isFormCompleteForProcess,
   isFormCompleteForDelivered,
   buttonStates,
+  assignmentData,
+  onAssignmentChange,
+  encargados,
+  filteredAreas,
+  loadingEncargados,
+  onFilteredAreasChange,
 }) => {
   const { user } = useAuth();
   const isFinished = service.status_service.name === "Finalizado";
@@ -56,19 +62,58 @@ const ServiceEditForm = ({
   const isGestorRepuestos = user?.roles?.includes("Gestor Repuestos");
   const canSeeDeliveryData = isAdmin || isFleetMgr;
 
+  // Verificar si el usuario puede asignar técnicos
+  const canAssignTechnician = isAdmin || isFleetMgr;
+  const isPending = service.status_service.name === "Pendiente";
+  const isAreaRequired =
+    assignmentData.user_assigned_id && filteredAreas.length > 0;
+
   // NUEVO: Roles que pueden ver Mano de Obra Pagada
-  const canSeePaidLabors = user?.roles?.some(role => 
+  const canSeePaidLabors = user?.roles?.some((role) =>
     [
-      'Administrador',
-      'Encargado Flotilla', 
-      'Encargado Livianos',
-      'Encargado Pesados',
-      'Encargado Enderezado y Pintura',
-      'Encargado Metalmecánica',
-      'Encargado Todo Frenos y Cluth',
-      'Encargado Hidráulica'
+      "Administrador",
+      "Encargado Flotilla",
+      "Encargado Livianos",
+      "Encargado Pesados",
+      "Encargado Enderezado y Pintura",
+      "Encargado Metalmecánica",
+      "Encargado Todo Frenos y Cluth",
+      "Encargado Hidráulica",
     ].includes(role)
   );
+
+  // Efecto para filtrar áreas según el técnico seleccionado
+  useEffect(() => {
+    if (assignmentData.user_assigned_id) {
+      const encargado = encargados.find(
+        (e) => e.id === assignmentData.user_assigned_id
+      );
+      const areas =
+        encargado?.roles?.map((role) => ({
+          id: role.id,
+          name: role.name.replace("Encargado ", ""),
+        })) || [];
+
+      onFilteredAreasChange(areas);
+
+      // Si el área actual no está en las disponibles, resetear área
+      if (
+        areas.length > 0 &&
+        !areas.some((area) => area.id === assignmentData.area_id)
+      ) {
+        onAssignmentChange({
+          ...assignmentData,
+          area_id: "",
+        });
+      }
+    } else {
+      onFilteredAreasChange([]);
+      onAssignmentChange({
+        ...assignmentData,
+        area_id: "",
+      });
+    }
+  }, [assignmentData.user_assigned_id, encargados]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -109,6 +154,23 @@ const ServiceEditForm = ({
     const seconds = String(localDate.getUTCSeconds()).padStart(2, "0");
 
     return `${day}/${month}/${year} a las ${hours}:${minutes}:${seconds}`;
+  };
+
+  const handleUserAssignmentChange = (e) => {
+    const newData = {
+      ...assignmentData,
+      user_assigned_id: e.target.value,
+      area_id: "", // Reset area when user changes
+    };
+    onAssignmentChange(newData);
+  };
+
+  const handleAreaChange = (e) => {
+    const newData = {
+      ...assignmentData,
+      area_id: e.target.value,
+    };
+    onAssignmentChange(newData);
   };
 
   const handleDateChange = (e) => {
@@ -197,7 +259,7 @@ const ServiceEditForm = ({
           </button>
         );
       case "Finalizado":
-            // SOLO mostrar botón de entregado si el usuario tiene permisos
+        // SOLO mostrar botón de entregado si el usuario tiene permisos
         return !isDelivered && canSeeDeliveryData ? (
           <button
             type="button"
@@ -400,7 +462,9 @@ const ServiceEditForm = ({
       {formData.paidLabors.map((paidLabor, index) => (
         <div key={`paidLabor-${index}`} className={styles.mobileCard}>
           <div className={styles.cardHeader}>
-            <span className={styles.cardTitle}>Mano de obra pagada #{index + 1}</span>
+            <span className={styles.cardTitle}>
+              Mano de obra pagada #{index + 1}
+            </span>
             {!isDelivered && !isGestorRepuestos && (
               <button
                 type="button"
@@ -687,6 +751,64 @@ const ServiceEditForm = ({
       onSubmit={!isDelivered ? handleSaveChanges : (e) => e.preventDefault()}
       className={styles.serviceForm}
     >
+      {canAssignTechnician && isPending && (
+        <div className={styles.proformaSection}>
+          <h3>Asignación de Encargado Taller</h3>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label>Encargado asignado {isAreaRequired && "*"}</label>
+              <select
+                name="user_assigned_id"
+                value={assignmentData.user_assigned_id || ""}
+                onChange={handleUserAssignmentChange}
+                disabled={loadingEncargados}
+              >
+                <option value="">
+                  {loadingEncargados ? "Cargando..." : "Seleccione un encargado taller"}
+                </option>
+                {encargados.map((encargado) => (
+                  <option key={encargado.id} value={encargado.id}>
+                    {encargado.name} {encargado.lastname1}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Área {isAreaRequired && "*"}</label>
+              <select
+                name="area_id"
+                value={assignmentData.area_id || ""}
+                onChange={handleAreaChange}
+                disabled={
+                  !assignmentData.user_assigned_id || filteredAreas.length === 0
+                }
+                required={isAreaRequired}
+              >
+                <option value="">
+                  {!assignmentData.user_assigned_id
+                    ? "Seleccione un encargado primero"
+                    : filteredAreas.length === 0
+                    ? "No hay áreas disponibles"
+                    : "Seleccione un área"}
+                </option>
+                {filteredAreas.map((area) => (
+                  <option key={area.id} value={area.id}>
+                    {area.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {isAreaRequired && !assignmentData.area_id && (
+            <p className={styles.warningText}>
+              Debe seleccionar un área para el encargado asignado
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Sección de Repuestos */}
       <div className={styles.proformaSection}>
@@ -737,7 +859,10 @@ const ServiceEditForm = ({
       {/* Sección de Mano de Obra Pagada - SOLO para roles específicos */}
       {canSeePaidLabors && !isGestorRepuestos && (
         <div className={styles.proformaSection}>
-          <h3>Mano de Obra Pagada para Calcular Ganancia ({formData.paidLabors.length})</h3>
+          <h3>
+            Mano de Obra Pagada para Calcular Ganancia (
+            {formData.paidLabors.length})
+          </h3>
           {formData.paidLabors.length > 0 ? (
             isMobileView ? (
               renderMobilePaidLabors()
@@ -904,7 +1029,9 @@ const ServiceEditForm = ({
       {isAdmin && !isGestorRepuestos && (
         <div className={styles.grandTotal}>
           <div className={styles.grandTotalContent}>
-            <span className={styles.grandTotalLabel}>Ganancia (Total Mano de Obra - Total Mano de Obra Pagada): </span>
+            <span className={styles.grandTotalLabel}>
+              Ganancia (Total Mano de Obra - Total Mano de Obra Pagada):{" "}
+            </span>
             <span className={styles.grandTotalValue}>
               {formatPrice(profit)}
             </span>

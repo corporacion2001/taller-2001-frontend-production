@@ -6,12 +6,17 @@ import ProcessActions from "./processActions/ProcessActions";
 import InfoCard from "./infoCard/InfoCard";
 import styles from "./serviceHeader.module.css";
 import { quoteAPI } from "../../../../services/quoteAPI";
-import { proformaAPI } from "../../../../services/proformaAPI"; // NUEVO IMPORT
+import { proformaAPI } from "../../../../services/proformaAPI";
 import { useNotification } from "../../../../contexts/NotificationContext";
 import { serviceAPI } from "../../../../services/service.api";
 
 const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   const { showNotification } = useNotification();
+
+  if (!service) {
+    return <p>Cargando servicio...</p>;
+  }
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat("es-CR", {
       style: "currency",
@@ -24,15 +29,14 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   };
 
   const handleEnviarProforma = async () => {
-    onSendProforma(); // Usa la función del padre
+    onSendProforma();
   };
 
   const handleExportToPDF = () => {
     const doc = generateServicePDF(service, formatPrice);
-    doc.save(`servicio_${service.order_number}.pdf`);
+    doc.save(`servicio_${service?.order_number}.pdf`);
   };
 
-  // ✅ Exportar a Word
   const handleExportToWord = async () => {
     try {
       await generateServiceWord(service);
@@ -76,31 +80,31 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className={styles.title}>
-            Número de orden: {service.order_number}
+            Número de orden: {service?.order_number}
           </h1>
           <div
             className={`${styles.statusBadge} ${getStatusBadgeClass(
-              service.status_service.name
+              service?.status_service?.name
             )}`}
-            data-status={service.status_service.name}
+            data-status={service?.status_service?.name}
           >
-            {service.status_service.name}
+            {service?.status_service?.name}
           </div>
         </div>
         <div className={styles.vehiclePlate}>
-          Placa: {service.vehicle.plate}
+          Placa: {service?.vehicle?.plate}
         </div>
       </header>
 
-      {service.status_service.name === "Pendiente" && (
+      {service?.status_service?.name === "Pendiente" && (
         <ProcessActions
           onCotizarRepuesto={handleCotizarRepuesto}
           showEnviarProforma={false}
         />
       )}
 
-      {(service.status_service.name === "En proceso" ||
-        service.status_service.name === "Finalizado") && (
+      {(service?.status_service?.name === "En proceso" ||
+        service?.status_service?.name === "Finalizado") && (
         <ProcessActions
           onCotizarRepuesto={handleCotizarRepuesto}
           onEnviarProforma={handleEnviarProforma}
@@ -113,17 +117,17 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           <div className={styles.infoItem}>
             <span className={styles.label}>Fecha de ingreso:</span>
             <span>
-              {service.entry_date} a las {service.entry_time}
+              {service?.entry_date} a las {service?.entry_time}
             </span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.label}>Taller:</span>
-            <span>{service.workshop.name}</span>
+            <span>{service?.workshop?.name}</span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.label}>Total:</span>
             <span className={styles.highlight}>
-              {formatPrice(service.total_price)}
+              {formatPrice(service?.total_price)}
             </span>
           </div>
         </InfoCard>
@@ -132,19 +136,19 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           <div className={styles.infoItem}>
             <span className={styles.label}>Marca/Modelo:</span>
             <span>
-              {service.vehicle.brand} {service.vehicle.model}
+              {service?.vehicle?.brand} {service?.vehicle?.model}
             </span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.label}>Año/KM:</span>
             <span>
-              {service.vehicle.year} •{" "}
-              {service.vehicle.mileage.toLocaleString()} km
+              {service?.vehicle?.year} •{" "}
+              {service?.vehicle?.mileage?.toLocaleString()} km
             </span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.label}>Motor:</span>
-            <span>{service.vehicle.engine}</span>
+            <span>{service?.vehicle?.engine}</span>
           </div>
         </InfoCard>
 
@@ -152,18 +156,18 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           <div className={styles.infoItem}>
             <span className={styles.label}>Nombre:</span>
             <span>
-              {service.client.name} {service.client.lastname1}
+              {service?.client?.name} {service?.client?.lastname1}
             </span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.label}>Contacto:</span>
             <span>
-              {service.client.phone} • {service.client.email}
+              {service?.client?.phone} • {service?.client?.email}
             </span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.label}>Identificación:</span>
-            <span>{service.client.identification}</span>
+            <span>{service?.client?.identification}</span>
           </div>
         </InfoCard>
       </div>
@@ -174,18 +178,34 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           <div className={styles.infoItem}>
             <span className={styles.label}>Recibido por:</span>
             <span>
-              {service.received_by.name} {service.received_by.lastname1}
+              {service?.received_by?.name} {service?.received_by?.lastname1}
             </span>
           </div>
+
+          {/* NUEVO: Encargado Flotilla */}
           <div className={styles.infoItem}>
-            <span className={styles.label}>Asignado a:</span>
+            <span className={styles.label}>Encargado Flotilla:</span>
             <span>
-              {service.assigned_to.name} {service.assigned_to.lastname1}
+              {service?.fleetUser
+                ? `${service.fleetUser.name} ${service.fleetUser.lastname1}`
+                : "Sin asignar"}
             </span>
           </div>
+
+          {/* MODIFICADO: Técnico asignado */}
+          <div className={styles.infoItem}>
+            <span className={styles.label}>Encargado taller:</span>
+            <span>
+              {service?.assigned_to
+                ? `${service.assigned_to.name} ${service.assigned_to.lastname1}`
+                : "Sin asignar"}
+            </span>
+          </div>
+
+          {/* MODIFICADO: Área */}
           <div className={styles.infoItem}>
             <span className={styles.label}>Área:</span>
-            <span>{service.area.name}</span>
+            <span>{service?.area?.name || "Sin asignar"}</span>
           </div>
         </div>
       </section>

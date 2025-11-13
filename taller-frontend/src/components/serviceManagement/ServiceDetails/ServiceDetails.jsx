@@ -9,9 +9,9 @@ import styles from "./serviceDetails.module.css";
 import { useNotification } from "../../../contexts/NotificationContext";
 import { quoteAPI } from "../../../services/quoteAPI";
 import { proformaAPI } from "../../../services/proformaAPI";
+import { usersAPI } from "../../../services/user.api";
 import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
 import { useAuth } from "../../../contexts/AuthContext";
-
 // Helper functions fuera del componente
 const formatPrice = (price) => {
   return new Intl.NumberFormat("es-CR", {
@@ -70,7 +70,6 @@ const ServiceDetails = () => {
   const [actionError, setActionError] = useState(null);
   const { user } = useAuth();
 
-
   // Estados para los modales de confirmación
   const [showDeleteServiceModal, setShowDeleteServiceModal] = useState(false);
   const [showDeletePartModal, setShowDeletePartModal] = useState(false);
@@ -81,7 +80,8 @@ const ServiceDetails = () => {
   const [showQuotePartsModal, setShowQuotePartsModal] = useState(false);
   const [showSendProformaModal, setShowSendProformaModal] = useState(false);
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
-  const [showDeletePaidLaborModal, setShowDeletePaidLaborModal] = useState(false);
+  const [showDeletePaidLaborModal, setShowDeletePaidLaborModal] =
+    useState(false);
   const [pendingPaidLaborIndex, setPendingPaidLaborIndex] = useState(null);
   const [pendingPaidLaborId, setPendingPaidLaborId] = useState(null);
 
@@ -106,6 +106,16 @@ const ServiceDetails = () => {
     mechanics: [],
     observations: "",
   });
+
+  const [assignmentData, setAssignmentData] = useState({
+    user_assigned_id: "",
+    area_id: "",
+  });
+
+  // Estados para encargados y áreas
+  const [encargados, setEncargados] = useState([]);
+  const [filteredAreas, setFilteredAreas] = useState([]);
+  const [loadingEncargados, setLoadingEncargados] = useState(false);
 
   const [deliveryData, setDeliveryData] = useState({
     invoice_number: "",
@@ -168,12 +178,17 @@ const ServiceDetails = () => {
 
   // MODIFICACIÓN: Función para validar campos requeridos para "En Proceso"
   const isFormCompleteForProcess = () => {
-    return (
+    const baseValidation =
       formData.end_date &&
       formData.vehicle_location?.trim() &&
       formData.mechanics.length > 0 &&
-      hasValidPartsOrLabors() // MODIFICADO: usa la nueva función
-    );
+      hasValidPartsOrLabors();
+
+    // NUEVO: Técnico y área son OBLIGATORIOS para marcar como "En Proceso"
+    const assignmentValid =
+      assignmentData.user_assigned_id && assignmentData.area_id;
+
+    return baseValidation && assignmentValid;
   };
 
   // MODIFICACIÓN: Función para validar campos requeridos para "Entregado"
@@ -208,6 +223,13 @@ const ServiceDetails = () => {
       JSON.stringify(formData.mechanics) !==
         JSON.stringify(initialFormData.mechanics);
 
+    // Verificar cambios en asignación de técnico
+    const initialAssignedId = service?.assigned_to?.id || "";
+    const initialAreaId = service?.area?.id || "";
+    const assignmentChanged =
+      assignmentData.user_assigned_id !== initialAssignedId ||
+      assignmentData.area_id !== initialAreaId;
+
     // Verificar cambios en partes (repuestos) - COMPARACIÓN PROFUNDA
     const partsChanged = !areArraysEqual(formData.parts, initialFormData.parts);
 
@@ -228,7 +250,12 @@ const ServiceDetails = () => {
       deliveryData.payment_method !== initialDeliveryData.payment_method;
 
     return (
-      basicFormChanges || partsChanged || laborsChanged || paidLaborsChanged || deliveryDataChanged
+      basicFormChanges ||
+      partsChanged ||
+      laborsChanged ||
+      paidLaborsChanged ||
+      deliveryDataChanged ||
+      assignmentChanged
     );
   };
 
@@ -238,7 +265,14 @@ const ServiceDetails = () => {
       const changesDetected = hasFormChanges();
       setHasUnsavedChanges(changesDetected);
     }
-  }, [formData, deliveryData, initialFormData, initialDeliveryData, isSaving]);
+  }, [
+    formData,
+    deliveryData,
+    assignmentData,
+    initialFormData,
+    initialDeliveryData,
+    isSaving,
+  ]);
 
   // Manejar navegación con confirmación
   const handleNavigation = (navigationAction) => {
@@ -521,6 +555,11 @@ const ServiceDetails = () => {
         const serviceData = serviceResponse.data.data;
         setService(serviceData);
 
+        // Cargar encargados del taller
+        if (serviceData.workshop?.id) {
+          await loadEncargados(serviceData.workshop.id);
+        }
+
         const initialData = {
           parts: serviceData.parts || [],
           labors: serviceData.labors || [],
@@ -529,6 +568,11 @@ const ServiceDetails = () => {
           vehicle_location: serviceData.vehicle_location || "",
           mechanics: serviceData.mechanics || [],
           observations: serviceData.observations || "",
+        };
+
+        const initialAssignment = {
+          user_assigned_id: serviceData.assigned_to?.id || "",
+          area_id: serviceData.area?.id || "",
         };
 
         const initialDelivery = {
@@ -540,6 +584,7 @@ const ServiceDetails = () => {
         setInitialFormData(JSON.parse(JSON.stringify(initialData))); // Deep copy
         setDeliveryData(initialDelivery);
         setInitialDeliveryData(JSON.parse(JSON.stringify(initialDelivery))); // Deep copy
+        setAssignmentData(initialAssignment);
 
         setPhotos(photosResponse.data.data || []);
       } catch (err) {
@@ -561,6 +606,29 @@ const ServiceDetails = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const loadEncargados = async (workshopId) => {
+    if (!workshopId) {
+      setEncargados([]);
+      return;
+    }
+
+    try {
+      setLoadingEncargados(true);
+      const response = await usersAPI.getEncargados(workshopId);
+
+      if (response.success) {
+        setEncargados(response.data || []);
+      } else {
+        throw new Error(response.message || "Error al obtener técnicos");
+      }
+    } catch (error) {
+      console.error("Error cargando técnicos:", error);
+      setEncargados([]);
+    } finally {
+      setLoadingEncargados(false);
+    }
   };
 
   const handlePartChange = (index, field, value) => {
@@ -618,61 +686,68 @@ const ServiceDetails = () => {
   };
 
   const handleConfirmDeletePart = async () => {
-  setShowDeletePartModal(false);
-  setActionLoading(true);
+    setShowDeletePartModal(false);
+    setActionLoading(true);
 
-  try {
-    // 1. Eliminar el part del backend
-    await serviceAPI.deletePart(pendingPartId);
+    try {
+      // 1. Eliminar el part del backend
+      await serviceAPI.deletePart(pendingPartId);
 
-    // 2. Actualizar el estado local eliminando el repuesto
-    const updatedParts = formData.parts.filter((_, i) => i !== pendingPartIndex);
-    
-    setFormData((prev) => ({
-      ...prev,
-      parts: updatedParts,
-    }));
+      // 2. Actualizar el estado local eliminando el repuesto
+      const updatedParts = formData.parts.filter(
+        (_, i) => i !== pendingPartIndex
+      );
 
-    const payload = {
-      parts: updatedParts.map((part) => ({
-        id: part.id || undefined,
-        amount: part.amount,
-        name: part.name,
-        price: parseFloat(part.price),
-        invoice_number: part.invoice_number || "",
-      })),
-    };
-    //Para que sea actualice el total_price
-    const response = await serviceAPI.updateService(serviceId, payload);
+      setFormData((prev) => ({
+        ...prev,
+        parts: updatedParts,
+      }));
 
-    if (!response.data.success) {
-      throw new Error(response.data.message || "Error al actualizar el servicio");
+      const payload = {
+        parts: updatedParts.map((part) => ({
+          id: part.id || undefined,
+          amount: part.amount,
+          name: part.name,
+          price: parseFloat(part.price),
+          invoice_number: part.invoice_number || "",
+        })),
+      };
+      //Para que sea actualice el total_price
+      const response = await serviceAPI.updateService(serviceId, payload);
+
+      if (!response.data.success) {
+        throw new Error(
+          response.data.message || "Error al actualizar el servicio"
+        );
+      }
+
+      // 6. Actualizar los datos iniciales
+      setInitialFormData(
+        JSON.parse(
+          JSON.stringify({
+            ...formData,
+            parts: updatedParts,
+          })
+        )
+      );
+      setHasUnsavedChanges(false);
+
+      showNotification("Repuesto eliminado correctamente", "success");
+
+      // 7. Recargar el servicio para obtener los datos actualizados
+      const serviceResponse = await serviceAPI.getServiceById(serviceId);
+      if (serviceResponse.data.success) {
+        setService(serviceResponse.data.data);
+      }
+    } catch (err) {
+      setActionError(err.message || "Error al eliminar el repuesto");
+      showNotification("Error al eliminar el repuesto", "error");
+    } finally {
+      setActionLoading(false);
+      setPendingPartIndex(null);
+      setPendingPartId(null);
     }
-
-    // 6. Actualizar los datos iniciales
-    setInitialFormData(JSON.parse(JSON.stringify({
-      ...formData,
-      parts: updatedParts
-    })));
-    setHasUnsavedChanges(false);
-
-    showNotification("Repuesto eliminado correctamente", "success");
-
-    // 7. Recargar el servicio para obtener los datos actualizados
-    const serviceResponse = await serviceAPI.getServiceById(serviceId);
-    if (serviceResponse.data.success) {
-      setService(serviceResponse.data.data);
-    }
-
-  } catch (err) {
-    setActionError(err.message || "Error al eliminar el repuesto");
-    showNotification("Error al eliminar el repuesto", "error");
-  } finally {
-    setActionLoading(false);
-    setPendingPartIndex(null);
-    setPendingPartId(null);
-  }
-};
+  };
 
   const removeLabor = async (index, laborId) => {
     if (laborId) {
@@ -688,62 +763,69 @@ const ServiceDetails = () => {
   };
 
   const handleConfirmDeleteLabor = async () => {
-  setShowDeleteLaborModal(false);
-  setActionLoading(true);
+    setShowDeleteLaborModal(false);
+    setActionLoading(true);
 
-  try {
-    // 1. Eliminar el labor del backend
-    await serviceAPI.deleteLabor(pendingLaborId);
+    try {
+      // 1. Eliminar el labor del backend
+      await serviceAPI.deleteLabor(pendingLaborId);
 
-    // 2. Actualizar el estado local eliminando la mano de obra
-    const updatedLabors = formData.labors.filter((_, i) => i !== pendingLaborIndex);
-    
-    setFormData((prev) => ({
-      ...prev,
-      labors: updatedLabors,
-    }));
+      // 2. Actualizar el estado local eliminando la mano de obra
+      const updatedLabors = formData.labors.filter(
+        (_, i) => i !== pendingLaborIndex
+      );
 
-    const payload = {
-      labors: updatedLabors.map((labor) => ({
-        id: labor.id || undefined,
-        amount: labor.amount,
-        description: labor.description,
-        price: parseFloat(labor.price),
-      })),
-    };
-    
-    const response = await serviceAPI.updateService(serviceId, payload);
+      setFormData((prev) => ({
+        ...prev,
+        labors: updatedLabors,
+      }));
 
-    if (!response.data.success) {
-      throw new Error(response.data.message || "Error al actualizar el servicio");
+      const payload = {
+        labors: updatedLabors.map((labor) => ({
+          id: labor.id || undefined,
+          amount: labor.amount,
+          description: labor.description,
+          price: parseFloat(labor.price),
+        })),
+      };
+
+      const response = await serviceAPI.updateService(serviceId, payload);
+
+      if (!response.data.success) {
+        throw new Error(
+          response.data.message || "Error al actualizar el servicio"
+        );
+      }
+
+      // 6. Actualizar los datos iniciales
+      setInitialFormData(
+        JSON.parse(
+          JSON.stringify({
+            ...formData,
+            labors: updatedLabors,
+          })
+        )
+      );
+      setHasUnsavedChanges(false);
+
+      showNotification("Mano de obra eliminada correctamente", "success");
+
+      // 7. Recargar el servicio para obtener los datos actualizados
+      const serviceResponse = await serviceAPI.getServiceById(serviceId);
+      if (serviceResponse.data.success) {
+        setService(serviceResponse.data.data);
+      }
+    } catch (err) {
+      setActionError(err.message || "Error al eliminar la mano de obra");
+      showNotification("Error al eliminar la mano de obra", "error");
+    } finally {
+      setActionLoading(false);
+      setPendingLaborIndex(null);
+      setPendingLaborId(null);
     }
+  };
 
-    // 6. Actualizar los datos iniciales
-    setInitialFormData(JSON.parse(JSON.stringify({
-      ...formData,
-      labors: updatedLabors
-    })));
-    setHasUnsavedChanges(false);
-
-    showNotification("Mano de obra eliminada correctamente", "success");
-
-    // 7. Recargar el servicio para obtener los datos actualizados
-    const serviceResponse = await serviceAPI.getServiceById(serviceId);
-    if (serviceResponse.data.success) {
-      setService(serviceResponse.data.data);
-    }
-
-  } catch (err) {
-    setActionError(err.message || "Error al eliminar la mano de obra");
-    showNotification("Error al eliminar la mano de obra", "error");
-  } finally {
-    setActionLoading(false);
-    setPendingLaborIndex(null);
-    setPendingLaborId(null);
-  }
-};
-
-// AGREGAR: Handlers para PaidLabors
+  // AGREGAR: Handlers para PaidLabors
   const handlePaidLaborChange = (index, field, value) => {
     const updatedPaidLabors = [...formData.paidLabors];
     updatedPaidLabors[index] = {
@@ -782,28 +864,36 @@ const ServiceDetails = () => {
       await serviceAPI.deletePaidLabor(pendingPaidLaborId);
 
       // 2. Actualizar el estado local eliminando la labor pagada
-      const updatedPaidLabors = formData.paidLabors.filter((_, i) => i !== pendingPaidLaborIndex);
-      
+      const updatedPaidLabors = formData.paidLabors.filter(
+        (_, i) => i !== pendingPaidLaborIndex
+      );
+
       setFormData((prev) => ({
         ...prev,
         paidLabors: updatedPaidLabors,
       }));
 
       // Actualizar los datos iniciales
-      setInitialFormData(JSON.parse(JSON.stringify({
-        ...formData,
-        paidLabors: updatedPaidLabors
-      })));
+      setInitialFormData(
+        JSON.parse(
+          JSON.stringify({
+            ...formData,
+            paidLabors: updatedPaidLabors,
+          })
+        )
+      );
       setHasUnsavedChanges(false);
 
-      showNotification("Mano de obra pagada eliminada correctamente", "success");
+      showNotification(
+        "Mano de obra pagada eliminada correctamente",
+        "success"
+      );
 
       // Recargar el servicio para obtener los datos actualizados
       const serviceResponse = await serviceAPI.getServiceById(serviceId);
       if (serviceResponse.data.success) {
         setService(serviceResponse.data.data);
       }
-
     } catch (err) {
       setActionError(err.message || "Error al eliminar la mano de obra pagada");
       showNotification("Error al eliminar la mano de obra pagada", "error");
@@ -836,6 +926,16 @@ const ServiceDetails = () => {
       showNotification("No hay cambios que guardar", "info");
       return;
     }
+
+    // Validar que si hay técnico asignado, también haya área
+    if (assignmentData.user_assigned_id && !assignmentData.area_id) {
+      showNotification(
+        "Debe seleccionar un área para el encargado asignado",
+        "warning"
+      );
+      return;
+    }
+
     setIsSaving(true);
     setButtonStates({
       deleteService: false,
@@ -853,6 +953,8 @@ const ServiceDetails = () => {
         observations: formData.observations,
         invoice_number: deliveryData.invoice_number || null,
         payment_method: deliveryData.payment_method || null,
+        user_assigned_id: assignmentData.user_assigned_id || null, // NUEVO
+        area_id: assignmentData.area_id || null, // NUEVO
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -925,6 +1027,14 @@ const ServiceDetails = () => {
       missingFields.push("al menos un repuesto o mano de obra completo");
     }
 
+    // NUEVA VALIDACIÓN: Técnico y área son OBLIGATORIOS
+    if (!assignmentData.user_assigned_id) {
+      missingFields.push("encargado taller asignado");
+    }
+    if (!assignmentData.area_id) {
+      missingFields.push("área del encargado");
+    }
+
     if (missingFields.length > 0) {
       setActionError(
         `Debe completar los siguientes campos: ${missingFields.join(", ")}`
@@ -961,6 +1071,15 @@ const ServiceDetails = () => {
     setActionLoading(true);
     setActionError(null);
 
+    // Validar que si hay técnico asignado, también haya área
+    if (assignmentData.user_assigned_id && !assignmentData.area_id) {
+      showNotification(
+        "Debe seleccionar un área para el encargado asignado",
+        "warning"
+      );
+      return;
+    }
+
     try {
       // Primero guardar los cambios
       const updatePayload = {
@@ -968,6 +1087,8 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
+        user_assigned_id: assignmentData.user_assigned_id || null, // NUEVO
+        area_id: assignmentData.area_id || null, // NUEVO
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -1431,6 +1552,12 @@ const ServiceDetails = () => {
         service={service}
         formData={formData}
         deliveryData={deliveryData}
+        assignmentData={assignmentData}
+        onAssignmentChange={setAssignmentData}
+        encargados={encargados}
+        filteredAreas={filteredAreas}
+        loadingEncargados={loadingEncargados}
+        onFilteredAreasChange={setFilteredAreas}
         loading={actionLoading}
         error={actionError}
         handleSaveChanges={handleSaveChanges}

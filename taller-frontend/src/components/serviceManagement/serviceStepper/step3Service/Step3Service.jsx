@@ -15,7 +15,7 @@ const Step3Service = ({
   clientId,
   vehicleId,
   onComplete,
-  loading = false, // <-- Recibe el loading del Stepper
+  loading = false,
 }) => {
   const { user } = useAuth();
   const { showNotification } = useNotification();
@@ -25,7 +25,7 @@ const Step3Service = ({
   const [error, setError] = useState(null);
   const [loadingWorkshops, setLoadingWorkshops] = useState(false);
   const [loadingEncargados, setLoadingEncargados] = useState(false);
-  const [photoProcessing, setPhotoProcessing] = useState(false); // <-- Solo para procesamiento de fotos
+  const [photoProcessing, setPhotoProcessing] = useState(false);
 
   // Datos del formulario
   const [formData, setFormData] = useState({
@@ -35,10 +35,9 @@ const Step3Service = ({
       minute: "2-digit",
     }),
     workshop_id: user?.workshop?.id || "",
-    user_assigned_id: "",
+    user_fleet_id: "",
     client_id: clientId,
     vehicle_id: vehicleId,
-    area_id: "",
     observations: "",
     ...initialData,
   });
@@ -46,8 +45,7 @@ const Step3Service = ({
   const [photos, setPhotos] = useState(initialPhotos);
   const [showCamera, setShowCamera] = useState(false);
   const [availableWorkshops, setAvailableWorkshops] = useState([]);
-  const [encargados, setEncargados] = useState([]);
-  const [filteredAreas, setFilteredAreas] = useState([]);
+  const [encargadosFlotilla, setEncargadosFlotilla] = useState([]);
 
   // Efecto para inicialización completa
   useEffect(() => {
@@ -58,10 +56,9 @@ const Step3Service = ({
         minute: "2-digit",
       }),
       workshop_id: user?.workshop?.id || "",
-      user_assigned_id: "",
+      user_fleet_id: "",
       client_id: clientId,
       vehicle_id: vehicleId,
-      area_id: "",
       observations: "",
       ...initialData,
     };
@@ -88,52 +85,35 @@ const Step3Service = ({
     loadWorkshops();
   }, []);
 
-  // Cargar encargados según taller
+  // Cargar encargados flotilla según taller
   useEffect(() => {
-    const loadEncargados = async () => {
+    const loadEncargadosFlotilla = async () => {
       try {
         const workshopId = isAdmin ? formData.workshop_id : user?.workshop?.id;
         if (!workshopId) {
-          setEncargados([]);
+          setEncargadosFlotilla([]);
           return;
         }
 
         setLoadingEncargados(true);
-        const response = await usersAPI.getEncargados(workshopId);
+        const response = await usersAPI.getEncargadosFlotilla(workshopId);
 
         if (response.success) {
-          setEncargados(response.data || []);
+          setEncargadosFlotilla(response.data || []);
         } else {
-          throw new Error(response.message || "Error al obtener encargados");
+          throw new Error(response.message || "Error al obtener encargados flotilla");
         }
       } catch (error) {
-        console.error("Error cargando encargados:", error);
-        showNotification("Error al cargar técnicos", "error");
-        setEncargados([]);
+        console.error("Error cargando encargados flotilla:", error);
+        showNotification("Error al cargar encargados flotilla", "error");
+        setEncargadosFlotilla([]);
       } finally {
         setLoadingEncargados(false);
       }
     };
 
-    loadEncargados();
+    loadEncargadosFlotilla();
   }, [formData.workshop_id, user?.workshop?.id, isAdmin]);
-
-  // Filtrar áreas según encargado seleccionado
-  useEffect(() => {
-    if (formData.user_assigned_id) {
-      const encargado = encargados.find(
-        (e) => e.id === formData.user_assigned_id
-      );
-      setFilteredAreas(
-        encargado?.roles?.map((role) => ({
-          id: role.id,
-          name: role.name.replace("Encargado ", ""),
-        })) || []
-      );
-    } else {
-      setFilteredAreas([]);
-    }
-  }, [formData.user_assigned_id, encargados]);
 
   // Handlers para el formulario
   const handleInputChange = (e) => {
@@ -144,14 +124,12 @@ const Step3Service = ({
   const handleUserChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      user_assigned_id: e.target.value,
-      area_id: "",
+      user_fleet_id: e.target.value,
     }));
   };
 
   // Función para convertir HEIC a JPG
   const convertHeicToJpg = async (file) => {
-    // Si no es HEIC, devolver el archivo original
     const isHeic =
       file.name.toLowerCase().endsWith(".heic") ||
       file.type.includes("heic") ||
@@ -165,14 +143,12 @@ const Step3Service = ({
     try {
       showNotification("Convirtiendo imagen HEIC a JPG...", "info");
 
-      // Convertir HEIC a JPG usando heic2any
       const conversionResult = await heic2any({
         blob: file,
         toType: "image/jpeg",
-        quality: 0.8, // Calidad de 0 a 1
+        quality: 0.8,
       });
 
-      // Crear nuevo archivo con extensión JPG
       const newFileName = file.name.replace(/\.[^/.]+$/, ".jpg");
       const newFile = new File([conversionResult], newFileName, {
         type: "image/jpeg",
@@ -186,7 +162,7 @@ const Step3Service = ({
         "Error al convertir imagen. Se usará el formato original.",
         "error"
       );
-      return file; // En caso de error, devolver el archivo original
+      return file;
     }
   };
 
@@ -201,10 +177,8 @@ const Step3Service = ({
       const processedPhotos = [];
 
       for (const file of files) {
-        // Convertir HEIC a JPG si es necesario
         const processedFile = await convertHeicToJpg(file);
 
-        // Crear objeto de foto
         const photoObject = {
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           name: processedFile.name,
@@ -236,7 +210,6 @@ const Step3Service = ({
   const handlePhotosCaptured = (newPhotos) => {
     setPhotos((prev) => {
       const processedPhotos = newPhotos.map((photo, index) => {
-        // Si la foto ya viene como objeto con url (desde Camera)
         if (typeof photo === "object" && photo.url) {
           return {
             id: `${Date.now()}-${index}-${Math.random()
@@ -247,7 +220,6 @@ const Step3Service = ({
             name: photo.name || `camera_${Date.now()}_${index}.jpg`,
           };
         }
-        // Si viene como string (data URL)
         return {
           id: `${Date.now()}-${index}-${Math.random()
             .toString(36)
@@ -259,7 +231,6 @@ const Step3Service = ({
       });
 
       const updatedPhotos = [...prev, ...processedPhotos];
-      console.log("Fotos actualizadas después de cámara:", updatedPhotos);
       return updatedPhotos;
     });
   };
@@ -290,22 +261,16 @@ const Step3Service = ({
       isValid = false;
     }
 
-    // Validación de observaciones (opcional pero con límite)
+    // Validación de observaciones
     if (serviceData.observations && serviceData.observations.length > 255) {
       errors.observations =
         "Las observaciones no pueden exceder 255 caracteres";
       isValid = false;
     }
 
-    // Validación de técnico asignado
-    if (!serviceData.user_assigned_id) {
-      errors.user_assigned_id = "Debe asignar un técnico";
-      isValid = false;
-    }
-
-    // Validación de área
-    if (!serviceData.area_id) {
-      errors.area_id = "Debe seleccionar un área";
+    // Validación de encargado flotilla
+    if (!serviceData.user_fleet_id) {
+      errors.user_fleet_id = "Debe asignar un encargado flotilla";
       isValid = false;
     }
 
@@ -326,15 +291,9 @@ const Step3Service = ({
       // Validar datos del servicio
       const { isValid, errors } = validateServiceData(formData);
       if (!isValid) {
-        // Construir mensaje de error más amigable
         const errorMessages = Object.values(errors).join(", ");
         setError(`Por favor corrija los siguientes errores: ${errorMessages}`);
         throw new Error("Por favor corrija los errores en el formulario");
-      }
-
-      // Validación de fotos
-      if (photos.length < 10) {
-        throw new Error("Debe subir al menos 10 fotos del vehículo");
       }
 
       // Preparar datos para enviar
@@ -343,9 +302,9 @@ const Step3Service = ({
         workshop_id: isAdmin ? formData.workshop_id : user.workshop.id,
         user_received_id: user.id,
         observations: formData.observations?.trim() || "",
+        // NOTA: Ya no se envía area_id
       };
 
-      // onComplete es manejado por el padre (Stepper) y debe activar globalLoading allí
       await onComplete({
         service: serviceToSend,
         photos: photos.map((photo) => ({
@@ -366,8 +325,7 @@ const Step3Service = ({
 
       <ServiceForm
         formData={formData}
-        encargados={encargados}
-        areas={filteredAreas}
+        encargadosFlotilla={encargadosFlotilla}
         photos={photos}
         onInputChange={handleInputChange}
         onUserChange={handleUserChange}
@@ -376,7 +334,7 @@ const Step3Service = ({
         onSubmit={handleSubmit}
         onBack={onBack}
         onOpenCamera={() => setShowCamera(true)}
-        loading={Boolean(loading || photoProcessing)} // <-- Combina loading del Stepper + procesamiento de fotos
+        loading={Boolean(loading || photoProcessing)}
         error={error}
         availableWorkshops={availableWorkshops}
         loadingWorkshops={loadingWorkshops}
