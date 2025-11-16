@@ -896,7 +896,6 @@ const ServiceEditForm = ({
               name="end_date"
               value={formatDateForInput(formData.end_date) || ""}
               onChange={handleDateChange}
-              min={localDate}
             />
           )}
         </div>
