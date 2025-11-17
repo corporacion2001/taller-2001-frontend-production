@@ -357,8 +357,8 @@ const VehicleForm = ({
     if (!formData.plate.trim()) {
       newErrors.plate = "La placa es requerida";
       isValid = false;
-    } else if (formData.plate.length > 6) {
-      newErrors.plate = "Máximo 6 caracteres permitidos";
+    } else if (formData.plate.length > 10) {
+      newErrors.plate = "Máximo 10 caracteres permitidos";
       isValid = false;
     }
 
