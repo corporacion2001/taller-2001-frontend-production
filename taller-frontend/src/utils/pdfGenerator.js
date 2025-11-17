@@ -39,8 +39,6 @@ export const generateServicePDF = (service) => {
             ["Identificación:", service.client.identification || "No disponible"],
             ["Teléfono:", service.client.phone || "No disponible"],
             ["Recibido por:", `${service.received_by.name} ${service.received_by.lastname1}` || "No disponible"],
-            ["Asignado a:", `${service.assigned_to.name} ${service.assigned_to.lastname1}` || "No disponible"],
-            ["Área:", service.area.name || "No disponible"],
           ],
         },
         layout: "lightHorizontalLines",
