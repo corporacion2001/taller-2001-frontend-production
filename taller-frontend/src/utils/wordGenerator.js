@@ -130,11 +130,11 @@ export const generateServiceWord = async (service) => {
             spacing: { after: 200 },
           }),
           new Paragraph({
-            text: `Número de orden ${service.order_number}`,
+            text: `Número de orden ${service.order_number}` || "No disponible",
             style: "header",
           }),
           new Paragraph({
-            text: `Estado: ${service.status_service.name}`,
+            text: `Estado: ${service.status_service.name}` || "No disponible",
             style: "subheader",
           }),
           sectionTitle("Información General"),
@@ -142,16 +142,16 @@ export const generateServiceWord = async (service) => {
             [
               [
                 "Fecha de ingreso:",
-                `${service.entry_date} a las ${service.entry_time}`,
+                `${service.entry_date} a las ${service.entry_time}` || "No disponible",
               ],
               ["Taller:", service.workshop.name || "No disponible"],
               [
                 "Vehículo:",
-                `${service.vehicle.plate} - ${service.vehicle.brand} ${service.vehicle.model}`,
+                `${service.vehicle.plate} - ${service.vehicle.brand} ${service.vehicle.model}` || "No disponible",
               ],
               [
                 "Cliente:",
-                `${service.client.name} ${service.client.lastname1}`,
+                `${service.client.name} ${service.client.lastname1}` || "No disponible",
               ],
               ["Correo:", service.client.email || "No disponible"],
               [
@@ -161,13 +161,13 @@ export const generateServiceWord = async (service) => {
               ["Teléfono:", service.client.phone || "No disponible"],
               [
                 "Recibido por:",
-                `${service.received_by.name} ${service.received_by.lastname1}`,
+                `${service.received_by.name} ${service.received_by.lastname1}` || "No disponible",
               ],
               [
                 "Asignado a:",
-                `${service.assigned_to.name} ${service.assigned_to.lastname1}`,
+                `${service.assigned_to.name} ${service.assigned_to.lastname1}` || "No disponible",
               ],
-              ["Área:", service.area.name],
+              ["Área:", service.area.name || "No disponible"],
             ],
             [35, 65]
           ),
