@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styles from "./step1Client.module.css";
 import { clientsAPI } from "../../../../services/client.api";
 import ClientForm from "./ClientForm";
-import ConfirmationModal from "../../../ui/confirmationModal/ConfirmationModal";
 
 const Step1Client = ({ onNext, initialData, showSearch, onBack }) => {
   const [identification, setIdentification] = useState(
@@ -13,7 +12,6 @@ const Step1Client = ({ onNext, initialData, showSearch, onBack }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState("");
-  const [showResetModal, setShowResetModal] = useState(false);
 
   // Validación de cédula
   const validateIdentification = (id) => {
