@@ -298,7 +298,7 @@ const Step3Service = ({
         throw new Error("Por favor corrija los errores en el formulario");
       }
 
-      if (photos.length < 0) {
+      if (photos.length < 5) {
         throw new Error("Debe subir al menos 10 fotos del vehículo");
       }
 
