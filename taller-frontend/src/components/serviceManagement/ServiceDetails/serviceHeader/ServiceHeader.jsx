@@ -31,10 +31,6 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   };
 
   const handleConfirmQuote = () => {
-    if (!quoteMessage.trim()) {
-      showNotification("Debe escribir un mensaje para la cotización", "warning");
-      return;
-    }
     setShowMessageModal(false);
     onQuoteParts(quoteMessage);
     setQuoteMessage(""); // Limpiar el mensaje después de enviar
@@ -77,16 +73,15 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   return (
     <div className={styles.container}>
       {showMessageModal && (
-        <div 
-          className={styles.modalOverlay} 
-          onClick={handleCancelQuote}
-        >
-          <div 
-            className={styles.messageModal} 
+        <div className={styles.modalOverlay} onClick={handleCancelQuote}>
+          <div
+            className={styles.messageModal}
             onClick={(e) => e.stopPropagation()}
           >
             <h3>Mensaje para cotización</h3>
-            <p>Escribe un mensaje para los proveedores (máximo 100 caracteres)</p>
+            <p>
+              Escribe un mensaje para los proveedores (máximo 100 caracteres)
+            </p>
             <textarea
               value={quoteMessage}
               onChange={(e) => {
@@ -103,13 +98,13 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
               {quoteMessage.length}/100 caracteres
             </div>
             <div className={styles.modalButtons}>
-              <button 
+              <button
                 onClick={handleCancelQuote}
                 className={styles.cancelButton}
               >
                 Cancelar
               </button>
-              <button 
+              <button
                 onClick={handleConfirmQuote}
                 className={styles.confirmButton}
               >
