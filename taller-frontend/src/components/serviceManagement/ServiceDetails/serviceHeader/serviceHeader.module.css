@@ -322,3 +322,141 @@
 .wordButton:hover {
   background-color: #1d3e73;
 }
+
+/* Agregar estos estilos a serviceHeader.module.css */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.messageModal {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: default;
+}
+
+.messageModal h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.3rem;
+  color: #2c3e50;
+  font-weight: 600;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 8px;
+}
+
+.messageModal p {
+  margin: 12px 0 16px 0;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.messageTextarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  resize: vertical;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.messageTextarea:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.characterCount {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: white;
+  color: #495057;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-height: 44px;
+}
+
+.cancelButton:hover {
+  background: #e2e6ea;
+}
+
+.confirmButton {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background: #3182ce;
+  color: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-height: 44px;
+}
+
+.confirmButton:hover {
+  background: #2c5282;
+}
+
+.confirmButton:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .messageModal {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .messageModal h3 {
+    font-size: 1.1rem;
+  }
+
+  .modalButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

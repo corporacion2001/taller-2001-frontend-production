@@ -81,26 +81,8 @@ const Step1Client = ({ onNext, initialData, showSearch, onBack }) => {
     onNext(newClientData, "client");
   };
 
-  const handleResetSearch = () => {
-    setShowResetModal(true);
-  };
-
-  const handleConfirmReset = () => {
-    setShowResetModal(false);
-    onBack();
-  };
-
   return (
     <div className={styles.container}>
-      <ConfirmationModal
-        isOpen={showResetModal}
-        onClose={() => setShowResetModal(false)}
-        onConfirm={handleConfirmReset}
-        title="¿Cambiar cliente?"
-        message="Esto eliminará también los datos del vehículo y servicio asociados"
-        confirmText="Sí, cambiar"
-        cancelText="Cancelar"
-      />
       <h2 className={styles.title}>Datos del Cliente</h2>
 
       {showSearch && !clientData && !showForm ? (
@@ -131,6 +113,9 @@ const Step1Client = ({ onNext, initialData, showSearch, onBack }) => {
             </form>
           </div>
           <div className={styles.buttonGroup}>
+            <button onClick={onBack} className={styles.secondaryButton}>
+              Atrás
+            </button>
             <button
               onClick={handleSearch}
               disabled={loading || !identification.trim()}
@@ -158,11 +143,8 @@ const Step1Client = ({ onNext, initialData, showSearch, onBack }) => {
             </div>
           </div>
           <div className={styles.buttonGroup}>
-            <button
-              onClick={handleResetSearch}
-              className={styles.secondaryButton}
-            >
-              Cambiar Cliente
+            <button onClick={onBack} className={styles.secondaryButton}>
+              Atrás
             </button>
             <button
               onClick={() => onNext(clientData, "client")}
@@ -175,10 +157,10 @@ const Step1Client = ({ onNext, initialData, showSearch, onBack }) => {
       ) : (
         <ClientForm
           onSubmit={handleSubmitForm}
-          onCancel={handleResetSearch}
           initialData={
             clientData?.isExisting === false ? clientData : { identification }
           }
+          onCancel={onBack}
           key={identification}
           validationError={validationError}
           setValidationError={setValidationError}

@@ -321,13 +321,11 @@ const ServiceStepper = () => {
   };
   const steps = [
     {
-      label: "Cliente",
+      label: "Vehículo",
       component: (
-        <Step1Client
-          key={`client-${formData.client?.id || "new"}`}
-          onNext={(data) => handleNext(data, "client")}
-          initialData={formData.client}
-          showSearch={!completedSteps.client}
+        <Step2Vehicle
+          key={`vehicle-${formData.vehicle?.id || "new"}`}
+          onNext={(data) => handleNext(data, "vehicle")}
           onBack={() => {
             // Para el receptor, no mostrar confirmación de volver
             if (isReceptor) {
@@ -336,19 +334,21 @@ const ServiceStepper = () => {
               navigate("/dashboard/gestion/servicios");
             }
           }}
+          initialData={formData.vehicle}
+          showSearch={!completedSteps.vehicle}
+          clientId={formData.client?.id}
         />
       ),
     },
     {
-      label: "Vehículo",
+      label: "Cliente",
       component: (
-        <Step2Vehicle
-          key={`vehicle-${formData.vehicle?.id || "new"}`}
-          onNext={(data) => handleNext(data, "vehicle")}
+        <Step1Client
+          key={`client-${formData.client?.id || "new"}`}
+          onNext={(data) => handleNext(data, "client")}
+          initialData={formData.client}
+          showSearch={!completedSteps.client}
           onBack={handleBack}
-          initialData={formData.vehicle}
-          showSearch={!completedSteps.vehicle}
-          clientId={formData.client?.id}
         />
       ),
     },

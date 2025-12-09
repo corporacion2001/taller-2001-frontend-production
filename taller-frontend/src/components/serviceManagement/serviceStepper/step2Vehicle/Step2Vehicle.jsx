@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./step2Vehicle.module.css";
 import { vehiclesApi } from "../../../../services/vehicles.api";
 import VehicleForm from "./VehicleForm";
-
+import ConfirmationModal from "../../../ui/confirmationModal/ConfirmationModal";
 const Step2Vehicle = ({
   onNext,
   onBack,
@@ -18,6 +18,7 @@ const Step2Vehicle = ({
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState("");
   const [currentMileage, setCurrentMileage] = useState("");
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const [formData, setFormData] = useState({
     plate: "",
@@ -517,8 +518,10 @@ const Step2Vehicle = ({
   };
 
   const handleSubmitNewVehicle = (formDataWithFormattedPlate) => {
-
-    const plateForSave = getPlateForSearch(formDataWithFormattedPlate.plate, tipoPlaca);
+    const plateForSave = getPlateForSearch(
+      formDataWithFormattedPlate.plate,
+      tipoPlaca
+    );
 
     onNext(
       {
@@ -531,8 +534,26 @@ const Step2Vehicle = ({
     );
   };
 
+  const handleResetSearch = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
+    setShowResetModal(false);
+    onBack();
+  };
+
   return (
     <div className={styles.container}>
+      <ConfirmationModal
+        isOpen={showResetModal}
+        onClose={() => setShowResetModal(false)}
+        onConfirm={handleConfirmReset}
+        title="¿Cambiar cliente?"
+        message="Esto eliminará también los datos del vehículo y servicio asociados"
+        confirmText="Sí, cambiar"
+        cancelText="Cancelar"
+      />
       <h2 className={styles.title}>Datos del Vehículo</h2>
 
       {showSearch && !vehicleData && !showForm ? (
@@ -575,9 +596,6 @@ const Step2Vehicle = ({
             </form>
           </div>
           <div className={styles.buttonGroup}>
-            <button onClick={onBack} className={styles.secondaryButton}>
-              Atrás
-            </button>
             <button
               onClick={handleSearch}
               disabled={loading || !plate.trim()}
@@ -656,8 +674,11 @@ const Step2Vehicle = ({
           </div>
 
           <div className={styles.buttonGroup}>
-            <button onClick={onBack} className={styles.secondaryButton}>
-              Atrás
+            <button
+              onClick={handleResetSearch}
+              className={styles.secondaryButton}
+            >
+              Cambiar Vehículo
             </button>
             <button
               onClick={handleSubmitExistingVehicle}
@@ -671,9 +692,9 @@ const Step2Vehicle = ({
       ) : (
         <VehicleForm
           formData={formData}
+          onCancel={handleResetSearch}
           onInputChange={handleInputChange}
           onSubmit={handleSubmitNewVehicle}
-          onCancel={onBack}
           loading={loading}
           error={error}
           tipoPlaca={tipoPlaca}

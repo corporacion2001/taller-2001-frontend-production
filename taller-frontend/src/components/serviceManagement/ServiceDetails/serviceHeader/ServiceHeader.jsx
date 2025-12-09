@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiArrowLeft, FiDownload } from "react-icons/fi";
 import { generateServicePDF } from "../../../../utils/pdfGenerator";
 import { generateServiceWord } from "../../../../utils/wordGenerator";
@@ -12,6 +12,8 @@ import { serviceAPI } from "../../../../services/service.api";
 
 const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   const { showNotification } = useNotification();
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [quoteMessage, setQuoteMessage] = useState("");
 
   if (!service) {
     return <p>Cargando servicio...</p>;
@@ -25,7 +27,22 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   };
 
   const handleCotizarRepuesto = async () => {
-    onQuoteParts();
+    setShowMessageModal(true);
+  };
+
+  const handleConfirmQuote = () => {
+    if (!quoteMessage.trim()) {
+      showNotification("Debe escribir un mensaje para la cotización", "warning");
+      return;
+    }
+    setShowMessageModal(false);
+    onQuoteParts(quoteMessage);
+    setQuoteMessage(""); // Limpiar el mensaje después de enviar
+  };
+
+  const handleCancelQuote = () => {
+    setShowMessageModal(false);
+    setQuoteMessage("");
   };
 
   const handleEnviarProforma = async () => {
@@ -59,6 +76,50 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
 
   return (
     <div className={styles.container}>
+      {showMessageModal && (
+        <div 
+          className={styles.modalOverlay} 
+          onClick={handleCancelQuote}
+        >
+          <div 
+            className={styles.messageModal} 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Mensaje para cotización</h3>
+            <p>Escribe un mensaje para los proveedores (máximo 100 caracteres)</p>
+            <textarea
+              value={quoteMessage}
+              onChange={(e) => {
+                if (e.target.value.length <= 100) {
+                  setQuoteMessage(e.target.value);
+                }
+              }}
+              placeholder="Ej: Por favor envíen cotización urgente..."
+              maxLength={100}
+              rows={4}
+              className={styles.messageTextarea}
+            />
+            <div className={styles.characterCount}>
+              {quoteMessage.length}/100 caracteres
+            </div>
+            <div className={styles.modalButtons}>
+              <button 
+                onClick={handleCancelQuote}
+                className={styles.cancelButton}
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={handleConfirmQuote}
+                className={styles.confirmButton}
+              >
+                Enviar Cotización
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={styles.headerActions}>
         <button
           onClick={() => navigate("/dashboard/gestion/servicios")}

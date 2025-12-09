@@ -1,25 +1,30 @@
 import { Link } from "react-router-dom";
 import styles from "./servicesTable.module.css";
 
-const ServicesTable = ({ services, getStatusStyle, formatPrice, formatDate }) => {
+const ServicesTable = ({
+  services,
+  getStatusStyle,
+  formatPrice,
+  formatDate,
+}) => {
   // Función para verificar si la fecha de finalización es hoy o ya pasó
   const isEndDateTodayOrPast = (dateString, statusName) => {
     if (!dateString) return false;
-    
+
     // Verificar si el estado es "En proceso" o "Pendiente"
     const status = statusName.toLowerCase();
     const shouldCheckDate = status === "en proceso" || status === "pendiente";
-    
+
     if (!shouldCheckDate) return false;
-    
+
     // Convertir la fecha del servicio a objeto Date
     const [day, month, year] = dateString.split("/");
     const endDate = new Date(year, month - 1, day); // mes -1 porque en JS los meses van de 0 a 11
-    
+
     // Fecha actual (sin horas, minutos, segundos)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     // Comparar fechas
     return endDate <= today;
   };
@@ -32,7 +37,7 @@ const ServicesTable = ({ services, getStatusStyle, formatPrice, formatDate }) =>
             <th className={styles.columnVehicle}>Vehículo</th>
             <th className={styles.columnClient}>Cliente</th>
             <th className={styles.columnPlate}>Placa</th>
-            <th className={styles.columnWorkshop}>Taller</th>
+            <th className={styles.columnWorkshop}>Orden</th>
             <th className={styles.columnDate}>Fecha Finalización</th>
             <th className={styles.columnStatus}>Estado</th>
             <th className={styles.columnTotal}>Total</th>
@@ -42,10 +47,10 @@ const ServicesTable = ({ services, getStatusStyle, formatPrice, formatDate }) =>
         <tbody>
           {services.map((service) => {
             const shouldHighlightDate = isEndDateTodayOrPast(
-              service.end_date, 
+              service.end_date,
               service.status_service.name
             );
-            
+
             return (
               <tr key={service.id}>
                 <td className={styles.cellVehicle}>
@@ -57,8 +62,8 @@ const ServicesTable = ({ services, getStatusStyle, formatPrice, formatDate }) =>
                         className={styles.tableImage}
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
+                          e.target.style.display = "none";
+                          e.target.nextSibling.style.display = "flex";
                         }}
                       />
                     ) : null}
@@ -68,35 +73,55 @@ const ServicesTable = ({ services, getStatusStyle, formatPrice, formatDate }) =>
                       </div>
                     )}
                     <div className={styles.vehicleText}>
-                      <div className={styles.vehicleName} title={`${service.vehicle.brand} ${service.vehicle.model}`}>
+                      <div
+                        className={styles.vehicleName}
+                        title={`${service.vehicle.brand} ${service.vehicle.model}`}
+                      >
                         {service.vehicle.brand} {service.vehicle.model}
                       </div>
-                      <div className={styles.vehicleYear}>{service.vehicle.year}</div>
+                      <div className={styles.vehicleYear}>
+                        {service.vehicle.year}
+                      </div>
                     </div>
                   </div>
                 </td>
                 <td className={styles.cellClient}>
-                  <div className={styles.textEllipsis} title={`${service.client.name} ${service.client.lastname1}`}>
+                  <div
+                    className={styles.textEllipsis}
+                    title={`${service.client.name} ${service.client.lastname1}`}
+                  >
                     {service.client.name} {service.client.lastname1}
                   </div>
                 </td>
                 <td className={styles.cellPlate}>
-                  <div className={styles.textEllipsis} title={service.vehicle.plate}>
+                  <div
+                    className={styles.textEllipsis}
+                    title={service.vehicle.plate}
+                  >
                     {service.vehicle.plate}
                   </div>
                 </td>
                 <td className={styles.cellWorkshop}>
-                  <div className={styles.textEllipsis} title={service.workshop?.name}>
-                    {service.workshop?.name}
+                  <div
+                    className={styles.textEllipsis}
+                    title={service.order_number}
+                  >
+                    {service.order_number}
                   </div>
                 </td>
                 <td className={styles.cellDate}>
-                  <span className={shouldHighlightDate ? styles.endDateToday : ""}>
+                  <span
+                    className={shouldHighlightDate ? styles.endDateToday : ""}
+                  >
                     {formatDate(service.end_date)}
                   </span>
                 </td>
                 <td className={styles.cellStatus}>
-                  <span className={`${styles.statusBadge} ${getStatusStyle(service.status_service.name)}`}>
+                  <span
+                    className={`${styles.statusBadge} ${getStatusStyle(
+                      service.status_service.name
+                    )}`}
+                  >
                     {service.status_service.name}
                   </span>
                 </td>

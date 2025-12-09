@@ -63,7 +63,8 @@ const VehicleForm = ({
     { value: "339", label: "339-ASAMBLEA LEGISLATIVA." },
     {
       value: "316",
-      label: "316-ASOCIACION DE CONSERVACION Y DESARROLLO FORESTAL DE TALAMANCA",
+      label:
+        "316-ASOCIACION DE CONSERVACION Y DESARROLLO FORESTAL DE TALAMANCA",
     },
     {
       value: "297",
@@ -101,7 +102,8 @@ const VehicleForm = ({
     { value: "312", label: "312-COLEGIO UNIVERSITARIO DE PUNTARENAS" },
     {
       value: "298",
-      label: "298-COLEGIO UNIVERSITARIO PARA EL RIESGO Y EL DESARROLLO DEL TROPICO",
+      label:
+        "298-COLEGIO UNIVERSITARIO PARA EL RIESGO Y EL DESARROLLO DEL TROPICO",
     },
     { value: "238", label: "238-COM.NAC.INVESTIGACION CIEN. Y TEC." },
     { value: "303", label: "303-COMISION DE ENERGIA ATOMICA DE C.R." },
@@ -112,15 +114,18 @@ const VehicleForm = ({
     },
     {
       value: "322",
-      label: "322-COMISION NACIONAL DE PREVENCION DE RIESGOS Y ATENCION EMERGENCIAS",
+      label:
+        "322-COMISION NACIONAL DE PREVENCION DE RIESGOS Y ATENCION EMERGENCIAS",
     },
     {
       value: "351",
-      label: "351-COMISION PARA EL ORDENAMIENTO Y MANEJO DE LA CUENCA DEL RIO REVENTAZON",
+      label:
+        "351-COMISION PARA EL ORDENAMIENTO Y MANEJO DE LA CUENCA DEL RIO REVENTAZON",
     },
     {
       value: "353",
-      label: "353-COMISIÓN NACIONAL PARA LA GESTION DE LA BIODIVERSIDAD (CONAGEBIO)",
+      label:
+        "353-COMISIÓN NACIONAL PARA LA GESTION DE LA BIODIVERSIDAD (CONAGEBIO)",
     },
     { value: "107", label: "107-COMPAÑIA NACIONAL DE FUERZA Y LUZ" },
     { value: "CNF", label: "CNF-COMPAÑIA NACIONAL DE FUERZA Y LUZ" },
@@ -169,7 +174,8 @@ const VehicleForm = ({
     { value: "350", label: "350-FONDO NACIONAL DE BECAS" },
     {
       value: "329",
-      label: "329-FUNDACION AYUDANOS PARA AYUDAR (CENTRO COSTARRICENSE DE LA CIENCIA Y LA CULTURA)",
+      label:
+        "329-FUNDACION AYUDANOS PARA AYUDAR (CENTRO COSTARRICENSE DE LA CIENCIA Y LA CULTURA)",
     },
     { value: "MI4", label: "MI4-FUNDACION CONSEJO DE LA TIERRA" },
     { value: "FUN", label: "FUN-FUNDACION FRIEDRICH EBERT" },
@@ -202,7 +208,8 @@ const VehicleForm = ({
     { value: "103", label: "103-INSTITUTO COSTARRICENSE DE ELECTRICIDAD" },
     {
       value: "256",
-      label: "256-INSTITUTO COSTARRICENSE DE INVESTIGACION Y ENSEÐANZA EN NUTRICION Y SALUD",
+      label:
+        "256-INSTITUTO COSTARRICENSE DE INVESTIGACION Y ENSEÐANZA EN NUTRICION Y SALUD",
     },
     {
       value: "313",
@@ -222,7 +229,8 @@ const VehicleForm = ({
     { value: "060", label: "060-INSTITUTO NACIONAL DE FOMENTO" },
     {
       value: "346",
-      label: "346-INSTITUTO NACIONAL DE INNOVACION Y TRANSFERENCIA EN TECNOLOGIA AGROPECUARIA",
+      label:
+        "346-INSTITUTO NACIONAL DE INNOVACION Y TRANSFERENCIA EN TECNOLOGIA AGROPECUARIA",
     },
     { value: "061", label: "061-INSTITUTO NACIONAL DE SEGUROS" },
     {
@@ -836,7 +844,7 @@ const VehicleForm = ({
           className={styles.secondaryButton}
           disabled={loading}
         >
-          Atrás
+          Cambiar Vehículo
         </button>
         <button
           type="submit"

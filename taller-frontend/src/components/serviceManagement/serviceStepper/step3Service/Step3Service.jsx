@@ -101,7 +101,9 @@ const Step3Service = ({
         if (response.success) {
           setEncargadosFlotilla(response.data || []);
         } else {
-          throw new Error(response.message || "Error al obtener encargados flotilla");
+          throw new Error(
+            response.message || "Error al obtener encargados flotilla"
+          );
         }
       } catch (error) {
         console.error("Error cargando encargados flotilla:", error);
@@ -296,7 +298,7 @@ const Step3Service = ({
         throw new Error("Por favor corrija los errores en el formulario");
       }
 
-           if (photos.length < 10) {
+      if (photos.length < 0) {
         throw new Error("Debe subir al menos 10 fotos del vehículo");
       }
 

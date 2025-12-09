@@ -95,7 +95,7 @@ const ServiceDetails = () => {
   const [initialFormData, setInitialFormData] = useState(null);
   const [initialDeliveryData, setInitialDeliveryData] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-
+  const [quoteMessage, setQuoteMessage] = useState("");
   // Estados del formulario
   const [formData, setFormData] = useState({
     parts: [],
@@ -378,16 +378,16 @@ const ServiceDetails = () => {
     }
   };
 
-  const handleQuoteParts = async () => {
+  const handleQuoteParts = async (message) => {
     if (!hasValidParts()) {
-      // MODIFICADO: usa la nueva función
       showNotification(
         "Debe agregar al menos un repuesto válido para cotizar",
         "warning"
       );
       return;
     }
-
+    // Guardar el mensaje para usarlo en la confirmación
+    setQuoteMessage(message);
     setShowQuotePartsModal(true);
   };
 
@@ -406,8 +406,7 @@ const ServiceDetails = () => {
         vehicle_year: service.vehicle.year,
         sender_name: `${user.name} ${user.lastname1} ${user.lastname2}`,
         sender_email: user.email,
-        message:
-          "Por favor envíenos su mejor cotización para los repuestos solicitados.",
+        message: quoteMessage, // Usar el mensaje del estado
         parts: formData.parts
           .filter(
             (part) => part.name?.trim() && part.amount > 0 && part.price >= 0
@@ -422,6 +421,7 @@ const ServiceDetails = () => {
 
       if (result.success) {
         showNotification("Cotización enviada exitosamente.", "success");
+        setQuoteMessage(""); // Limpiar el mensaje después de enviar
       } else {
         throw new Error(result.message || "Error al enviar cotización");
       }
