@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiArrowLeft, FiDownload, FiChevronDown } from "react-icons/fi";
-import { AiOutlineFilePdf, AiOutlineFileWord, AiOutlineFileExcel } from "react-icons/ai";
+import {
+  AiOutlineFilePdf,
+  AiOutlineFileWord,
+  AiOutlineFileExcel,
+} from "react-icons/ai";
 import { generateServicePDF } from "../../../../utils/pdfGenerator";
 import { generateServiceWord } from "../../../../utils/wordGenerator";
 import { generateServiceExcel } from "../../../../utils/excelGenerator";
@@ -18,7 +22,10 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target)) {
+      if (
+        exportMenuRef.current &&
+        !exportMenuRef.current.contains(event.target)
+      ) {
         setShowExportMenu(false);
       }
     };
@@ -96,6 +103,12 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
     }
   };
 
+  const handleVehicleClick = () => {
+    if (!service?.vehicle?.id) return;
+
+    // Navegar con parámetro en la URL
+    navigate(`/dashboard/gestion/vehicles?vehicleId=${service.vehicle.id}`);
+  };
   const getStatusBadgeClass = (status) => {
     const statusMap = {
       Pendiente: styles.statusPending,
@@ -158,7 +171,7 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
         >
           <FiArrowLeft /> Volver
         </button>
-        
+
         <div className={styles.exportContainer} ref={exportMenuRef}>
           <button
             onClick={() => setShowExportMenu(!showExportMenu)}
@@ -166,7 +179,7 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           >
             <FiDownload /> Exportar <FiChevronDown className={styles.chevron} />
           </button>
-          
+
           {showExportMenu && (
             <div className={styles.exportMenu}>
               <button
@@ -249,24 +262,30 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
             </span>
           </div>
         </InfoCard>
-
         <InfoCard title="Vehículo">
-          <div className={styles.infoItem}>
-            <span className={styles.label}>Marca/Modelo:</span>
-            <span>
-              {service?.vehicle?.brand} {service?.vehicle?.model}
-            </span>
-          </div>
-          <div className={styles.infoItem}>
-            <span className={styles.label}>Año/KM:</span>
-            <span>
-              {service?.vehicle?.year} •{" "}
-              {service?.vehicle?.mileage?.toLocaleString()} km
-            </span>
-          </div>
-          <div className={styles.infoItem}>
-            <span className={styles.label}>Motor:</span>
-            <span>{service?.vehicle?.engine}</span>
+          <div
+            className={`${styles.infoItem} ${styles.clickableItem}`}
+            onClick={handleVehicleClick}
+          >
+            <span className={styles.label}>Placa:</span>
+            <span className={styles.highlight}>{service?.vehicle?.plate}</span>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Marca/Modelo:</span>
+              <span>
+                {service?.vehicle?.brand} {service?.vehicle?.model}
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Año/KM:</span>
+              <span>
+                {service?.vehicle?.year} •{" "}
+                {service?.vehicle?.mileage?.toLocaleString()} km
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Motor:</span>
+              <span>{service?.vehicle?.engine}</span>
+            </div>
           </div>
         </InfoCard>
 

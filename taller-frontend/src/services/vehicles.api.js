@@ -4,6 +4,7 @@ export const vehiclesApi = {
   // ENDPOINT PARA CONSULTAR SI EXISTE EL CLIENTE POR IDENTIFICACIÓN
   getVehicleByPlate: (plate) =>
     api.get(`/vehicles`, { params: { plate } }).then((res) => res.data),
+  getVehicleById: (id) => api.get(`/vehicles/${id}`).then((res) => res.data),
   scrapeVehicleData: (plate, tipoPlaca) =>
     api
       .get(`/vehicles/consulta`, {

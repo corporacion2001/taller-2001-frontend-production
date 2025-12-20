@@ -515,3 +515,27 @@
     justify-content: center;
   }
 }
+
+.clickableItem {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: -8px -12px;
+}
+.highlight {
+  font-weight: 600;
+  color: #1890ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: underline dotted #1890ff;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickableItem:hover .highlight {
+  color: #096dd9;
+  text-decoration: underline solid #096dd9;
+}

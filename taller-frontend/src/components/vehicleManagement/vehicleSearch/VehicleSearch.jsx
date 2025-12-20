@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import VehicleDetails from "../vehicleDetails/VehicleDetails";
 import styles from "./vehicleSearch.module.css";
 import { vehiclesApi } from "../../../services/vehicles.api";
 import { FiSearch } from "react-icons/fi";
 import { useNotification } from "../../../contexts/NotificationContext";
 import LoadingSpinner from "../../ui/spinner/LoadingSpinner";
+import { useSearchParams } from "react-router-dom"; // NUEVO: Importar hook
 
 const VehicleSearch = () => {
+  const [searchParams] = useSearchParams(); // NUEVO: Obtener parámetros
+  const vehicleId = searchParams.get("vehicleId"); // NUEVO: Obtener ID de URL
   const [plate, setPlate] = useState("");
   const [tipoPlaca, setTipoPlaca] = useState(" - PARTICULAR"); // Nuevo estado para tipo de placa
   const [vehicleData, setVehicleData] = useState(null);
@@ -14,6 +17,37 @@ const VehicleSearch = () => {
   const [loading, setLoading] = useState(false);
   const [validationError, setValidationError] = useState("");
   const { showNotification } = useNotification();
+
+  useEffect(() => {
+    if (vehicleId) {
+      loadVehicleFromService(vehicleId);
+    }
+  }, [vehicleId]);
+
+  // NUEVO: Función para cargar vehículo por ID
+  const loadVehicleFromService = async (id) => {
+    setLoading(true);
+    try {
+      const res = await vehiclesApi.getVehicleById(id);
+      if (res.success && res.data) {
+        setVehicleData(res.data);
+        // Extraer tipo y número de la placa
+        const fullPlate = res.data.plate;
+        if (fullPlate.includes("-")) {
+          const [prefix, ...rest] = fullPlate.split("-");
+          setTipoPlaca(prefix ? `${prefix}-` : " - PARTICULAR");
+          setPlate(rest.join("-"));
+        } else {
+          setTipoPlaca(" - PARTICULAR");
+          setPlate(fullPlate);
+        }
+      }
+    } catch (error) {
+      showNotification("Error al cargar vehículo", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Lista de tipos de placa (la misma que en Step2Vehicle)
   const tiposPlaca = [
@@ -563,26 +597,26 @@ const VehicleSearch = () => {
   // Función para obtener solo la parte antes del guión del tipo de placa
   const getTipoPlacaPrefix = (tipoPlacaValue) => {
     // Limpiar espacios y guiones al inicio
-    const cleanedTipoPlaca = tipoPlacaValue.replace(/^\s*-\s*/, '').trim();
-    
+    const cleanedTipoPlaca = tipoPlacaValue.replace(/^\s*-\s*/, "").trim();
+
     const noPrefixTypes = ["PARTICULAR"];
-    
+
     if (noPrefixTypes.includes(cleanedTipoPlaca)) {
-      return '';
+      return "";
     }
-    
-    const parts = tipoPlacaValue.split('-');
+
+    const parts = tipoPlacaValue.split("-");
     // Para tipos como " - PARTICULAR", no debe devolver prefijo
     if (parts.length > 1) {
       const firstPart = parts[0].trim();
       // Si la primera parte está vacía o es solo espacios, no es un prefijo válido
       if (!firstPart) {
-        return '';
+        return "";
       }
-      return firstPart + '-';
+      return firstPart + "-";
     }
-    
-    return tipoPlacaValue.trim() + '-';
+
+    return tipoPlacaValue.trim() + "-";
   };
 
   // Función para formatear la placa completa
@@ -594,14 +628,14 @@ const VehicleSearch = () => {
   // Función para determinar qué placa enviar al endpoint
   const getPlateForSearch = (plateNumber, tipoPlacaValue) => {
     // Limpiar el tipo de placa para la comparación
-    const cleanedTipoPlaca = tipoPlacaValue.replace(/^\s*-\s*/, '').trim();
-    
+    const cleanedTipoPlaca = tipoPlacaValue.replace(/^\s*-\s*/, "").trim();
+
     const noPrefixTypes = ["PARTICULAR"];
-    
+
     if (noPrefixTypes.includes(cleanedTipoPlaca)) {
       return plateNumber; // Solo el número de placa para PARTICULAR
     }
-    
+
     const formattedPlate = formatPlate(plateNumber, tipoPlacaValue);
     return formattedPlate; // Prefijo + número para otros tipos
   };
@@ -628,6 +662,11 @@ const VehicleSearch = () => {
   };
 
   const handleSearch = async () => {
+    if (vehicleId) {
+      // Remover el parámetro de la URL sin recargar
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, "", newUrl);
+    }
     const validationMsg = validatePlate(plate);
     if (validationMsg) {
       setValidationError(validationMsg);
@@ -641,7 +680,7 @@ const VehicleSearch = () => {
     try {
       // Usar la misma lógica para formatear la placa para la búsqueda
       const plateForSearch = getPlateForSearch(plate, tipoPlaca);
-      
+
       const res = await vehiclesApi.getVehicleByPlate(plateForSearch);
       if (res.success && res.data) {
         setVehicleData(res.data);
@@ -681,7 +720,7 @@ const VehicleSearch = () => {
                 </option>
               ))}
             </select>
-            
+
             <FiSearch className={styles.searchIcon} />
             <input
               type="text"
