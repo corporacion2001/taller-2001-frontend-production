@@ -1,19 +1,36 @@
-import React, { useState } from "react";
-import { FiArrowLeft, FiDownload } from "react-icons/fi";
+import React, { useState, useRef, useEffect } from "react";
+import { FiArrowLeft, FiDownload, FiChevronDown } from "react-icons/fi";
+import { AiOutlineFilePdf, AiOutlineFileWord, AiOutlineFileExcel } from "react-icons/ai";
 import { generateServicePDF } from "../../../../utils/pdfGenerator";
 import { generateServiceWord } from "../../../../utils/wordGenerator";
+import { generateServiceExcel } from "../../../../utils/excelGenerator";
 import ProcessActions from "./processActions/ProcessActions";
 import InfoCard from "./infoCard/InfoCard";
 import styles from "./serviceHeader.module.css";
-import { quoteAPI } from "../../../../services/quoteAPI";
-import { proformaAPI } from "../../../../services/proformaAPI";
 import { useNotification } from "../../../../contexts/NotificationContext";
-import { serviceAPI } from "../../../../services/service.api";
 
 const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   const { showNotification } = useNotification();
   const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
   const [quoteMessage, setQuoteMessage] = useState("");
+  const exportMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target)) {
+        setShowExportMenu(false);
+      }
+    };
+
+    if (showExportMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showExportMenu]);
 
   if (!service) {
     return <p>Cargando servicio...</p>;
@@ -33,7 +50,7 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   const handleConfirmQuote = () => {
     setShowMessageModal(false);
     onQuoteParts(quoteMessage);
-    setQuoteMessage(""); // Limpiar el mensaje después de enviar
+    setQuoteMessage("");
   };
 
   const handleCancelQuote = () => {
@@ -46,17 +63,36 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
   };
 
   const handleExportToPDF = () => {
-    const doc = generateServicePDF(service, formatPrice);
-    doc.save(`servicio_${service?.order_number}.pdf`);
+    try {
+      const doc = generateServicePDF(service, formatPrice);
+      doc.save(`servicio_${service?.order_number}.pdf`);
+      showNotification("PDF generado exitosamente.", "success");
+      setShowExportMenu(false);
+    } catch (error) {
+      console.error("Error exportando a PDF:", error);
+      showNotification("Error al generar el PDF.", "error");
+    }
   };
 
   const handleExportToWord = async () => {
     try {
       await generateServiceWord(service);
       showNotification("Documento Word generado exitosamente.", "success");
+      setShowExportMenu(false);
     } catch (error) {
       console.error("Error exportando a Word:", error);
       showNotification("Error al generar el documento Word.", "error");
+    }
+  };
+
+  const handleExportToExcel = () => {
+    try {
+      generateServiceExcel(service);
+      showNotification("Excel generado exitosamente.", "success");
+      setShowExportMenu(false);
+    } catch (error) {
+      console.error("Error exportando a Excel:", error);
+      showNotification("Error al generar el Excel.", "error");
     }
   };
 
@@ -122,14 +158,40 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
         >
           <FiArrowLeft /> Volver
         </button>
-
-        <div className={styles.exportButtons}>
-          <button onClick={handleExportToPDF} className={styles.pdfButton}>
-            <FiDownload /> Exportar PDF
+        
+        <div className={styles.exportContainer} ref={exportMenuRef}>
+          <button
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            className={styles.exportButton}
+          >
+            <FiDownload /> Exportar <FiChevronDown className={styles.chevron} />
           </button>
-          <button onClick={handleExportToWord} className={styles.wordButton}>
-            <FiDownload /> Exportar Word
-          </button>
+          
+          {showExportMenu && (
+            <div className={styles.exportMenu}>
+              <button
+                onClick={handleExportToPDF}
+                className={styles.exportMenuItem}
+              >
+                <AiOutlineFilePdf className={styles.pdfIcon} />
+                <span>Exportar a PDF</span>
+              </button>
+              <button
+                onClick={handleExportToWord}
+                className={styles.exportMenuItem}
+              >
+                <AiOutlineFileWord className={styles.wordIcon} />
+                <span>Exportar a Word</span>
+              </button>
+              <button
+                onClick={handleExportToExcel}
+                className={styles.exportMenuItem}
+              >
+                <AiOutlineFileExcel className={styles.excelIcon} />
+                <span>Exportar a Excel</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -237,8 +299,6 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
               {service?.received_by?.name} {service?.received_by?.lastname1}
             </span>
           </div>
-
-          {/* NUEVO: Encargado Flotilla */}
           <div className={styles.infoItem}>
             <span className={styles.label}>Encargado Flotilla:</span>
             <span>
@@ -247,8 +307,6 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
                 : "Sin asignar"}
             </span>
           </div>
-
-          {/* MODIFICADO: Técnico asignado */}
           <div className={styles.infoItem}>
             <span className={styles.label}>Encargado taller:</span>
             <span>
@@ -257,8 +315,6 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
                 : "Sin asignar"}
             </span>
           </div>
-
-          {/* MODIFICADO: Área */}
           <div className={styles.infoItem}>
             <span className={styles.label}>Área:</span>
             <span>{service?.area?.name || "Sin asignar"}</span>
