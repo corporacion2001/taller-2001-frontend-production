@@ -165,133 +165,47 @@ export const generateServiceExcel = (service) => {
       "Fecha de ingreso:",
       `${service.entry_date} a las ${service.entry_time}` || "No disponible",
     ],
-    ["Taller:", service.workshop?.name || "No disponible"],
-  ];
-
-  generalInfo.forEach((row) => {
-    XLSX.utils.sheet_add_aoa(ws, [[row[0], row[1]]], {
-      origin: { r: currentRow, c: 0 },
-    });
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })].s = labelStyle;
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 1 })].s = valueStyle;
-    ws["!merges"].push({
-      s: { r: currentRow, c: 1 },
-      e: { r: currentRow, c: 3 },
-    });
-    currentRow++;
-  });
-  currentRow += 1;
-
-  // ==================== VEHÍCULO ====================
-  XLSX.utils.sheet_add_aoa(ws, [["Vehículo"]], {
-    origin: { r: currentRow, c: 0 },
-  });
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })].s = sectionHeaderStyle;
-  ws["!merges"].push({
-    s: { r: currentRow, c: 0 },
-    e: { r: currentRow, c: 3 },
-  });
-  currentRow += 1;
-
-  const vehicleInfo = [
     [
-      "Vehículo:",
-      `${service.vehicle?.plate} - ${service.vehicle?.brand} ${service.vehicle?.model}` ||
-        "No disponible",
-    ],
-    ["Año:", service.vehicle?.year || "No disponible"],
-    [
-      "Kilometraje:",
-      service.vehicle?.mileage?.toLocaleString() || "No disponible",
-    ],
-    ["Motor:", service.vehicle?.engine || "No disponible"],
-  ];
-
-  vehicleInfo.forEach((row) => {
-    XLSX.utils.sheet_add_aoa(ws, [[row[0], row[1]]], {
-      origin: { r: currentRow, c: 0 },
-    });
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })].s = labelStyle;
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 1 })].s = valueStyle;
-    ws["!merges"].push({
-      s: { r: currentRow, c: 1 },
-      e: { r: currentRow, c: 3 },
-    });
-    currentRow++;
-  });
-  currentRow += 1;
-
-  // ==================== CLIENTE ====================
-  XLSX.utils.sheet_add_aoa(ws, [["Cliente"]], {
-    origin: { r: currentRow, c: 0 },
-  });
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })].s = sectionHeaderStyle;
-  ws["!merges"].push({
-    s: { r: currentRow, c: 0 },
-    e: { r: currentRow, c: 3 },
-  });
-  currentRow += 1;
-
-  const clientInfo = [
-    [
-      "Cliente:",
-      `${service.client?.name || ""} ${
-        service.client?.lastname1 || ""
+      "Nombre del cliente:",
+      `${service.client?.name || ""} ${service.client?.lastname1 || ""} ${
+        service.client?.lastname2 || ""
       }`.trim() || "No disponible",
     ],
-    ["Correo:", service.client?.email || "No disponible"],
-    ["Identificación:", service.client?.identification || "No disponible"],
-    ["Teléfono:", service.client?.phone || "No disponible"],
-  ];
-
-  clientInfo.forEach((row) => {
-    XLSX.utils.sheet_add_aoa(ws, [[row[0], row[1]]], {
-      origin: { r: currentRow, c: 0 },
-    });
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })].s = labelStyle;
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 1 })].s = valueStyle;
-    ws["!merges"].push({
-      s: { r: currentRow, c: 1 },
-      e: { r: currentRow, c: 3 },
-    });
-    currentRow++;
-  });
-  currentRow += 1;
-
-  // ==================== PERSONAL ====================
-  XLSX.utils.sheet_add_aoa(ws, [["Personal"]], {
-    origin: { r: currentRow, c: 0 },
-  });
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })].s = sectionHeaderStyle;
-  ws["!merges"].push({
-    s: { r: currentRow, c: 0 },
-    e: { r: currentRow, c: 3 },
-  });
-  currentRow += 1;
-
-  const personalInfo = [
+    ["Marca:", service.vehicle?.brand || "No disponible"],
+    ["Placa:", service.vehicle?.plate || "No disponible"],
+    [
+      "Kilometraje:",
+      service.vehicle?.mileage
+        ? `${Number(service.vehicle.mileage).toLocaleString("es-CR")} km`
+        : "No disponible",
+    ],
+    [
+      "Encargado de flotilla:",
+      service.fleetUser
+        ? `${service.fleetUser.name} ${service.fleetUser.lastname1}`.trim()
+        : "No disponible",
+    ],
+    [
+      "Encargado de taller:",
+      service.assigned_to
+        ? `${service.assigned_to.name} ${service.assigned_to.lastname1}`.trim()
+        : "No disponible",
+    ],
+    [
+      "Mecánico:",
+      service.mechanics && service.mechanics.length > 0
+        ? service.mechanics.join(", ")
+        : "No disponible",
+    ],
     [
       "Recibido por:",
       `${service.received_by?.name || ""} ${
         service.received_by?.lastname1 || ""
       }`.trim() || "No disponible",
     ],
-    [
-      "Encargado Flotilla:",
-      service.fleetUser
-        ? `${service.fleetUser.name} ${service.fleetUser.lastname1}`
-        : "Sin asignar",
-    ],
-    [
-      "Encargado taller:",
-      service.assigned_to
-        ? `${service.assigned_to.name} ${service.assigned_to.lastname1}`
-        : "Sin asignar",
-    ],
-    ["Área:", service.area?.name || "Sin asignar"],
   ];
 
-  personalInfo.forEach((row) => {
+  generalInfo.forEach((row) => {
     XLSX.utils.sheet_add_aoa(ws, [[row[0], row[1]]], {
       origin: { r: currentRow, c: 0 },
     });
