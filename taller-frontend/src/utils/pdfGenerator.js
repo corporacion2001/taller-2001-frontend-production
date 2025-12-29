@@ -43,24 +43,40 @@ export const generateServicePDF = (service) => {
               `${service.entry_date} a las ${service.entry_time}` ||
                 "No disponible",
             ],
-            ["Taller:", service.workshop.name || "No disponible"],
             [
-              "Vehículo:",
-              `${service.vehicle.plate} - ${service.vehicle.brand} ${service.vehicle.model}` ||
-                "No disponible",
-            ],
-            [
-              "Cliente:",
-              `${service.client.name || ""} ${
-                service.client.lastname1 || ""
+              "Nombre del cliente:",
+              `${service.client.name || ""} ${service.client.lastname1 || ""} ${
+                service.client.lastname2 || ""
               }`.trim() || "No disponible",
             ],
-            ["Correo:", service.client.email || "No disponible"],
+            ["Marca:", service.vehicle.brand || "No disponible"],
+            ["Placa:", service.vehicle.plate || "No disponible"],
             [
-              "Identificación:",
-              service.client.identification || "No disponible",
+              "Kilometraje:",
+              service.vehicle.mileage
+                ? `${Number(service.vehicle.mileage).toLocaleString(
+                    "es-CR"
+                  )} km`
+                : "No disponible",
             ],
-            ["Teléfono:", service.client.phone || "No disponible"],
+            [
+              "Encargado de flotilla:",
+              service.fleetUser
+                ? `${service.fleetUser.name} ${service.fleetUser.lastname1}`.trim()
+                : "No disponible",
+            ],
+            [
+              "Encargado de taller:",
+              service.assigned_to
+                ? `${service.assigned_to.name} ${service.assigned_to.lastname1}`.trim()
+                : "No disponible",
+            ],
+            [
+              "Mecánico:",
+              service.mechanics && service.mechanics.length > 0
+                ? service.mechanics.join(", ")
+                : "No disponible",
+            ],
             [
               "Recibido por:",
               `${service.received_by.name} ${service.received_by.lastname1}` ||
