@@ -5,12 +5,13 @@ export const vehiclesApi = {
   getVehicleByPlate: (plate) =>
     api.get(`/vehicles`, { params: { plate } }).then((res) => res.data),
   getVehicleById: (id) => api.get(`/vehicles/${id}`).then((res) => res.data),
-  scrapeVehicleData: (plate, tipoPlaca) =>
+  scrapeVehicleData: (plate, tipoPlaca, codigo = null) =>
     api
       .get(`/vehicles/consulta`, {
         params: {
           placa: plate,
           tipo_placa: tipoPlaca,
+          ...(codigo && { codigo }),
         },
       })
       .then((res) => res.data)
