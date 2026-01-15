@@ -220,6 +220,7 @@ const ServiceDetails = () => {
       formData.end_date !== initialFormData.end_date ||
       formData.vehicle_location !== initialFormData.vehicle_location ||
       formData.observations !== initialFormData.observations ||
+      formData.iva !== initialFormData.iva ||
       JSON.stringify(formData.mechanics) !==
         JSON.stringify(initialFormData.mechanics);
 
@@ -568,6 +569,7 @@ const ServiceDetails = () => {
           vehicle_location: serviceData.vehicle_location || "",
           mechanics: serviceData.mechanics || [],
           observations: serviceData.observations || "",
+          iva: serviceData.iva,
         };
 
         const initialAssignment = {
@@ -951,6 +953,7 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
+        iva: parseFloat(formData.iva),
         invoice_number: deliveryData.invoice_number || null,
         payment_method: deliveryData.payment_method || null,
         user_assigned_id: assignmentData.user_assigned_id || null, // NUEVO

@@ -6,8 +6,9 @@ export const generateServiceExcel = (service) => {
       minimumFractionDigits: 2,
     })}`;
 
+  const ivaRate = Number(service.iva) / 100; 
   const subtotal = Number(service.total_price || 0);
-  const iva = Number((subtotal * 0.13).toFixed(2));
+  const iva = Number((subtotal * ivaRate).toFixed(2));
   const total = Number((subtotal + iva).toFixed(2));
 
   // ==================== ESTILOS PROFESIONALES ====================
@@ -395,10 +396,9 @@ export const generateServiceExcel = (service) => {
 
   currentRow += 1;
 
-  // Totales
   const totalsData = [
     ["", "", "Subtotal:", formatPrice(subtotal)],
-    ["", "", "IVA (13%):", formatPrice(iva)],
+    ["", "", `IVA (${Math.round(service.iva || 13)}%):`, formatPrice(iva)],
     ["", "", "Total:", formatPrice(total)],
   ];
 

@@ -10,8 +10,9 @@ export const generateServicePDF = (service) => {
       minimumFractionDigits: 2,
     })}`;
 
+  const ivaRate = Number(service.iva) / 100;
   const subtotal = Number(service.total_price || 0);
-  const iva = Number((subtotal * 0.13).toFixed(2));
+  const iva = Number((subtotal * ivaRate).toFixed(2));
   const total = Number((subtotal + iva).toFixed(2));
 
   const docDefinition = {
@@ -151,7 +152,10 @@ export const generateServicePDF = (service) => {
             ["N° Factura:", service.invoice_number || "No especificado"],
             ["Método de pago:", service.payment_method || "No especificado"],
             ["Subtotal:", { text: formatPrice(subtotal) }],
-            ["IVA (13%):", { text: formatPrice(iva) }],
+            [
+              `IVA (${Math.round(service.iva || 13)}%):`,
+              { text: formatPrice(iva) },
+            ],
             [
               "Total:",
               { text: formatPrice(total), color: "green", bold: true },

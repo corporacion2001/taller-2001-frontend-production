@@ -18,8 +18,9 @@ export const generateServiceWord = async (service) => {
       minimumFractionDigits: 2,
     })}`;
 
+  const ivaRate = Number(service.iva) / 100 ; 
   const subtotal = Number(service.total_price || 0);
-  const iva = Number((subtotal * 0.13).toFixed(2));
+  const iva = Number((subtotal * ivaRate).toFixed(2));
   const total = Number((subtotal + iva).toFixed(2));
 
   const blueColor = "1532ba";
@@ -222,7 +223,8 @@ export const generateServiceWord = async (service) => {
         ["N° Factura:", service.invoice_number || "No especificado"],
         ["Método de pago:", service.payment_method || "No especificado"],
         ["Subtotal:", formatPrice(subtotal)],
-        ["IVA (13%):", formatPrice(iva)],
+        // Cambiado: Usar el IVA dinámico del servicio
+        [`IVA (${Math.round(service.iva)}%):`, formatPrice(iva)],
       ]
         .map(
           (r) =>

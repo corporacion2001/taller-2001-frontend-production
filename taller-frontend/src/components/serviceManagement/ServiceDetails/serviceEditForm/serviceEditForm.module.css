@@ -44,13 +44,21 @@
   box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
 }
 
+.readOnlyValue {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #eaeaea;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
 .proformaSection {
   margin: 20px 0;
   padding: 15px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  /* AÑADE ESTO */
   overflow-x: auto;
 }
 
@@ -68,7 +76,6 @@
   border-collapse: collapse;
   margin-bottom: 15px;
   background: white;
-  /* AÑADE ESTO */
   min-width: 600px;
 }
 
@@ -138,7 +145,7 @@
 
 .buttonGroup {
   display: flex;
-  justify-content: space-between; /* separa izquierda y derecha */
+  justify-content: space-between;
   margin-top: 50px;
 }
 
@@ -174,7 +181,7 @@
   cursor: not-allowed;
   transform: none;
 }
-/* Estilo para el botón secundario */
+
 .secondaryButton {
   background-color: #1532ba;
   color: white;
@@ -192,7 +199,7 @@
 }
 
 .secondaryButton:hover {
-  background-color: #2980b9; /* Azul más oscuro */
+  background-color: #2980b9;
   transform: translateY(-2px);
 }
 
@@ -229,21 +236,6 @@
   transform: none;
 }
 
-/* Para móviles */
-@media (max-width: 768px) {
-  .buttonGroup {
-    flex-direction: column;
-  }
-
-  .invisibleSpacer {
-    display: none; /* No necesitamos el espaciador en móvil */
-  }
-
-  .secondaryButton {
-    margin-left: 0;
-    width: 100%;
-  }
-}
 .error {
   color: #e74c3c;
   margin-top: 15px;
@@ -262,73 +254,6 @@
   font-size: 0.9rem;
   background-color: #f8f9fa;
   border-radius: 6px;
-}
-
-.grandTotal {
-  background-color: #f8f9fa;
-  padding: 15px 20px;
-  border-radius: 8px;
-  margin: 20px 0;
-  border: 1px solid #eaeaea;
-}
-
-.grandTotalContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.grandTotalLabel {
-  font-weight: 400;
-  font-size: 1rem;
-  color: #000000;
-  text-transform: uppercase;
-}
-
-.grandTotalValue {
-  font-weight: 400;
-  font-size: 1.3rem;
-  color: #000000;
-}
-
-@media (max-width: 768px) {
-  .serviceForm {
-    padding: 15px;
-  }
-
-  .formRow {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .proformaTable th,
-  .proformaTable td {
-    padding: 8px;
-    font-size: 0.85rem;
-  }
-
-  .buttonGroup {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .button {
-    width: 100%;
-  }
-
-  .grandTotalContent {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-
-  .grandTotalValue {
-    align-self: flex-end;
-    font-size: 1.2rem;
-  }
-  .assignmentSection {
-    padding: 15px;
-  }
 }
 
 /* Estilos para la vista móvil de repuestos y mano de obra */
@@ -426,46 +351,6 @@
   min-height: 60px;
 }
 
-/* Media queries para responsive */
-@media (max-width: 767px) {
-  .proformaTable {
-    display: none; /* Ocultar tabla en móviles */
-  }
-
-  .mobileList {
-    display: flex; /* Mostrar tarjetas en móviles */
-  }
-}
-
-@media (min-width: 768px) {
-  .mobileList {
-    display: none; /* Ocultar tarjetas en desktop */
-  }
-
-  .proformaTable {
-    display: table; /* Mostrar tabla en desktop */
-  }
-}
-
-/* Mejoras adicionales para móviles */
-@media (max-width: 480px) {
-  .mobileCard {
-    padding: 0.75rem;
-  }
-
-  .cardField {
-    margin-bottom: 0.5rem;
-  }
-
-  .mobileInput {
-    padding: 0.5rem;
-  }
-
-  .cardTitle {
-    font-size: 0.9rem;
-  }
-}
-
 .mechanicsInputContainer {
   margin-bottom: 1rem;
 }
@@ -475,7 +360,6 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  /* AÑADE ESTO */
   max-width: 100%;
 }
 
@@ -488,7 +372,6 @@
   border-radius: 16px;
   font-size: 0.9rem;
   font-weight: 500;
-  /* AÑADE ESTO */
   word-break: break-word;
   max-width: 100%;
 }
@@ -568,17 +451,162 @@
   transform: none;
 }
 
-/* Espaciador invisible para mantener la estructura */
 .invisibleSpacer {
   visibility: hidden;
-  height: 44px; /* Misma altura que los botones */
+  height: 44px;
   pointer-events: none;
 }
-
 
 .warningText {
   color: #dc3545;
   font-size: 0.875rem;
   margin: 10px 0 0 0;
   font-style: italic;
+}
+
+
+.totalsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.totalRow:last-child {
+  border-bottom: none;
+}
+
+.totalLabel {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #495057;
+}
+
+.totalValue {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.grandTotalRow {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 3px solid #1532ba;
+  border-bottom: none;
+}
+
+.grandTotalLabel {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1532ba;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grandTotalValue {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #1532ba;
+}
+
+/* Media queries para responsive */
+@media (max-width: 767px) {
+  .proformaTable {
+    display: none;
+  }
+
+  .mobileList {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobileList {
+    display: none;
+  }
+
+  .proformaTable {
+    display: table;
+  }
+}
+
+@media (max-width: 768px) {
+  .serviceForm {
+    padding: 15px;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .proformaTable th,
+  .proformaTable td {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .invisibleSpacer {
+    display: none;
+  }
+
+  .secondaryButton {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .assignmentSection {
+    padding: 15px;
+  }
+
+  .grandTotal {
+    padding: 20px;
+  }
+
+  .totalLabel,
+  .grandTotalLabel {
+    font-size: 0.9rem;
+  }
+
+  .totalValue {
+    font-size: 1rem;
+  }
+
+  .grandTotalValue {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobileCard {
+    padding: 0.75rem;
+  }
+
+  .cardField {
+    margin-bottom: 0.5rem;
+  }
+
+  .mobileInput {
+    padding: 0.5rem;
+  }
+
+  .cardTitle {
+    font-size: 0.9rem;
+  }
 }

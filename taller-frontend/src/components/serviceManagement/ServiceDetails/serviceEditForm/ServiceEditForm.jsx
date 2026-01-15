@@ -179,9 +179,10 @@ const ServiceEditForm = ({
   };
 
   // ----------------- CÁLCULO DE SUBTOTAL, IVA Y TOTAL -----------------
-  const IVA_RATE = 0.13;
+  const ivaRate = parseFloat(formData.iva) / 100; // CAMBIO: Usa el IVA del formData
+
   const subtotal = calculatePartsTotal() + calculateLaborsTotal();
-  const ivaAmount = subtotal * IVA_RATE;
+  const ivaAmount = subtotal * ivaRate;
   const totalWithIVA = subtotal + ivaAmount;
 
   // NUEVO: Cálculo de Ganancia
@@ -765,7 +766,9 @@ const ServiceEditForm = ({
                 disabled={loadingEncargados}
               >
                 <option value="">
-                  {loadingEncargados ? "Cargando..." : "Seleccione un encargado taller"}
+                  {loadingEncargados
+                    ? "Cargando..."
+                    : "Seleccione un encargado taller"}
                 </option>
                 {encargados.map((encargado) => (
                   <option key={encargado.id} value={encargado.id}>
@@ -999,24 +1002,43 @@ const ServiceEditForm = ({
           </small>
         )}
       </div>
+      {/* Campo de IVA */}
+      <div className={styles.formGroup}>
+        <label>Porcentaje de IVA aplicado</label>
+        {isDelivered || isGestorRepuestos ? (
+          <span className={styles.readOnlyValue}>
+            {Math.round(parseFloat(formData.iva || 13))}%
+          </span>
+        ) : (
+          <select
+            name="iva"
+            value={Math.round(parseFloat(formData.iva || 13))}
+            onChange={handleInputChange}
+          >
+            <option value="0">0% (Exento)</option>
+            <option value="1">1%</option>
+            <option value="2">2%</option>
+            <option value="4">4%</option>
+            <option value="13">13% (Estándar)</option>
+          </select>
+        )}
+      </div>
 
       {/* Total General */}
       <div className={styles.grandTotal}>
-        <div className={styles.grandTotalContent}>
-          <div>
-            <span className={styles.grandTotalLabel}>Subtotal: </span>
-            <span className={styles.grandTotalValue}>
-              {formatPrice(subtotal)}
-            </span>
+        <div className={styles.totalsGrid}>
+          <div className={styles.totalRow}>
+            <span className={styles.totalLabel}>Subtotal:</span>
+            <span className={styles.totalValue}>{formatPrice(subtotal)}</span>
           </div>
-          <div>
-            <span className={styles.grandTotalLabel}>IVA (13%): </span>
-            <span className={styles.grandTotalValue}>
-              {formatPrice(ivaAmount)}
+          <div className={styles.totalRow}>
+            <span className={styles.totalLabel}>
+              IVA ({formData.iva || 13}%):
             </span>
+            <span className={styles.totalValue}>{formatPrice(ivaAmount)}</span>
           </div>
-          <div>
-            <span className={styles.grandTotalLabel}>TOTAL GENERAL: </span>
+          <div className={`${styles.totalRow} ${styles.grandTotalRow}`}>
+            <span className={styles.grandTotalLabel}>TOTAL GENERAL:</span>
             <span className={styles.grandTotalValue}>
               {formatPrice(totalWithIVA)}
             </span>
