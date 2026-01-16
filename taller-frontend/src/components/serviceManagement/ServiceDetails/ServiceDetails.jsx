@@ -1090,8 +1090,9 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
-        user_assigned_id: assignmentData.user_assigned_id || null, // NUEVO
-        area_id: assignmentData.area_id || null, // NUEVO
+        iva: parseFloat(formData.iva),
+        user_assigned_id: assignmentData.user_assigned_id || null,
+        area_id: assignmentData.area_id || null,
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -1202,6 +1203,7 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
+        iva: parseFloat(formData.iva), 
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -1323,6 +1325,7 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
+        iva: parseFloat(formData.iva), 
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -1392,7 +1395,6 @@ const ServiceDetails = () => {
       setActionLoading(false);
     }
   };
-
   // Estados de carga y error
   if (loading) {
     return (
