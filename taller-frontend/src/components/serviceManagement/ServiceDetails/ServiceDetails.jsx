@@ -133,31 +133,31 @@ const ServiceDetails = () => {
   const calculatePartsTotal = (parts = formData.parts) => {
     return parts.reduce(
       (total, part) => total + part.amount * parseFloat(part.price),
-      0
+      0,
     );
   };
 
   const calculateLaborsTotal = (labors = formData.labors) => {
     return labors.reduce(
       (total, labor) => total + labor.amount * parseFloat(labor.price),
-      0
+      0,
     );
   };
 
   const calculatePaidLaborsTotal = (paidLabors = formData.paidLabors) => {
     return paidLabors.reduce(
       (total, paidLabor) => total + parseFloat(paidLabor.price || 0),
-      0
+      0,
     );
   };
 
   // MODIFICACIÓN: Función para verificar si hay al menos un repuesto o mano de obra válida
   const hasValidPartsOrLabors = () => {
     const validParts = formData.parts.every(
-      (p) => p.amount > 0 && p.name && p.name.trim() !== ""
+      (p) => p.amount > 0 && p.name && p.name.trim() !== "",
     );
     const validLabors = formData.labors.every(
-      (l) => l.amount > 0 && l.description && l.description.trim() !== ""
+      (l) => l.amount > 0 && l.description && l.description.trim() !== "",
     );
 
     // Al menos uno de los dos grupos debe tener registros válidos
@@ -169,7 +169,7 @@ const ServiceDetails = () => {
 
   const hasValidParts = () => {
     const validParts = formData.parts.every(
-      (p) => p.amount > 0 && p.name && p.name.trim() !== ""
+      (p) => p.amount > 0 && p.name && p.name.trim() !== "",
     );
 
     // Debe haber al menos un repuesto y que todos sean válidos
@@ -221,6 +221,7 @@ const ServiceDetails = () => {
       formData.vehicle_location !== initialFormData.vehicle_location ||
       formData.observations !== initialFormData.observations ||
       formData.iva !== initialFormData.iva ||
+      formData.discount !== initialFormData.discount ||
       JSON.stringify(formData.mechanics) !==
         JSON.stringify(initialFormData.mechanics);
 
@@ -237,12 +238,12 @@ const ServiceDetails = () => {
     // Verificar cambios en mano de obra - COMPARACIÓN PROFUNDA
     const laborsChanged = !areArraysEqual(
       formData.labors,
-      initialFormData.labors
+      initialFormData.labors,
     );
 
     const paidLaborsChanged = !areArraysEqual(
       formData.paidLabors,
-      initialFormData.paidLabors
+      initialFormData.paidLabors,
     );
 
     // Verificar cambios en datos de entrega (para servicios Finalizados)
@@ -383,7 +384,7 @@ const ServiceDetails = () => {
     if (!hasValidParts()) {
       showNotification(
         "Debe agregar al menos un repuesto válido para cotizar",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -410,7 +411,7 @@ const ServiceDetails = () => {
         message: quoteMessage, // Usar el mensaje del estado
         parts: formData.parts
           .filter(
-            (part) => part.name?.trim() && part.amount > 0 && part.price >= 0
+            (part) => part.name?.trim() && part.amount > 0 && part.price >= 0,
           )
           .map((part) => ({
             name: part.name,
@@ -440,7 +441,7 @@ const ServiceDetails = () => {
       // MODIFICADO: usa la nueva función
       showNotification(
         "Debe agregar al menos un repuesto o mano de obra válida para enviar la proforma",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -460,17 +461,17 @@ const ServiceDetails = () => {
 
     try {
       const validParts = formData.parts.filter(
-        (part) => part.name && part.amount && part.price !== undefined
+        (part) => part.name && part.amount && part.price !== undefined,
       );
 
       const validLabors = formData.labors.filter(
         (labor) =>
-          labor.description && labor.amount && labor.price !== undefined
+          labor.description && labor.amount && labor.price !== undefined,
       );
 
       if (validParts.length === 0 && validLabors.length === 0) {
         throw new Error(
-          "Los repuestos y servicios deben tener precios asignados para enviar la proforma."
+          "Los repuestos y servicios deben tener precios asignados para enviar la proforma.",
         );
       }
 
@@ -492,7 +493,7 @@ const ServiceDetails = () => {
           amount: part.amount || 1,
           price: part.price || "0.00",
           subtotal: (parseFloat(part.price || 0) * (part.amount || 1)).toFixed(
-            2
+            2,
           ),
         })),
         labors: validLabors.map((labor) => ({
@@ -504,7 +505,7 @@ const ServiceDetails = () => {
           ).toFixed(2),
         })),
         total_price: formatPrice(
-          calculatePartsTotal() + calculateLaborsTotal()
+          calculatePartsTotal() + calculateLaborsTotal(),
         ),
       };
 
@@ -513,7 +514,7 @@ const ServiceDetails = () => {
       if (result.success) {
         showNotification(
           `Proforma enviada exitosamente a ${service.client.email}`,
-          "success"
+          "success",
         );
       } else {
         throw new Error(result.message || "Error al enviar proforma");
@@ -536,7 +537,7 @@ const ServiceDetails = () => {
 
         if (
           !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-            serviceId
+            serviceId,
           )
         ) {
           throw new Error("ID de servicio inválido");
@@ -549,7 +550,7 @@ const ServiceDetails = () => {
 
         if (!serviceResponse.data.success) {
           throw new Error(
-            serviceResponse.data.message || "Error al obtener el servicio"
+            serviceResponse.data.message || "Error al obtener el servicio",
           );
         }
 
@@ -570,6 +571,7 @@ const ServiceDetails = () => {
           mechanics: serviceData.mechanics || [],
           observations: serviceData.observations || "",
           iva: serviceData.iva,
+          discount: serviceData.discount || 0,
         };
 
         const initialAssignment = {
@@ -697,7 +699,7 @@ const ServiceDetails = () => {
 
       // 2. Actualizar el estado local eliminando el repuesto
       const updatedParts = formData.parts.filter(
-        (_, i) => i !== pendingPartIndex
+        (_, i) => i !== pendingPartIndex,
       );
 
       setFormData((prev) => ({
@@ -719,7 +721,7 @@ const ServiceDetails = () => {
 
       if (!response.data.success) {
         throw new Error(
-          response.data.message || "Error al actualizar el servicio"
+          response.data.message || "Error al actualizar el servicio",
         );
       }
 
@@ -729,8 +731,8 @@ const ServiceDetails = () => {
           JSON.stringify({
             ...formData,
             parts: updatedParts,
-          })
-        )
+          }),
+        ),
       );
       setHasUnsavedChanges(false);
 
@@ -774,7 +776,7 @@ const ServiceDetails = () => {
 
       // 2. Actualizar el estado local eliminando la mano de obra
       const updatedLabors = formData.labors.filter(
-        (_, i) => i !== pendingLaborIndex
+        (_, i) => i !== pendingLaborIndex,
       );
 
       setFormData((prev) => ({
@@ -795,7 +797,7 @@ const ServiceDetails = () => {
 
       if (!response.data.success) {
         throw new Error(
-          response.data.message || "Error al actualizar el servicio"
+          response.data.message || "Error al actualizar el servicio",
         );
       }
 
@@ -805,8 +807,8 @@ const ServiceDetails = () => {
           JSON.stringify({
             ...formData,
             labors: updatedLabors,
-          })
-        )
+          }),
+        ),
       );
       setHasUnsavedChanges(false);
 
@@ -867,7 +869,7 @@ const ServiceDetails = () => {
 
       // 2. Actualizar el estado local eliminando la labor pagada
       const updatedPaidLabors = formData.paidLabors.filter(
-        (_, i) => i !== pendingPaidLaborIndex
+        (_, i) => i !== pendingPaidLaborIndex,
       );
 
       setFormData((prev) => ({
@@ -881,14 +883,14 @@ const ServiceDetails = () => {
           JSON.stringify({
             ...formData,
             paidLabors: updatedPaidLabors,
-          })
-        )
+          }),
+        ),
       );
       setHasUnsavedChanges(false);
 
       showNotification(
         "Mano de obra pagada eliminada correctamente",
-        "success"
+        "success",
       );
 
       // Recargar el servicio para obtener los datos actualizados
@@ -933,7 +935,19 @@ const ServiceDetails = () => {
     if (assignmentData.user_assigned_id && !assignmentData.area_id) {
       showNotification(
         "Debe seleccionar un área para el encargado asignado",
-        "warning"
+        "warning",
+      );
+      return;
+    }
+
+    // Validar que el descuento no sea mayor al subtotal
+    const currentSubtotal = calculatePartsTotal() + calculateLaborsTotal();
+    const requestedDiscount = parseFloat(formData.discount || 0);
+
+    if (requestedDiscount > currentSubtotal) {
+      showNotification(
+        "El descuento no puede ser mayor que el subtotal",
+        "error",
       );
       return;
     }
@@ -954,6 +968,7 @@ const ServiceDetails = () => {
         mechanics: formData.mechanics,
         observations: formData.observations,
         iva: parseFloat(formData.iva),
+        discount: parseFloat(formData.discount || 0),
         invoice_number: deliveryData.invoice_number || null,
         payment_method: deliveryData.payment_method || null,
         user_assigned_id: assignmentData.user_assigned_id || null, // NUEVO
@@ -985,7 +1000,7 @@ const ServiceDetails = () => {
 
       if (!response.data.success) {
         throw new Error(
-          response.data.message || "Error al actualizar el servicio"
+          response.data.message || "Error al actualizar el servicio",
         );
       }
 
@@ -999,7 +1014,7 @@ const ServiceDetails = () => {
         JSON.stringify({
           message: "Servicio actualizado correctamente",
           type: "success",
-        })
+        }),
       );
 
       // Recargar la página después de guardar
@@ -1040,22 +1055,22 @@ const ServiceDetails = () => {
 
     if (missingFields.length > 0) {
       setActionError(
-        `Debe completar los siguientes campos: ${missingFields.join(", ")}`
+        `Debe completar los siguientes campos: ${missingFields.join(", ")}`,
       );
       showNotification(
         `Complete los campos requeridos: ${missingFields.join(", ")}`,
-        "warning"
+        "warning",
       );
       return;
     }
 
     if (service.status_service.name !== "Pendiente") {
       setActionError(
-        "Solo se pueden marcar como 'En proceso' servicios pendientes"
+        "Solo se pueden marcar como 'En proceso' servicios pendientes",
       );
       showNotification(
         "Solo se pueden marcar como 'En proceso' servicios pendientes",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -1078,7 +1093,7 @@ const ServiceDetails = () => {
     if (assignmentData.user_assigned_id && !assignmentData.area_id) {
       showNotification(
         "Debe seleccionar un área para el encargado asignado",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -1091,6 +1106,7 @@ const ServiceDetails = () => {
         mechanics: formData.mechanics,
         observations: formData.observations,
         iva: parseFloat(formData.iva),
+        discount: parseFloat(formData.discount || 0),
         user_assigned_id: assignmentData.user_assigned_id || null,
         area_id: assignmentData.area_id || null,
         parts: formData.parts.map((part) => ({
@@ -1118,11 +1134,11 @@ const ServiceDetails = () => {
 
       const updateResponse = await serviceAPI.updateService(
         serviceId,
-        updatePayload
+        updatePayload,
       );
       if (!updateResponse.data.success) {
         throw new Error(
-          updateResponse.data.message || "Error al actualizar el servicio"
+          updateResponse.data.message || "Error al actualizar el servicio",
         );
       }
 
@@ -1130,7 +1146,7 @@ const ServiceDetails = () => {
       const markResponse = await serviceAPI.markServiceInProcess(serviceId);
       if (!markResponse.data.success) {
         throw new Error(
-          markResponse.data.message || "Error al cambiar el estado"
+          markResponse.data.message || "Error al cambiar el estado",
         );
       }
 
@@ -1142,7 +1158,7 @@ const ServiceDetails = () => {
           message:
             "Servicio actualizado y marcado como 'En proceso' correctamente",
           type: "success",
-        })
+        }),
       );
 
       window.location.reload();
@@ -1166,18 +1182,18 @@ const ServiceDetails = () => {
       setActionError("Debe agregar al menos un repuesto o mano de obra válida");
       showNotification(
         "Debe agregar al menos un repuesto o mano de obra válida para finalizar el servicio",
-        "warning"
+        "warning",
       );
       return;
     }
 
     if (service.status_service.name !== "En proceso") {
       setActionError(
-        "Solo se pueden marcar como 'Finalizado' servicios en proceso"
+        "Solo se pueden marcar como 'Finalizado' servicios en proceso",
       );
       showNotification(
         "Solo se pueden marcar como 'Finalizado' servicios en proceso",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -1203,7 +1219,8 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
-        iva: parseFloat(formData.iva), 
+        iva: parseFloat(formData.iva),
+        discount: parseFloat(formData.discount || 0),
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -1229,11 +1246,11 @@ const ServiceDetails = () => {
 
       const updateResponse = await serviceAPI.updateService(
         serviceId,
-        updatePayload
+        updatePayload,
       );
       if (!updateResponse.data.success) {
         throw new Error(
-          updateResponse.data.message || "Error al guardar cambios"
+          updateResponse.data.message || "Error al guardar cambios",
         );
       }
 
@@ -1241,7 +1258,7 @@ const ServiceDetails = () => {
       const markResponse = await serviceAPI.markServiceFinished(serviceId);
       if (!markResponse.data.success) {
         throw new Error(
-          markResponse.data.message || "Error al cambiar el estado"
+          markResponse.data.message || "Error al cambiar el estado",
         );
       }
 
@@ -1253,7 +1270,7 @@ const ServiceDetails = () => {
           message:
             "Servicio actualizado y marcado como 'Finalizado' correctamente",
           type: "success",
-        })
+        }),
       );
 
       window.location.reload();
@@ -1285,22 +1302,22 @@ const ServiceDetails = () => {
 
     if (missingFields.length > 0) {
       setActionError(
-        `Debe completar los siguientes campos: ${missingFields.join(", ")}`
+        `Debe completar los siguientes campos: ${missingFields.join(", ")}`,
       );
       showNotification(
         `Complete los campos requeridos: ${missingFields.join(", ")}`,
-        "warning"
+        "warning",
       );
       return;
     }
 
     if (service.status_service.name !== "Finalizado") {
       setActionError(
-        "Solo se pueden marcar como 'Entregado' servicios finalizados"
+        "Solo se pueden marcar como 'Entregado' servicios finalizados",
       );
       showNotification(
         "Solo se pueden marcar como 'Entregado' servicios finalizados",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -1325,7 +1342,8 @@ const ServiceDetails = () => {
         vehicle_location: formData.vehicle_location,
         mechanics: formData.mechanics,
         observations: formData.observations,
-        iva: parseFloat(formData.iva), 
+        iva: parseFloat(formData.iva),
+        discount: parseFloat(formData.discount || 0),
         parts: formData.parts.map((part) => ({
           id: part.id || undefined,
           amount: part.amount,
@@ -1351,11 +1369,11 @@ const ServiceDetails = () => {
 
       const updateResponse = await serviceAPI.updateService(
         serviceId,
-        updatePayload
+        updatePayload,
       );
       if (!updateResponse.data.success) {
         throw new Error(
-          updateResponse.data.message || "Error al guardar cambios"
+          updateResponse.data.message || "Error al guardar cambios",
         );
       }
 
@@ -1367,7 +1385,7 @@ const ServiceDetails = () => {
 
       if (!markResponse.data.success) {
         throw new Error(
-          markResponse.data.message || "Error al cambiar el estado"
+          markResponse.data.message || "Error al cambiar el estado",
         );
       }
 
@@ -1379,7 +1397,7 @@ const ServiceDetails = () => {
           message:
             "Servicio actualizado y marcado como 'Entregado' correctamente",
           type: "success",
-        })
+        }),
       );
 
       window.location.reload();

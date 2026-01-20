@@ -6,10 +6,12 @@ export const generateServiceExcel = (service) => {
       minimumFractionDigits: 2,
     })}`;
 
-  const ivaRate = Number(service.iva) / 100; 
+  const ivaRate = Number(service.iva) / 100;
   const subtotal = Number(service.total_price || 0);
-  const iva = Number((subtotal * ivaRate).toFixed(2));
-  const total = Number((subtotal + iva).toFixed(2));
+  const discount = Number(service.discount || 0);
+  const subtotalWithDiscount = Math.max(subtotal - discount, 0);
+  const iva = Number((subtotalWithDiscount * ivaRate).toFixed(2));
+  const total = Number((subtotalWithDiscount + iva).toFixed(2));
 
   // ==================== ESTILOS PROFESIONALES ====================
   const logoPlaceholderStyle = {
@@ -98,6 +100,17 @@ export const generateServiceExcel = (service) => {
       bottom: { style: "medium", color: { rgb: "2f9e44" } },
     },
   };
+
+  const discountStyle = (hasDiscount) => ({
+    font: { 
+      sz: 10, 
+      color: { rgb: hasDiscount ? "FF0000" : "212529" } 
+    },
+    alignment: { horizontal: "right", vertical: "center" },
+    border: {
+      bottom: { style: "hair", color: { rgb: "e9ecef" } },
+    },
+  });
 
   // ==================== CREAR HOJA ====================
   const ws = XLSX.utils.aoa_to_sheet([]);
@@ -398,6 +411,7 @@ export const generateServiceExcel = (service) => {
 
   const totalsData = [
     ["", "", "Subtotal:", formatPrice(subtotal)],
+    ["", "", "Descuento aplicado:", formatPrice(discount)],
     ["", "", `IVA (${Math.round(service.iva || 13)}%):`, formatPrice(iva)],
     ["", "", "Total:", formatPrice(total)],
   ];
@@ -407,20 +421,27 @@ export const generateServiceExcel = (service) => {
       origin: { r: currentRow, c: 0 },
     });
 
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 2 })].s =
-      idx === 2
-        ? {
-            ...totalLabelStyle,
-            font: { bold: true, sz: 12, color: { rgb: "2c3e50" } },
-          }
-        : totalLabelStyle;
-    ws[XLSX.utils.encode_cell({ r: currentRow, c: 3 })].s =
-      idx === 2
-        ? totalValueStyle
-        : {
-            ...valueStyle,
-            alignment: { horizontal: "right", vertical: "center" },
-          };
+    if (idx === 1) {
+      ws[XLSX.utils.encode_cell({ r: currentRow, c: 2 })].s = totalLabelStyle;
+      ws[XLSX.utils.encode_cell({ r: currentRow, c: 3 })].s = 
+        discountStyle(discount > 0);
+    }
+    // Estilo para total (índice 4, última fila)
+    else if (idx === 4) {
+      ws[XLSX.utils.encode_cell({ r: currentRow, c: 2 })].s = {
+        ...totalLabelStyle,
+        font: { bold: true, sz: 12, color: { rgb: "2c3e50" } },
+      };
+      ws[XLSX.utils.encode_cell({ r: currentRow, c: 3 })].s = totalValueStyle;
+    }
+    // Estilo para las demás filas
+    else {
+      ws[XLSX.utils.encode_cell({ r: currentRow, c: 2 })].s = totalLabelStyle;
+      ws[XLSX.utils.encode_cell({ r: currentRow, c: 3 })].s = {
+        ...valueStyle,
+        alignment: { horizontal: "right", vertical: "center" },
+      };
+    }
 
     currentRow++;
   });

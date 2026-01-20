@@ -55,6 +55,7 @@ const ServiceEditForm = ({
   const isReadOnly = isDelivered || isFinished;
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
   const [mechanicInput, setMechanicInput] = useState("");
+  const [discount, setDiscount] = useState(formData.discount || "");
 
   // Verificar roles del usuario
   const isAdmin = user?.roles?.includes("Administrador");
@@ -79,14 +80,14 @@ const ServiceEditForm = ({
       "Encargado Metalmecánica",
       "Encargado Todo Frenos y Cluth",
       "Encargado Hidráulica",
-    ].includes(role)
+    ].includes(role),
   );
 
   // Efecto para filtrar áreas según el técnico seleccionado
   useEffect(() => {
     if (assignmentData.user_assigned_id) {
       const encargado = encargados.find(
-        (e) => e.id === assignmentData.user_assigned_id
+        (e) => e.id === assignmentData.user_assigned_id,
       );
       const areas =
         encargado?.roles?.map((role) => ({
@@ -156,6 +157,24 @@ const ServiceEditForm = ({
     return `${day}/${month}/${year} a las ${hours}:${minutes}:${seconds}`;
   };
 
+  // Handler para el descuento
+  const handleDiscountChange = (e) => {
+    const value = e.target.value;
+
+    // Permite borrar el input
+    if (value === "") {
+      setDiscount("");
+      handleInputChange({ target: { name: "discount", value: "" } });
+      return;
+    }
+
+    // SOLO números positivos (sin signo -)
+    if (/^\d*\.?\d{0,2}$/.test(value)) {
+      setDiscount(value);
+      handleInputChange({ target: { name: "discount", value } });
+    }
+  };
+
   const handleUserAssignmentChange = (e) => {
     const newData = {
       ...assignmentData,
@@ -179,11 +198,13 @@ const ServiceEditForm = ({
   };
 
   // ----------------- CÁLCULO DE SUBTOTAL, IVA Y TOTAL -----------------
-  const ivaRate = parseFloat(formData.iva) / 100; // CAMBIO: Usa el IVA del formData
+  const ivaRate = parseFloat(formData.iva) / 100;
 
   const subtotal = calculatePartsTotal() + calculateLaborsTotal();
-  const ivaAmount = subtotal * ivaRate;
-  const totalWithIVA = subtotal + ivaAmount;
+  const discountAmount = parseFloat(discount) || 0;
+  const subtotalWithDiscount = Math.max(subtotal - discountAmount, 0);
+  const ivaAmount = subtotalWithDiscount * ivaRate;
+  const totalWithIVA = subtotalWithDiscount + ivaAmount;
 
   // NUEVO: Cálculo de Ganancia
   const paidLaborsTotal = calculatePaidLaborsTotal();
@@ -203,7 +224,7 @@ const ServiceEditForm = ({
 
   const removeMechanic = (mechanicToRemove) => {
     const newMechanics = formData.mechanics.filter(
-      (mechanic) => mechanic !== mechanicToRemove
+      (mechanic) => mechanic !== mechanicToRemove,
     );
     handleMechanicsChange({ target: { value: newMechanics.join(", ") } });
   };
@@ -793,8 +814,8 @@ const ServiceEditForm = ({
                   {!assignmentData.user_assigned_id
                     ? "Seleccione un encargado primero"
                     : filteredAreas.length === 0
-                    ? "No hay áreas disponibles"
-                    : "Seleccione un área"}
+                      ? "No hay áreas disponibles"
+                      : "Seleccione un área"}
                 </option>
                 {filteredAreas.map((area) => (
                   <option key={area.id} value={area.id}>
@@ -1002,6 +1023,33 @@ const ServiceEditForm = ({
           </small>
         )}
       </div>
+
+      {/* Campo de Descuento */}
+      <div className={styles.formGroup}>
+        <label>Descuento aplicado</label>
+        {isDelivered || isGestorRepuestos ? (
+          <span className={styles.readOnlyValue}>{formatPrice(discount)}</span>
+        ) : (
+          <div className={styles.discountContainer}>
+            <input
+              type="number"
+              name="discount"
+              min="0"
+              step="0.01"
+              value={discount}
+              onChange={handleDiscountChange}
+              placeholder="0.00"
+              className={styles.discountInput}
+            />
+          </div>
+        )}
+        {!isDelivered && !isGestorRepuestos && discount > subtotal && (
+          <p className={styles.warningText}>
+            El descuento no puede ser mayor que el subtotal
+          </p>
+        )}
+      </div>
+
       {/* Campo de IVA */}
       <div className={styles.formGroup}>
         <label>Porcentaje de IVA aplicado</label>
@@ -1030,6 +1078,21 @@ const ServiceEditForm = ({
           <div className={styles.totalRow}>
             <span className={styles.totalLabel}>Subtotal:</span>
             <span className={styles.totalValue}>{formatPrice(subtotal)}</span>
+          </div>
+          <div className={styles.totalRow}>
+            <span className={styles.totalLabel}>Descuento:</span>
+            <span
+              className={styles.totalValue}
+              style={{ color: discount > 0 ? "#f44336" : "inherit" }}
+            >
+              -{formatPrice(discount)}
+            </span>
+          </div>
+          <div className={styles.totalRow}>
+            <span className={styles.totalLabel}>Subtotal con descuento:</span>
+            <span className={styles.totalValue}>
+              {formatPrice(subtotalWithDiscount)}
+            </span>
           </div>
           <div className={styles.totalRow}>
             <span className={styles.totalLabel}>
