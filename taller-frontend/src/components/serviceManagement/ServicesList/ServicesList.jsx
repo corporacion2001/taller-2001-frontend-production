@@ -81,6 +81,42 @@ const ServicesList = () => {
     return `${day}/${month}/${year}`;
   };
 
+  // Función para generar números de página
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push("...");
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(1);
+        pageNumbers.push("...");
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        pageNumbers.push(1);
+        pageNumbers.push("...");
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push("...");
+        pageNumbers.push(totalPages);
+      }
+    }
+
+    return pageNumbers;
+  };
+
   useEffect(() => {
     const checkUserRoles = () => {
       setIsAdmin(user?.roles?.includes("Administrador"));
@@ -95,7 +131,7 @@ const ServicesList = () => {
       try {
         const workshopIdToSend = isAdmin
           ? undefined
-          : user?.workshop_id ?? user?.workshop?.id ?? user?.workshopId ?? "";
+          : (user?.workshop_id ?? user?.workshop?.id ?? user?.workshopId ?? "");
 
         const usersResponse = await usersAPI.getBasicProfiles(workshopIdToSend);
         const usersPayload =
@@ -106,13 +142,12 @@ const ServicesList = () => {
         setUsersList(Array.isArray(usersPayload) ? usersPayload : []);
 
         if (isAdmin || isFleetMgr) {
-          const nonAdminsResponse = await usersAPI.getEncargados(
-            workshopIdToSend
-          );
+          const nonAdminsResponse =
+            await usersAPI.getEncargados(workshopIdToSend);
           const nonAdminsPayload =
             nonAdminsResponse?.data ?? nonAdminsResponse ?? [];
           setNonAdminsList(
-            Array.isArray(nonAdminsPayload) ? nonAdminsPayload : []
+            Array.isArray(nonAdminsPayload) ? nonAdminsPayload : [],
           );
         }
       } catch (err) {
@@ -138,6 +173,7 @@ const ServicesList = () => {
           Pendiente: "Pendiente",
           "En Proceso": "En proceso",
           Finalizado: "Finalizado",
+          Entregado: "Entregado",
         };
 
         const statusName = activeTab === "Todos" ? null : statusMap[activeTab];
@@ -179,7 +215,7 @@ const ServicesList = () => {
           response.data.data.map(async (service) => {
             try {
               const photosResponse = await serviceAPI.getServicePhotos(
-                service.id
+                service.id,
               );
               return {
                 ...service,
@@ -188,22 +224,22 @@ const ServicesList = () => {
             } catch (photoError) {
               console.error(
                 `Error obteniendo fotos para servicio ${service.id}:`,
-                photoError
+                photoError,
               );
               return {
                 ...service,
                 photos: [],
               };
             }
-          })
+          }),
         );
 
         setServices(servicesWithPhotos);
         setFilteredServices(servicesWithPhotos);
         setTotalPages(
           Math.ceil(
-            response.data.pagination.total / response.data.pagination.limit
-          )
+            response.data.pagination.total / response.data.pagination.limit,
+          ),
         );
       } catch (err) {
         setError("Error al cargar los servicios");
@@ -249,6 +285,12 @@ const ServicesList = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePageClick = (pageNumber) => {
+    if (pageNumber !== "..." && pageNumber !== currentPage) {
+      setCurrentPage(pageNumber);
     }
   };
 
@@ -327,26 +369,28 @@ const ServicesList = () => {
 
       <div className={styles.tabsContainer}>
         <div className={styles.tabs}>
-          {["Todos", "Pendiente", "En Proceso", "Finalizado"].map((tab) => (
-            <button
-              key={tab}
-              className={`${styles.tab} ${
-                activeTab === tab ? styles.activeTab : ""
-              }`}
-              onClick={() => {
-                setActiveTab(tab);
-                setCurrentPage(1);
-              }}
-            >
-              {tab}
-            </button>
-          ))}
+          {["Todos", "Pendiente", "En Proceso", "Finalizado", "Entregado"].map(
+            (tab) => (
+              <button
+                key={tab}
+                className={`${styles.tab} ${
+                  activeTab === tab ? styles.activeTab : ""
+                }`}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setCurrentPage(1);
+                }}
+              >
+                {tab}
+              </button>
+            ),
+          )}
         </div>
       </div>
 
       {/* Contenedor de servicios según el modo de vista */}
       {loading ? (
-               <div>
+        <div>
           <LoadingSpinner />
         </div>
       ) : viewMode === "cards" ? (
@@ -391,9 +435,25 @@ const ServicesList = () => {
             Anterior
           </button>
 
-          <span className={styles.pageInfo}>
-            Página {currentPage} de {totalPages}
-          </span>
+          <div className={styles.pageNumbers}>
+            {getPageNumbers().map((pageNumber, index) => (
+              pageNumber === "..." ? (
+                <span key={`ellipsis-${index}`} className={styles.pageEllipsis}>
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageClick(pageNumber)}
+                  className={`${styles.pageNumber} ${
+                    currentPage === pageNumber ? styles.activePage : ""
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              )
+            ))}
+          </div>
 
           <button
             onClick={handleNextPage}
