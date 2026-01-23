@@ -395,6 +395,22 @@ const ServiceEditForm = ({
               />
             )}
           </div>
+          <div className={styles.cardField}>
+            <label>Código:</label>
+            {isDelivered ? (
+              <span>{part.code || "N/A"}</span>
+            ) : (
+              <input
+                type="text"
+                value={part.code || ""}
+                onChange={(e) =>
+                  handlePartChange(index, "code", e.target.value)
+                }
+                placeholder="Código del repuesto"
+                className={styles.mobileInput}
+              />
+            )}
+          </div>
         </div>
       ))}
     </div>
@@ -549,6 +565,7 @@ const ServiceEditForm = ({
           <th>Nombre</th>
           <th>Precio</th>
           <th>Nº Factura</th>
+          <th>Código</th>
           {!isDelivered && <th>Acciones</th>}
         </tr>
       </thead>
@@ -610,6 +627,22 @@ const ServiceEditForm = ({
                     handlePartChange(index, "invoice_number", e.target.value)
                   }
                   placeholder="Número de factura"
+                />
+              )}
+            </td>
+            <td>
+              {" "}
+              {/* NUEVO: celda para código */}
+              {isDelivered ? (
+                <span>{part.code || "N/A"}</span>
+              ) : (
+                <input
+                  type="text"
+                  value={part.code || ""}
+                  onChange={(e) =>
+                    handlePartChange(index, "code", e.target.value)
+                  }
+                  placeholder="Código"
                 />
               )}
             </td>

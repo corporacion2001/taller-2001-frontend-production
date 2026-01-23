@@ -664,7 +664,7 @@ const ServiceDetails = () => {
       ...prev,
       parts: [
         ...prev.parts,
-        { name: "", amount: 1, price: 0, invoice_number: "" },
+        { name: "", amount: 1, price: 0, invoice_number: "", code: "" },
       ],
     }));
   };
@@ -714,6 +714,7 @@ const ServiceDetails = () => {
           name: part.name,
           price: parseFloat(part.price),
           invoice_number: part.invoice_number || "",
+          code: part.code || "",
         })),
       };
       //Para que sea actualice el total_price
@@ -979,6 +980,7 @@ const ServiceDetails = () => {
           name: part.name,
           price: parseFloat(part.price),
           invoice_number: part.invoice_number || "",
+          code: part.code || "",
         })),
         labors: formData.labors.map((labor) => ({
           id: labor.id || undefined,
@@ -1115,6 +1117,7 @@ const ServiceDetails = () => {
           name: part.name,
           price: parseFloat(part.price),
           invoice_number: part.invoice_number || "",
+          code: part.code || "",
         })),
         labors: formData.labors.map((labor) => ({
           id: labor.id || undefined,
@@ -1227,6 +1230,7 @@ const ServiceDetails = () => {
           name: part.name,
           price: parseFloat(part.price),
           invoice_number: part.invoice_number || "",
+          code: part.code || "",
         })),
         labors: formData.labors.map((labor) => ({
           id: labor.id || undefined,
@@ -1350,6 +1354,7 @@ const ServiceDetails = () => {
           name: part.name,
           price: parseFloat(part.price),
           invoice_number: part.invoice_number || "",
+          code: part.code || "",
         })),
         labors: formData.labors.map((labor) => ({
           id: labor.id || undefined,
