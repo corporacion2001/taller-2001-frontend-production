@@ -206,37 +206,37 @@
   .container {
     padding: 0.75rem;
   }
-  
+
   .title {
     font-size: 1.3rem;
     margin-bottom: 1rem;
   }
-  
+
   .searchContainer {
     padding: 0.75rem;
   }
-  
+
   .clientCard {
     padding: 0.75rem;
   }
-  
+
   .formGrid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  
+
   .buttonGroup {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .primaryButton,
   .secondaryButton {
     width: 100%;
     min-width: auto;
     padding: 0.75rem;
   }
-  
+
   .clientField {
     flex-direction: column;
     gap: 0.25rem;
@@ -247,16 +247,16 @@
   .container {
     padding: 0.5rem;
   }
-  
+
   .title {
     font-size: 1.2rem;
   }
-  
+
   .searchContainer,
   .clientCard {
     padding: 0.5rem;
   }
-  
+
   .formGroup input,
   .formGroup select {
     padding: 0.6rem;
@@ -322,7 +322,7 @@
   flex-wrap: wrap;
 }
 
-.resetPrimaryButton, 
+.resetPrimaryButton,
 .resetSecondaryButton {
   margin: 0;
   display: inline-flex;
@@ -366,23 +366,23 @@
     width: 95%;
     border-radius: 10px;
   }
-  
+
   .resetButtonGroup {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .resetPrimaryButton,
   .resetSecondaryButton {
     width: 100%;
     padding: 0.75rem;
     min-width: auto;
   }
-  
+
   .resetTitle {
     font-size: 1rem;
   }
-  
+
   .resetMessage {
     font-size: 0.9rem;
   }
@@ -391,4 +391,105 @@
 .required {
   color: #ff0000;
   font-weight: bold;
+}
+
+/* Agregar estos estilos al final del archivo existente */
+
+/* Selector de modo de búsqueda */
+.searchModeSelector {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  background: #f8fafc;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.modeButton {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #dee2e6;
+  background: white;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.modeButton:hover {
+  background: #f1f3f5;
+}
+
+.modeButton.active {
+  background: #1532ba;
+  color: white;
+  border-color: #1532ba;
+}
+
+/* Resultados de búsqueda */
+.searchResultsContainer {
+  margin-top: 1rem;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.resultsTitle {
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.resultCard {
+  background: white;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resultCard:hover {
+  border-color: #1532ba;
+  background: #f0f4ff;
+  transform: translateX(4px);
+}
+
+.resultName {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.resultId {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+
+/* Responsive para los nuevos elementos */
+@media (max-width: 768px) {
+  .searchModeSelector {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .modeButton {
+    padding: 0.75rem;
+  }
+
+  .resultsList {
+    max-height: 250px;
+  }
 }
