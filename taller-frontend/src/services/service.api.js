@@ -6,6 +6,7 @@ export const serviceAPI = {
 
   getPhotoUploadUrl: (serviceId) =>
     api.post(`/services/${serviceId}/photos/upload-url`),
+  deletePhoto: (photoId) => api.delete(`/vehicle-photos/${photoId}`),
 
   registerPhotoInDatabase: (photoData) =>
     api.post("/vehicle-photos", photoData),
@@ -46,10 +47,7 @@ export const serviceAPI = {
     api.patch(`/services/${serviceId}/mark-delivered`, deliveryData),
   deleteService: (serviceId) =>
     api.delete(`/services/${serviceId}`).then((res) => res.data),
-  deletePart: (partId) =>
-    api.delete(`/parts/${partId}`),
-  deleteLabor: (laborId) =>
-    api.delete(`/labors/${laborId}`),
-  deletePaidLabor: (paidLaborId) =>
-    api.delete(`/paid-labors/${paidLaborId}`)
+  deletePart: (partId) => api.delete(`/parts/${partId}`),
+  deleteLabor: (laborId) => api.delete(`/labors/${laborId}`),
+  deletePaidLabor: (paidLaborId) => api.delete(`/paid-labors/${paidLaborId}`),
 };

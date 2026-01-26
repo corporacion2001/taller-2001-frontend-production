@@ -106,7 +106,15 @@ const ServiceDetails = () => {
     mechanics: [],
     observations: "",
   });
-
+  const reloadPhotos = async () => {
+    try {
+      const photosResponse = await serviceAPI.getServicePhotos(serviceId);
+      setPhotos(photosResponse.data.data || []);
+    } catch (err) {
+      console.error("Error recargando fotos:", err);
+      showNotification("Error al recargar fotos", "error");
+    }
+  };
   const [assignmentData, setAssignmentData] = useState({
     user_assigned_id: "",
     area_id: "",
@@ -1574,8 +1582,21 @@ const ServiceDetails = () => {
         onSendProforma={handleSendProforma}
         hasUnsavedChanges={hasUnsavedChanges}
       />
-      <ServicePhotos photos={photos} openImageModal={openImageModal} />
 
+      <ServicePhotos
+        photos={photos}
+        openImageModal={openImageModal}
+        serviceId={serviceId}
+        onPhotosUpdate={reloadPhotos}
+        canEdit={
+          service.status_service.name !== "Entregado" && // No puede ser entregado
+          (user?.roles?.includes("Administrador") || // Admin siempre puede
+            user?.roles?.includes("Encargado Flotilla") || // Fleet Manager puede
+            service.fleetUser?.id === user?.id || // El fleet user asignado puede
+            service.assigned_to?.id === user?.id) // El técnico asignado puede
+        }
+      />
+      
       <ServiceEditForm
         service={service}
         formData={formData}
