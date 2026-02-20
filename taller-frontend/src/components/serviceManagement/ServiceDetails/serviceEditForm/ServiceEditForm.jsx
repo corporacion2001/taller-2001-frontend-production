@@ -1050,7 +1050,7 @@ const ServiceEditForm = ({
             className={styles.textArea}
           />
         )}
-        {!isDelivered && !isGestorRepuestos && (
+        {!isDelivered  && (
           <small className={styles.characterCount}>
             {(formData.observations || "").length}/1000 caracteres
           </small>
