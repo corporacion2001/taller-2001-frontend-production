@@ -1045,14 +1045,14 @@ const ServiceEditForm = ({
             value={formData.observations || ""}
             onChange={handleInputChange}
             placeholder="Ingrese observaciones adicionales (opcional)"
-            maxLength={255}
+            maxLength={1000}
             rows={3}
             className={styles.textArea}
           />
         )}
         {!isDelivered && !isGestorRepuestos && (
           <small className={styles.characterCount}>
-            {(formData.observations || "").length}/255 caracteres
+            {(formData.observations || "").length}/1000 caracteres
           </small>
         )}
       </div>

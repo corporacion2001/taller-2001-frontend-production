@@ -264,9 +264,9 @@ const Step3Service = ({
     }
 
     // Validación de observaciones
-    if (serviceData.observations && serviceData.observations.length > 255) {
+    if (serviceData.observations && serviceData.observations.length > 1000) {
       errors.observations =
-        "Las observaciones no pueden exceder 255 caracteres";
+        "Las observaciones no pueden exceder 1000 caracteres";
       isValid = false;
     }
 

@@ -155,12 +155,12 @@ const ServiceForm = ({
           value={formData.observations || ""}
           onChange={onInputChange}
           placeholder="Ingrese observaciones adicionales (opcional)"
-          maxLength={255}
+          maxLength={1000}
           rows={3}
           className={styles.textArea}
         />
         <small className={styles.characterCount}>
-          {(formData.observations || "").length}/255 caracteres
+          {(formData.observations || "").length}/1000 caracteres
         </small>
       </div>
 
