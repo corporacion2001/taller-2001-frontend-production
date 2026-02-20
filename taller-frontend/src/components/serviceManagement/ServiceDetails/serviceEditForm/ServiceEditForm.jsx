@@ -1035,7 +1035,7 @@ const ServiceEditForm = ({
       {/* Sección de Observaciones */}
       <div className={styles.formGroup}>
         <label>Observaciones</label>
-        {isDelivered || isGestorRepuestos ? (
+        {isDelivered ? (
           <div className={styles.observationsText}>
             {formData.observations || "No hay observaciones registradas"}
           </div>
@@ -1050,7 +1050,7 @@ const ServiceEditForm = ({
             className={styles.textArea}
           />
         )}
-        {!isDelivered  && (
+        {!isDelivered && (
           <small className={styles.characterCount}>
             {(formData.observations || "").length}/1000 caracteres
           </small>
