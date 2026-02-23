@@ -315,6 +315,7 @@ export const codigosPorTipo = {
     { value: "20", label: "20-PODER JUDICIAL" },
     { value: "05", label: "05-PRESIDENTE DE LA REPUBLICA" },
     { value: "25", label: "25-TRIBUNAL SUPREMO DE ELECCIONES" },
+    { value: "29", label: "29-MINISTERIO DEL AMBIENTE Y ENERGIA" },
   ],
 };
 
