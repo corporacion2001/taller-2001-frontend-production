@@ -331,7 +331,8 @@ const ServiceEditForm = ({
             ) : (
               <input
                 type="number"
-                min="1"
+                min="0.01"
+                step="0.01"
                 value={part.amount || ""}
                 onChange={(e) =>
                   handlePartChange(index, "amount", e.target.value)
@@ -578,7 +579,8 @@ const ServiceEditForm = ({
               ) : (
                 <input
                   type="number"
-                  min="1"
+                  min="0.01"
+                  step="0.01"
                   required
                   value={part.amount || ""}
                   onChange={(e) =>
