@@ -270,7 +270,7 @@
 
 @media (max-width: 768px) {
   .title {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
   .vehiclePlate {
@@ -279,17 +279,34 @@
 
   .card h3,
   .section h2 {
-    font-size: 1.1rem;
+    font-size: 1rem;
+  }
+
+  .summaryCards {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
+  .title {
+    font-size: 1.1rem;
+  }
+
   .summaryCards {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card {
+    padding: 12px;
   }
 
   .section {
-    padding: 15px;
+    padding: 12px;
+  }
+
+  .toggleText {
+    font-size: 0.8rem;
   }
 }
 

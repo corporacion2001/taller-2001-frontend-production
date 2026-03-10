@@ -265,28 +265,31 @@
 }
 
 .mobileCard {
-  background: #f8f9fa;
+  background: #ffffff;
   border-radius: 8px;
   padding: 1rem;
   border: 1px solid #e9ecef;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 2px solid #e9ecef;
 }
 
 .cardTitle {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1532ba;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
+/* Campo editable: label arriba, input abajo */
 .cardField {
   display: flex;
   flex-direction: column;
@@ -295,9 +298,63 @@
 }
 
 .cardField label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #868e96;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Campo solo lectura: label + valor en línea */
+.cardFieldRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #f1f3f5;
+  gap: 0.5rem;
+}
+
+.cardFieldRow:last-of-type {
+  border-bottom: none;
+}
+
+.cardFieldLabel {
   font-size: 0.8rem;
+  color: #868e96;
   font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cardFieldValue {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Subtotal por ítem */
+.cardSubtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 2px solid #e9ecef;
+}
+
+.cardSubtotalLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
   color: #495057;
+}
+
+.cardSubtotalValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1532ba;
 }
 
 .mobileInput {
@@ -464,6 +521,69 @@
   font-style: italic;
 }
 
+/* Contenedor del total general y ganancia */
+.grandTotal {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.grandTotalContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Sección de datos de entrega */
+.deliverySection {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.deliverySection h3 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 8px;
+}
+
+/* Input y contenedor de descuento */
+.discountContainer {
+  display: flex;
+  align-items: center;
+}
+
+.discountInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+}
+
+.discountInput:focus {
+  outline: none;
+  border-color: #1532ba;
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(21, 50, 186, 0.1);
+}
+
+/* Botones izquierdos del grupo de acciones */
+.leftButtons {
+  display: flex;
+  gap: 10px;
+}
 
 .totalsGrid {
   display: flex;
@@ -506,8 +626,6 @@
   font-weight: 700;
   font-size: 1.2rem;
   color: #1532ba;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .grandTotalValue {
@@ -558,6 +676,12 @@
     gap: 10px;
   }
 
+  .leftButtons,
+  .rightButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
   .invisibleSpacer {
     display: none;
   }
@@ -565,18 +689,18 @@
   .secondaryButton {
     margin-left: 0;
     width: 100%;
+    justify-content: center;
   }
 
-  .button {
+  .button,
+  .deleteButton {
     width: 100%;
+    justify-content: center;
   }
 
-  .assignmentSection {
+  .grandTotal,
+  .deliverySection {
     padding: 15px;
-  }
-
-  .grandTotal {
-    padding: 20px;
   }
 
   .totalLabel,
@@ -589,7 +713,12 @@
   }
 
   .grandTotalValue {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+  }
+
+  .grandTotalContent {
+    flex-direction: column;
+    gap: 4px;
   }
 }
 
@@ -608,5 +737,23 @@
 
   .cardTitle {
     font-size: 0.9rem;
+  }
+
+  .grandTotal,
+  .deliverySection,
+  .proformaSection {
+    padding: 12px;
+  }
+
+  .grandTotalValue {
+    font-size: 1.1rem;
+  }
+
+  .grandTotalLabel {
+    font-size: 0.85rem;
+  }
+
+  .totalRow {
+    padding: 8px 0;
   }
 }

@@ -324,94 +324,98 @@ const ServiceEditForm = ({
             )}
           </div>
 
-          <div className={styles.cardField}>
-            <label>Cantidad:</label>
-            {isDelivered ? (
-              <span>{part.amount}</span>
-            ) : (
-              <input
-                type="number"
-                min="0.01"
-                step="0.01"
-                value={part.amount || ""}
-                onChange={(e) =>
-                  handlePartChange(index, "amount", e.target.value)
-                }
-                required
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Nombre:</label>
-            {isDelivered ? (
-              <span>{part.name}</span>
-            ) : (
-              <input
-                type="text"
-                value={part.name || ""}
-                onChange={(e) =>
-                  handlePartChange(index, "name", e.target.value)
-                }
-                placeholder="Nombre del repuesto"
-                required
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Precio:</label>
-            {isDelivered ? (
-              <span>{formatPrice(part.price)}</span>
-            ) : (
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={part.price || ""}
-                onChange={(e) =>
-                  handlePartChange(index, "price", e.target.value)
-                }
-                placeholder="0.00"
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Nº Factura:</label>
-            {isDelivered ? (
-              <span>{part.invoice_number || "N/A"}</span>
-            ) : (
-              <input
-                type="text"
-                value={part.invoice_number || ""}
-                onChange={(e) =>
-                  handlePartChange(index, "invoice_number", e.target.value)
-                }
-                placeholder="Número de factura"
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
-          <div className={styles.cardField}>
-            <label>Código:</label>
-            {isDelivered ? (
-              <span>{part.code || "N/A"}</span>
-            ) : (
-              <input
-                type="text"
-                value={part.code || ""}
-                onChange={(e) =>
-                  handlePartChange(index, "code", e.target.value)
-                }
-                placeholder="Código del repuesto"
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
+          {isDelivered ? (
+            <>
+              <div className={styles.cardFieldRow}>
+                <span className={styles.cardFieldLabel}>Nombre</span>
+                <span className={styles.cardFieldValue}>{part.name}</span>
+              </div>
+              <div className={styles.cardFieldRow}>
+                <span className={styles.cardFieldLabel}>Cantidad</span>
+                <span className={styles.cardFieldValue}>{part.amount}</span>
+              </div>
+              <div className={styles.cardFieldRow}>
+                <span className={styles.cardFieldLabel}>Precio unit.</span>
+                <span className={styles.cardFieldValue}>{formatPrice(part.price)}</span>
+              </div>
+              {part.invoice_number && (
+                <div className={styles.cardFieldRow}>
+                  <span className={styles.cardFieldLabel}>Nº Factura</span>
+                  <span className={styles.cardFieldValue}>{part.invoice_number}</span>
+                </div>
+              )}
+              {part.code && (
+                <div className={styles.cardFieldRow}>
+                  <span className={styles.cardFieldLabel}>Código</span>
+                  <span className={styles.cardFieldValue}>{part.code}</span>
+                </div>
+              )}
+              <div className={styles.cardSubtotal}>
+                <span className={styles.cardSubtotalLabel}>Subtotal</span>
+                <span className={styles.cardSubtotalValue}>
+                  {formatPrice((part.amount || 0) * (part.price || 0))}
+                </span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.cardField}>
+                <label>Cantidad:</label>
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  value={part.amount || ""}
+                  onChange={(e) => handlePartChange(index, "amount", e.target.value)}
+                  required
+                  className={styles.mobileInput}
+                />
+              </div>
+              <div className={styles.cardField}>
+                <label>Nombre:</label>
+                <input
+                  type="text"
+                  value={part.name || ""}
+                  onChange={(e) => handlePartChange(index, "name", e.target.value)}
+                  placeholder="Nombre del repuesto"
+                  required
+                  className={styles.mobileInput}
+                />
+              </div>
+              <div className={styles.cardField}>
+                <label>Precio:</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={part.price || ""}
+                  onChange={(e) => handlePartChange(index, "price", e.target.value)}
+                  placeholder="0.00"
+                  className={styles.mobileInput}
+                />
+              </div>
+              <div className={styles.cardField}>
+                <label>Nº Factura:</label>
+                <input
+                  type="text"
+                  value={part.invoice_number || ""}
+                  onChange={(e) => handlePartChange(index, "invoice_number", e.target.value)}
+                  placeholder="Número de factura"
+                  className={styles.mobileInput}
+                />
+              </div>
+              <div className={styles.cardField}>
+                <label>Código:</label>
+                <input
+                  type="text"
+                  value={part.code || ""}
+                  onChange={(e) => handlePartChange(index, "code", e.target.value)}
+                  placeholder="Código del repuesto"
+                  className={styles.mobileInput}
+                />
+              </div>
+            </>
+          )}
         </div>
       ))}
     </div>
@@ -436,60 +440,61 @@ const ServiceEditForm = ({
             )}
           </div>
 
-          <div className={styles.cardField}>
-            <label>Cantidad:</label>
-            {isDelivered || isGestorRepuestos ? (
-              <span>{labor.amount}</span>
-            ) : (
-              <input
-                type="number"
-                min="1"
-                value={labor.amount || ""}
-                onChange={(e) =>
-                  handleLaborChange(index, "amount", e.target.value)
-                }
-                required
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Descripción:</label>
-            {isDelivered || isGestorRepuestos ? (
-              <span>{labor.description}</span>
-            ) : (
-              <input
-                type="text"
-                value={labor.description || ""}
-                onChange={(e) =>
-                  handleLaborChange(index, "description", e.target.value)
-                }
-                placeholder="Descripción del trabajo"
-                required
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
-
-          <div className={styles.cardField}>
-            <label>Precio:</label>
-            {isDelivered || isGestorRepuestos ? (
-              <span>{formatPrice(labor.price)}</span>
-            ) : (
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={labor.price || ""}
-                onChange={(e) =>
-                  handleLaborChange(index, "price", e.target.value)
-                }
-                placeholder="0.00"
-                className={styles.mobileInput}
-              />
-            )}
-          </div>
+          {isDelivered || isGestorRepuestos ? (
+            <>
+              <div className={styles.cardFieldRow}>
+                <span className={styles.cardFieldLabel}>Descripción</span>
+                <span className={styles.cardFieldValue}>{labor.description}</span>
+              </div>
+              <div className={styles.cardFieldRow}>
+                <span className={styles.cardFieldLabel}>Cantidad</span>
+                <span className={styles.cardFieldValue}>{labor.amount}</span>
+              </div>
+              <div className={styles.cardSubtotal}>
+                <span className={styles.cardSubtotalLabel}>Total</span>
+                <span className={styles.cardSubtotalValue}>
+                  {formatPrice((labor.amount || 0) * (labor.price || 0))}
+                </span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.cardField}>
+                <label>Cantidad:</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={labor.amount || ""}
+                  onChange={(e) => handleLaborChange(index, "amount", e.target.value)}
+                  required
+                  className={styles.mobileInput}
+                />
+              </div>
+              <div className={styles.cardField}>
+                <label>Descripción:</label>
+                <input
+                  type="text"
+                  value={labor.description || ""}
+                  onChange={(e) => handleLaborChange(index, "description", e.target.value)}
+                  placeholder="Descripción del trabajo"
+                  required
+                  className={styles.mobileInput}
+                />
+              </div>
+              <div className={styles.cardField}>
+                <label>Precio:</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={labor.price || ""}
+                  onChange={(e) => handleLaborChange(index, "price", e.target.value)}
+                  placeholder="0.00"
+                  className={styles.mobileInput}
+                />
+              </div>
+            </>
+          )}
         </div>
       ))}
     </div>
@@ -944,54 +949,63 @@ const ServiceEditForm = ({
       )}
 
       {/* Campos básicos */}
-      <div className={styles.formRow}>
-        <div className={styles.formGroup}>
-          <label>Fecha estimada de finalización</label>
-          {isReadOnly || isGestorRepuestos ? (
-            <span>{formData.end_date}</span>
-          ) : (
-            <input
-              type="date"
-              name="end_date"
-              value={formatDateForInput(formData.end_date) || ""}
-              onChange={handleDateChange}
-            />
-          )}
-        </div>
-
-        {isDelivered && service.delivery_datetime && (
+      <div className={styles.proformaSection}>
+        <h3>Detalles del Servicio</h3>
+        <div className={styles.formRow}>
           <div className={styles.formGroup}>
-            <label>Fecha y hora de entrega</label>
-            {formatDeliveryDateTime(service.delivery_datetime)}
+            <label>Fecha estimada de finalización</label>
+            {isReadOnly || isGestorRepuestos ? (
+              <span className={styles.readOnlyValue}>{formData.end_date}</span>
+            ) : (
+              <input
+                type="date"
+                name="end_date"
+                value={formatDateForInput(formData.end_date) || ""}
+                onChange={handleDateChange}
+              />
+            )}
           </div>
-        )}
 
-        <div className={styles.formGroup}>
-          <label>Ubicación del vehículo</label>
-          {isDelivered || isGestorRepuestos ? (
-            <span>{formData.vehicle_location}</span>
-          ) : (
-            <input
-              maxLength={150}
-              type="text"
-              name="vehicle_location"
-              value={formData.vehicle_location || ""}
-              onChange={handleInputChange}
-            />
+          {isDelivered && service.delivery_datetime && (
+            <div className={styles.formGroup}>
+              <label>Fecha y hora de entrega</label>
+              <span className={styles.readOnlyValue}>
+                {formatDeliveryDateTime(service.delivery_datetime)}
+              </span>
+            </div>
           )}
+
+          <div className={styles.formGroup}>
+            <label>Ubicación del vehículo</label>
+            {isDelivered || isGestorRepuestos ? (
+              <span className={styles.readOnlyValue}>{formData.vehicle_location}</span>
+            ) : (
+              <input
+                maxLength={150}
+                type="text"
+                name="vehicle_location"
+                value={formData.vehicle_location || ""}
+                onChange={handleInputChange}
+              />
+            )}
+          </div>
         </div>
       </div>
 
       {/* Mecánicos asignados */}
-      <div className={styles.formGroup}>
-        <label>Mecánicos asignados</label>
+      <div className={styles.proformaSection}>
+        <h3>Mecánicos Asignados</h3>
         {isReadOnly || isGestorRepuestos ? (
           <div className={styles.mechanicsTags}>
-            {formData.mechanics.map((mechanic, index) => (
-              <span key={index} className={styles.mechanicTag}>
-                {mechanic}
-              </span>
-            ))}
+            {formData.mechanics.length > 0 ? (
+              formData.mechanics.map((mechanic, index) => (
+                <span key={index} className={styles.mechanicTag}>
+                  {mechanic}
+                </span>
+              ))
+            ) : (
+              <p className={styles.noData}>Sin mecánicos asignados</p>
+            )}
           </div>
         ) : (
           <div className={styles.mechanicsInputContainer}>
@@ -1034,77 +1048,81 @@ const ServiceEditForm = ({
         )}
       </div>
 
-      {/* Sección de Observaciones */}
-      <div className={styles.formGroup}>
-        <label>Observaciones</label>
-        {isDelivered ? (
-          <div className={styles.observationsText}>
-            {formData.observations || "No hay observaciones registradas"}
-          </div>
-        ) : (
-          <textarea
-            name="observations"
-            value={formData.observations || ""}
-            onChange={handleInputChange}
-            placeholder="Ingrese observaciones adicionales (opcional)"
-            maxLength={1000}
-            rows={3}
-            className={styles.textArea}
-          />
-        )}
-        {!isDelivered && (
-          <small className={styles.characterCount}>
-            {(formData.observations || "").length}/1000 caracteres
-          </small>
-        )}
-      </div>
+      {/* Observaciones, Descuento e IVA */}
+      <div className={styles.proformaSection}>
+        <h3>Observaciones y Precios</h3>
 
-      {/* Campo de Descuento */}
-      <div className={styles.formGroup}>
-        <label>Descuento aplicado</label>
-        {isDelivered || isGestorRepuestos ? (
-          <span className={styles.readOnlyValue}>{formatPrice(discount)}</span>
-        ) : (
-          <div className={styles.discountContainer}>
-            <input
-              type="number"
-              name="discount"
-              min="0"
-              step="0.01"
-              value={discount}
-              onChange={handleDiscountChange}
-              placeholder="0.00"
-              className={styles.discountInput}
+        <div className={styles.formGroup}>
+          <label>Observaciones</label>
+          {isDelivered ? (
+            <div className={styles.observationsText}>
+              {formData.observations || "No hay observaciones registradas"}
+            </div>
+          ) : (
+            <textarea
+              name="observations"
+              value={formData.observations || ""}
+              onChange={handleInputChange}
+              placeholder="Ingrese observaciones adicionales (opcional)"
+              maxLength={1000}
+              rows={3}
+              className={styles.textArea}
             />
-          </div>
-        )}
-        {!isDelivered && !isGestorRepuestos && discount > subtotal && (
-          <p className={styles.warningText}>
-            El descuento no puede ser mayor que el subtotal
-          </p>
-        )}
-      </div>
+          )}
+          {!isDelivered && (
+            <small className={styles.characterCount}>
+              {(formData.observations || "").length}/1000 caracteres
+            </small>
+          )}
+        </div>
 
-      {/* Campo de IVA */}
-      <div className={styles.formGroup}>
-        <label>Porcentaje de IVA aplicado</label>
-        {isDelivered || isGestorRepuestos ? (
-          <span className={styles.readOnlyValue}>
-            {Math.round(parseFloat(formData.iva || 13))}%
-          </span>
-        ) : (
-          <select
-            name="iva"
-            value={Math.round(parseFloat(formData.iva || 13))}
-            onChange={handleInputChange}
-          >
-            <option value="0">0% (Exento)</option>
-            <option value="1">1%</option>
-            <option value="2">2%</option>
-            <option value="4">4%</option>
-            <option value="13">13% (Estándar)</option>
-          </select>
-        )}
+        <div className={styles.formRow}>
+          <div className={styles.formGroup}>
+            <label>Descuento aplicado</label>
+            {isDelivered || isGestorRepuestos ? (
+              <span className={styles.readOnlyValue}>{formatPrice(discount)}</span>
+            ) : (
+              <div className={styles.discountContainer}>
+                <input
+                  type="number"
+                  name="discount"
+                  min="0"
+                  step="0.01"
+                  value={discount}
+                  onChange={handleDiscountChange}
+                  placeholder="0.00"
+                  className={styles.discountInput}
+                />
+              </div>
+            )}
+            {!isDelivered && !isGestorRepuestos && discount > subtotal && (
+              <p className={styles.warningText}>
+                El descuento no puede ser mayor que el subtotal
+              </p>
+            )}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Porcentaje de IVA aplicado</label>
+            {isDelivered || isGestorRepuestos ? (
+              <span className={styles.readOnlyValue}>
+                {Math.round(parseFloat(formData.iva || 13))}%
+              </span>
+            ) : (
+              <select
+                name="iva"
+                value={Math.round(parseFloat(formData.iva || 13))}
+                onChange={handleInputChange}
+              >
+                <option value="0">0% (Exento)</option>
+                <option value="1">1%</option>
+                <option value="2">2%</option>
+                <option value="4">4%</option>
+                <option value="13">13% (Estándar)</option>
+              </select>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Total General */}
@@ -1136,7 +1154,7 @@ const ServiceEditForm = ({
             <span className={styles.totalValue}>{formatPrice(ivaAmount)}</span>
           </div>
           <div className={`${styles.totalRow} ${styles.grandTotalRow}`}>
-            <span className={styles.grandTotalLabel}>TOTAL GENERAL:</span>
+            <span className={styles.grandTotalLabel}>Total general:</span>
             <span className={styles.grandTotalValue}>
               {formatPrice(totalWithIVA)}
             </span>
