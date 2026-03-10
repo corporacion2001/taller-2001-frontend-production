@@ -90,7 +90,8 @@ const ServicesCard = ({ service }) => {
                 {service.status_service.name}
               </span>
               {service.proformado &&
-                service.status_service.name.toLowerCase() === "finalizado" && (
+                (service.status_service.name.toLowerCase() === "finalizado" ||
+                  service.status_service.name.toLowerCase() === "entregado") && (
                   <span className={styles.proformadoBadge}>Proformado</span>
                 )}
             </div>

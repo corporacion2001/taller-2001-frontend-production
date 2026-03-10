@@ -1596,6 +1596,7 @@ const ServiceDetails = () => {
         onQuoteParts={handleQuoteParts}
         onSendProforma={handleSendProforma}
         onToggleProformado={handleToggleProformado}
+        canToggleProformado={user?.roles?.includes("Encargado Flotilla")}
         hasUnsavedChanges={hasUnsavedChanges}
       />
 

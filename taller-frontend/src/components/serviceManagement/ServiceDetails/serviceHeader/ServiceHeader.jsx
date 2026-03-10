@@ -13,7 +13,7 @@ import InfoCard from "./infoCard/InfoCard";
 import styles from "./serviceHeader.module.css";
 import { useNotification } from "../../../../contexts/NotificationContext";
 
-const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma, onToggleProformado }) => {
+const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma, onToggleProformado, canToggleProformado }) => {
   const { showNotification } = useNotification();
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -222,19 +222,26 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma, onTogg
             >
               {service?.status_service?.name}
             </div>
-            {service?.status_service?.name === "Finalizado" && (
-              <label className={styles.proformadoToggle}>
-                <input
-                  type="checkbox"
-                  checked={service?.proformado || false}
-                  onChange={onToggleProformado}
-                  className={styles.toggleInput}
-                />
-                <span className={styles.toggleSlider}></span>
-                <span className={styles.toggleText}>
-                  {service?.proformado ? "Proformado" : "Sin proformar"}
-                </span>
-              </label>
+            {(service?.status_service?.name === "Finalizado" ||
+              service?.status_service?.name === "Entregado") && (
+              canToggleProformado ? (
+                <label className={styles.proformadoToggle}>
+                  <input
+                    type="checkbox"
+                    checked={service?.proformado || false}
+                    onChange={onToggleProformado}
+                    className={styles.toggleInput}
+                  />
+                  <span className={styles.toggleSlider}></span>
+                  <span className={styles.toggleText}>
+                    {service?.proformado ? "Proformado" : "Sin proformar"}
+                  </span>
+                </label>
+              ) : (
+                service?.proformado && (
+                  <span className={styles.proformadoReadOnly}>Proformado</span>
+                )
+              )
             )}
           </div>
         </div>

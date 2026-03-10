@@ -131,6 +131,15 @@
   color: #495057;
 }
 
+.proformadoReadOnly {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: #d3f9d8;
+  color: #1a7431;
+}
+
 /* Selectores CSS para los estados - coinciden con la BD */
 .statusBadge[data-status="Pendiente"] {
   background-color: #ffecf1;
