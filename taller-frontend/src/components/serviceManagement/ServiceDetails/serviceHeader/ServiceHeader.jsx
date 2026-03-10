@@ -13,7 +13,7 @@ import InfoCard from "./infoCard/InfoCard";
 import styles from "./serviceHeader.module.css";
 import { useNotification } from "../../../../contexts/NotificationContext";
 
-const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
+const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma, onToggleProformado }) => {
   const { showNotification } = useNotification();
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -213,13 +213,29 @@ const ServiceHeader = ({ service, navigate, onQuoteParts, onSendProforma }) => {
           <h1 className={styles.title}>
             Número de orden: {service?.order_number}
           </h1>
-          <div
-            className={`${styles.statusBadge} ${getStatusBadgeClass(
-              service?.status_service?.name
-            )}`}
-            data-status={service?.status_service?.name}
-          >
-            {service?.status_service?.name}
+          <div className={styles.statusRow}>
+            <div
+              className={`${styles.statusBadge} ${getStatusBadgeClass(
+                service?.status_service?.name
+              )}`}
+              data-status={service?.status_service?.name}
+            >
+              {service?.status_service?.name}
+            </div>
+            {service?.status_service?.name === "Finalizado" && (
+              <label className={styles.proformadoToggle}>
+                <input
+                  type="checkbox"
+                  checked={service?.proformado || false}
+                  onChange={onToggleProformado}
+                  className={styles.toggleInput}
+                />
+                <span className={styles.toggleSlider}></span>
+                <span className={styles.toggleText}>
+                  {service?.proformado ? "Proformado" : "Sin proformar"}
+                </span>
+              </label>
+            )}
           </div>
         </div>
         <div className={styles.vehiclePlate}>

@@ -61,6 +61,13 @@
   display: inline-block;
 }
 
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .statusBadge {
   padding: 6px 12px;
   border-radius: 20px;
@@ -69,6 +76,59 @@
   text-transform: uppercase;
   color: #ffffff;
   align-self: flex-start;
+}
+
+/* Toggle proformado */
+.proformadoToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggleInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  background-color: #ced4da;
+  border-radius: 22px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toggleSlider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.toggleInput:checked + .toggleSlider {
+  background-color: #2f9e44;
+}
+
+.toggleInput:checked + .toggleSlider::after {
+  transform: translateX(18px);
+}
+
+.toggleText {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
 }
 
 /* Selectores CSS para los estados - coinciden con la BD */

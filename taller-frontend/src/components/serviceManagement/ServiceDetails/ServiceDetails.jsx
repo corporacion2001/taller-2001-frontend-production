@@ -444,6 +444,21 @@ const ServiceDetails = () => {
     }
   };
 
+  const handleToggleProformado = async () => {
+    try {
+      const newValue = !service.proformado;
+      await serviceAPI.updateService(serviceId, { proformado: newValue });
+      setService((prev) => ({ ...prev, proformado: newValue }));
+      showNotification(
+        newValue ? "Servicio marcado como proformado." : "Proforma desmarcada.",
+        "success",
+      );
+    } catch (error) {
+      console.error("Error al actualizar proformado:", error);
+      showNotification("Error al actualizar el estado de proforma.", "error");
+    }
+  };
+
   const handleSendProforma = async () => {
     if (!hasValidPartsOrLabors()) {
       // MODIFICADO: usa la nueva función
@@ -1580,6 +1595,7 @@ const ServiceDetails = () => {
         formatPrice={formatPrice}
         onQuoteParts={handleQuoteParts}
         onSendProforma={handleSendProforma}
+        onToggleProformado={handleToggleProformado}
         hasUnsavedChanges={hasUnsavedChanges}
       />
 

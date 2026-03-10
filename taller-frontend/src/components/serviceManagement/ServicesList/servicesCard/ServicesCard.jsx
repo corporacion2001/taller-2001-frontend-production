@@ -81,13 +81,19 @@ const ServicesCard = ({ service }) => {
             <h3 className={styles.cardTitle}>
               {service.vehicle.brand} {service.vehicle.model}
             </h3>
-            <span
-              className={`${styles.cardStatus} ${getStatusStyle(
-                service.status_service.name
-              )}`}
-            >
-              {service.status_service.name}
-            </span>
+            <div className={styles.statusGroup}>
+              <span
+                className={`${styles.cardStatus} ${getStatusStyle(
+                  service.status_service.name
+                )}`}
+              >
+                {service.status_service.name}
+              </span>
+              {service.proformado &&
+                service.status_service.name.toLowerCase() === "finalizado" && (
+                  <span className={styles.proformadoBadge}>Proformado</span>
+                )}
+            </div>
           </div>
           <p className={styles.cardPlate}>Placa: {service.vehicle.plate}</p>
 

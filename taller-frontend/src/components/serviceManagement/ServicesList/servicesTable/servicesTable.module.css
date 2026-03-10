@@ -132,6 +132,19 @@
   text-overflow: ellipsis;
 }
 
+/* Badge proformado en tabla */
+.proformadoBadge {
+  display: block;
+  margin-top: 4px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  background-color: #d3f9d8;
+  color: #1a7431;
+  white-space: nowrap;
+}
+
 /* Badge de estado en tabla */
 .statusBadge {
   padding: 0.35rem 0.65rem;

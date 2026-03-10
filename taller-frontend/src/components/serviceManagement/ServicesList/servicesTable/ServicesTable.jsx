@@ -124,6 +124,10 @@ const ServicesTable = ({
                   >
                     {service.status_service.name}
                   </span>
+                  {service.proformado &&
+                    service.status_service.name.toLowerCase() === "finalizado" && (
+                      <span className={styles.proformadoBadge}>Proformado</span>
+                    )}
                 </td>
                 <td className={styles.cellTotal}>
                   {formatPrice(service.total_price)}
