@@ -35,8 +35,8 @@ const VehicleDetails = ({ vehicle }) => {
   const validateField = (name, value) => {
     switch (name) {
       case "plate":
-        if (!value.trim()) return "La placa es requerida";
-        if (value.length > 6) return "Máximo 6 caracteres";
+        if (!value || !value.trim()) return "La placa es requerida";
+        if (value.length > 10) return "Máximo 10 caracteres";
         return "";
       case "year":
         if (!value) return "Año requerido";
@@ -105,7 +105,7 @@ const VehicleDetails = ({ vehicle }) => {
 
   const validateForm = () => {
     const newErrors = {
-      plate: validateField("plate", formData.plate),
+      plate: "", // campo deshabilitado, no se valida ni se envía
       year: validateField("year", formData.year),
       model: validateField("model", formData.model),
       chassis: validateField("chassis", formData.chassis),
@@ -193,18 +193,32 @@ const VehicleDetails = ({ vehicle }) => {
       const changes = {};
       Object.keys(formData).forEach((key) => {
         // Excluir la placa de los cambios a enviar
-        if (key !== "plate" && formData[key] !== originalData[key]) {
+        // eslint-disable-next-line eqeqeq
+        if (key !== "plate" && formData[key] != originalData[key]) {
           changes[key] = formData[key];
         }
       });
-      console.log("Changes to save:", changes);
 
       await vehiclesApi.updateVehicle(vehicle.id, changes);
       showNotification("Vehículo actualizado correctamente", "success");
       setIsEditable(false);
       setOriginalData({ ...formData });
     } catch (error) {
-      showNotification("Error al actualizar vehículo", "error");
+      const serverErrors = error?.errors;
+      if (serverErrors && serverErrors.length > 0) {
+        const fieldErrors = {};
+        serverErrors.forEach(({ field, message }) => {
+          if (field) fieldErrors[field] = message;
+        });
+        setErrors((prev) => ({ ...prev, ...fieldErrors }));
+        showNotification(
+          `Error: ${serverErrors.map((e) => e.message).join(", ")}`,
+          "error"
+        );
+      } else {
+        const msg = error?.message || "Error al actualizar vehículo";
+        showNotification(msg, "error");
+      }
     } finally {
       setLoading((prev) => ({ ...prev, save: false }));
     }
