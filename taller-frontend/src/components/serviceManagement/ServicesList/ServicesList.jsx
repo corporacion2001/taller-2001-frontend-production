@@ -25,6 +25,7 @@ const ServicesList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [activeTab, setActiveTab] = useState("Todos");
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("cards");
@@ -118,6 +119,14 @@ const ServicesList = () => {
   };
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setCurrentPage(1);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  useEffect(() => {
     const checkUserRoles = () => {
       setIsAdmin(user?.roles?.includes("Administrador"));
       setIsFleetMgr(user?.roles?.includes("Encargado Flotilla"));
@@ -185,7 +194,7 @@ const ServicesList = () => {
         const params = {
           page: currentPage,
           limit: 10,
-          search: searchTerm,
+          search: debouncedSearch,
           entry_date_start: filters.entryDateStart || null,
           entry_date_end: filters.entryDateEnd || null,
           end_date_start: filters.endDateStart || null,
@@ -250,7 +259,7 @@ const ServicesList = () => {
     };
 
     fetchServices();
-  }, [activeTab, currentPage, searchTerm, filters, isAdmin]);
+  }, [activeTab, currentPage, debouncedSearch, filters, isAdmin]);
 
   const handleGoToService = () => {
     navigate("/dashboard/nuevo-servicio");
@@ -311,10 +320,7 @@ const ServicesList = () => {
               className={styles.searchInput}
               aria-label="Buscar servicios"
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
