@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { serviceAPI } from "../../../services/service.api";
 import ServiceHeader from "./serviceHeader/ServiceHeader";
@@ -95,6 +95,7 @@ const ServiceDetails = () => {
   const [initialFormData, setInitialFormData] = useState(null);
   const [initialDeliveryData, setInitialDeliveryData] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const isSavingRef = useRef(false);
   const [quoteMessage, setQuoteMessage] = useState("");
   // Estados del formulario
   const [formData, setFormData] = useState({
@@ -950,6 +951,7 @@ const ServiceDetails = () => {
   // MODIFICACIÓN: Handler para Guardar Cambios (sin validación de campos requeridos)
   const handleSaveChanges = async (e) => {
     e.preventDefault();
+    if (isSavingRef.current) return;
     if (!hasFormChanges()) {
       showNotification("No hay cambios que guardar", "info");
       return;
@@ -976,6 +978,7 @@ const ServiceDetails = () => {
       return;
     }
 
+    isSavingRef.current = true;
     setIsSaving(true);
     setButtonStates({
       deleteService: false,
@@ -1045,6 +1048,7 @@ const ServiceDetails = () => {
       // Recargar la página después de guardar
       window.location.reload();
     } catch (err) {
+      isSavingRef.current = false;
       setActionError(err.message || "Error al guardar los cambios");
       showNotification("Error al actualizar el servicio", "error");
       setButtonStates({
